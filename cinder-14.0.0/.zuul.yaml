@@ -1,0 +1,140 @@
+- project:
+    templates:
+      - openstack-lower-constraints-jobs
+      - openstack-python-jobs
+      - openstack-python36-jobs
+      - publish-openstack-docs-pti
+      - periodic-stable-jobs
+      - check-requirements
+      - integrated-gate
+      - integrated-gate-py3
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        - cinder-tempest-dsvm-lvm-lio-barbican
+        - cinder-tox-bandit-baseline:
+            voting: false
+        - openstack-tox-functional-py36:
+            irrelevant-files: &functional-irrelevant-files
+              - ^.*\.rst$
+              - ^api-ref/.*$
+              - ^cinder/hacking/.*$
+              - ^cinder/locale/.*$
+              - ^cinder/tests/unit.*$
+              - ^contrib/block-box.*$
+              - ^doc/.*$
+              - ^releasenotes/.*$
+        - cinder-rally-task:
+            voting: false
+        - openstack-tox-pylint:
+            voting: false
+            timeout: 5400
+            irrelevant-files: *functional-irrelevant-files
+        - devstack-plugin-ceph-tempest:
+            voting: false
+            irrelevant-files: &gate-irrelevant-files
+              - ^(test-|)requirements.txt$
+              - ^.*\.rst$
+              - ^api-ref/.*$
+              - ^cinder/hacking/.*$
+              - ^cinder/locale/.*$
+              - ^cinder/tests/functional.*$
+              - ^cinder/tests/unit.*$
+              - ^contrib/block-box.*$
+              - ^doc/.*$
+              - ^releasenotes/.*$
+              - ^setup.cfg$
+              - ^tools/.*$
+              - ^tox.ini$
+        - openstack-tox-functional:
+            voting: false
+            irrelevant-files: *functional-irrelevant-files
+        - legacy-grenade-dsvm-cinder-mn-sub-volbak:
+            irrelevant-files: *gate-irrelevant-files
+        - legacy-tempest-dsvm-lvm-multibackend:
+            voting: false
+            irrelevant-files: *gate-irrelevant-files
+        - legacy-tempest-dsvm-full-devstack-plugin-nfs:
+            voting: false
+            irrelevant-files: *gate-irrelevant-files
+        - neutron-grenade:
+            irrelevant-files: *gate-irrelevant-files
+        - tempest-slow-py3:
+            irrelevant-files: *gate-irrelevant-files
+        - tempest-full:
+            irrelevant-files: *gate-irrelevant-files
+        - tempest-full-py3:
+            irrelevant-files: *gate-irrelevant-files
+        - grenade-py3:
+            irrelevant-files: *gate-irrelevant-files
+    gate:
+      jobs:
+        - legacy-grenade-dsvm-cinder-mn-sub-volbak:
+            irrelevant-files: *gate-irrelevant-files
+        - neutron-grenade:
+            irrelevant-files: *gate-irrelevant-files
+        - tempest-full:
+            irrelevant-files: *gate-irrelevant-files
+        - tempest-full-py3:
+            irrelevant-files: *gate-irrelevant-files
+        - grenade-py3:
+            irrelevant-files: *gate-irrelevant-files
+    experimental:
+      jobs:
+        - tempest-cinder-v2-api:
+            irrelevant-files: *gate-irrelevant-files
+        - legacy-tempest-dsvm-full-sheepdog-src-os-brick:
+            irrelevant-files: *gate-irrelevant-files
+        - legacy-tempest-dsvm-zeromq-multibackend:
+            irrelevant-files: *gate-irrelevant-files
+        - legacy-tempest-dsvm-multibackend-matrix:
+            irrelevant-files: *gate-irrelevant-files
+        - legacy-grenade-dsvm-cinder-mn-sub-volschbak:
+            irrelevant-files: *gate-irrelevant-files
+        - legacy-grenade-dsvm-cinder-mn-sub-bak:
+            irrelevant-files: *gate-irrelevant-files
+        - devstack-plugin-ceph-tempest-py3:
+            irrelevant-files: *gate-irrelevant-files
+        - tempest-pg-full:
+            irrelevant-files: *gate-irrelevant-files
+        - tempest-full-py3-opensuse150:
+            irrelevant-files: *gate-irrelevant-files
+        - legacy-tempest-dsvm-full-sheepdog:
+            irrelevant-files: *gate-irrelevant-files
+
+- job:
+    # Previously named legacy-tempest-dsvm-full-lio
+    name: cinder-tempest-dsvm-lvm-lio-barbican
+    parent: legacy-dsvm-base
+    run: playbooks/legacy/cinder-tempest-dsvm-lvm-lio-barbican/run.yaml
+    post-run: playbooks/legacy/cinder-tempest-dsvm-lvm-lio-barbican/post.yaml
+    timeout: 10800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/barbican
+      - openstack/python-barbicanclient
+      - openstack/tempest
+      - openstack/os-brick
+    irrelevant-files: *gate-irrelevant-files
+
+- job:
+    # Security testing for known issues
+    name: cinder-tox-bandit-baseline
+    parent: openstack-tox
+    timeout: 2400
+    vars:
+      tox_envlist: bandit-baseline
+    required-projects:
+      - openstack/requirements
+    irrelevant-files: *gate-irrelevant-files
+
+- job:
+    name: cinder-rally-task
+    parent: rally-task-cinder
+    timeout: 7800
+    vars:
+      devstack_plugins:
+        rally-openstack: https://git.openstack.org/openstack/rally-openstack
+      rally_task: rally-jobs/cinder.yaml
+    required-projects:
+      - openstack/rally-openstack

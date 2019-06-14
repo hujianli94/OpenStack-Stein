@@ -1,0 +1,3 @@
+[oslo.config.opts]
+openstack_dashboard = openstack_dashboard.utils.config:list_options
+

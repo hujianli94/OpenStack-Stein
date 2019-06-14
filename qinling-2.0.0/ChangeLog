@@ -1,0 +1,338 @@
+CHANGES
+=======
+
+2.0.0
+-----
+
+* add python 3.7 unit test job
+* Skip the external network connection test
+* Chang Glance to Qinling
+* Change openstack-dev to openstack-discuss
+* Fix failure during the k8s reset
+* Fix the NetworkPolicy in multihost deployment
+* Some improvements for the doc
+* Improve the k8s related configuration guide
+* Improve the documentation
+* Skip k8s installation if needed
+* add Qinling-dashboard url in docs
+* Add framework for qinling-status upgrade check
+* Add runtime creation guide
+* Support Image type function timeout
+* Increment versioning with pbr instruction
+* use include\_tasks instead of include
+* Use storyboard to collect documentation bugs
+* Add user doc for function timeout
+* Support to update function timeout
+* Function timeout support for python runtime
+* Use templates for cover and lower-constraints
+* Timeout support for api and engine
+* Fix the image type function cookbook
+* Add duration for image type function
+* Validate swift params for swift type function creation
+* Fix package function update with same md5
+* Fix first\_execution\_time when used together with pattern
+* add python 3.6 unit test job
+* switch documentation job to new PTI
+* import zuul job settings from project-config
+* Support TLS connection to etcd
+* Use python3 runtime in CI
+* Adding Doc: Creating Image type function in Qinling
+* Update reno for stable/rocky
+
+1.0.0
+-----
+
+* python3 runtime
+* Add release note for function alias
+* Delete check of function alias
+
+1.0.0.0b3
+---------
+
+* Support to specify workload type for runtime
+* Improve connecting to existing k8s cluster guide
+* Add upgrade description to release note
+* Add a tempest test case to verify connection from k8s pod to outside
+* Support alias for webhook creation
+* Kubernetes: disable inter-pods connections
+* Raise specific exceptions instead of tenacity.RetryError
+* Support alias for job creation
+* Runtime: less strict for resource limiting
+* Creating functions using OpenStack Swift
+* Increase etcd3gw dependency version
+* Add scope information when getting session from Keystone
+* Support alias for execution creation
+* Fix function download content-type not set correctly
+* Support to get pool information for the runtime
+* periodics: fix service of function version 0 not expiring issue
+* Set file size limit to 50M in the python rumtime image
+* python2-runtime: limit cglimit listen on localhost only
+* Add a preliminary structure for admin security guide
+* The original image link does not work
+* Remove default function\_version in webhook resource def
+* config: update api\_workers default value to match help message
+* Enable oslo\_config mutable configurations
+* Function Alias API: delete and update
+* Invoke Python function in a directory rather than a zip package
+* Add an example for function cookbook
+* Function Alias API: create and get
+* Add basic structure for user guide
+* add release notes to README.rst
+* Add install guide on ubuntu 16.04
+* Add simple tempest testcases for resource limiting
+* Fix typo
+* Improve contributing page
+* Add release note for customized memory and cpu resources feature
+* devstack: use cgroupfs driver for both docker and k8s on Cent OS
+
+1.0.0.0b2
+---------
+
+* Runtime implementation for non-image type function
+* fix tox python3 overrides
+* replace file() with open() for python 3 compatibility
+* Function aliases: db scheme change
+* Fix trivial errors in log formatting
+* Store error info in execution result when failed
+* Delete package only when the package is updated
+* Specify the runtime image version explicitly
+* Improve doc
+* rest\_utils: simplify filter extracting
+* Function Aliases spec proposal
+* Delete underlying resources when deleting function version
+* Replace Chinese quotes with English quotes
+* Fix typo
+* Improve the quick start guide a little bit
+* [Trivialfix]Modify a grammatical error
+* Improve the setup scripts to support multi-nics
+* Fix function package downloading
+* Fix incompatible requirements
+* kubernetes: add V1DeleteOptions when deleting services
+* Improve qinling doc
+* Fix the permission issue in devstack plugin
+* Runtime implementation for image type function
+* Document how to make Qinling work with existing k8s cluster
+* Outline for Qinling doc
+* Add release note for function versioning feature
+* Functional test for deleting function version
+* Functional test for function version detach/get
+* Fix missing fields in API response
+* Add function\_id in function version API response
+* Functional test for creating job/webhook with function version
+* Functional test for creating execution with function version
+* Functional test for creating function version
+* Function version API: scale\_up/scale\_down/detach/get\_workers
+* Delete all its versions when deleting function
+* Add cpu and memory\_size options support for function
+* Support function version for webhook
+* Support function version for job
+* Replace assertRaisesRegexp with assertRaisesRegex
+* Support version for execution creation
+* Upgrade db version to add cpu column for function
+
+1.0.0.0b1
+---------
+
+* Function versioning API: delete
+* Function versioning API: get
+* Function versioning API: list
+* Function versioning API: create
+* Delete old package when updating function
+* Fix devstack plugin script
+* Function versioning: db scheme support
+* Include md5 in function package path
+* Depress the debug log from futurist.periodics
+* Add missing release note for the k8s certs change
+* Fix typo: extention -> extension
+* engine: set execution status upon exceptions
+* Allow qinling to connect to k8s API with certificates
+* spec doc for adding customized mem/cpu for function
+* Remove force value of get\_url in playbook
+* Function versioning spec proposal
+* Switch qinling-tempest to a voting check and gate job
+* periodics: switch to use futurist
+* engine: delete workers from etcd after removing
+* Install same version for k8s CLIs and k8s control plane services
+* Updated from global requirements
+* Updated from global requirements
+* add lower-constraints job
+* Add specs folder for Qinling
+* add missing unit tests for methods of function controller
+* Updated from global requirements
+* Exclude tests and db migrations from coverage report
+* Add a basic feature description about Sync/Async
+* zuul: create Neutron config dir for the devstack job
+* tempest plugin: save package in temporary dir
+* Updated from global requirements
+* Make tempest check use devstack-tempest parent
+* Updated from global requirements
+* tests: add more unit tests for qinling.orchestrator
+* tests: add unit tests for qinling.orchestrator
+* Updated from global requirements
+* kubeadm: make it also work on CentOS 7
+* Updated from global requirements
+* Improve the net\_resolv\_pre\_kube function in network.sh
+* Remove the resource limit for pod in k8s deployment
+* Add Node.js runtime support
+* Add unzip functionality in sidecar
+* kubeadm: fix issue about obtaining k8s config
+* Don't run tempest jobs when patching unit test and releasenote
+* Follow the new PTI for document build
+* orchestrator: fix several issues of kubernetes manager
+* Replace uuid.uuid4() with uuidutils.generate\_uuid()
+* Updated from global requirements
+* Add sidecar support for runtime
+* Update qinling doc location to docs.openstack.org
+* tests: add filesystem storage unit tests
+* tests: add default engine unit tests
+* Use uWSGI for python runtime
+* Fix potential KeyError in execution tests
+* Use kubeadm for devstack
+* doc: use storyboard link in CONTRIBUTING
+* filesystem storage: don't ensure base path when initialization
+* Don't run tempest jobs when patching document
+* Update the admin guide doc structure
+* Fix link for keystonemiddleware page
+* Fix minor typos in chinese spelling
+* Update mysql connection in doc
+* Update home-page url
+* Add coverage test script
+* tests: improve unit tests of runtime API controller
+* Fix the OpenStack-Helm page does not exist
+* engine: fix a typo in default\_engine log message
+* Use storyboard link in Qinling doc
+* Improve doc
+* Zuul: Remove project name
+* kube.sh: don't download kubectl again when it exists
+* kube.sh: fix wrong systemd mount flag
+* tox.ini: add missing comments for H204 and H205
+* kube.sh: skip get-docker when Docker is installed from distro repo
+* Fix a typo in quick start guide
+* Make shell script graceful
+* Fix one doc error in developer guide
+* Zuul: Remove project name
+* Fix a potential error about script file
+* Replace Chinese punctuation with English punctuation
+* Support function package md5
+* Check object size in swift
+* Add kubeadm-dind-cluster gate script as backlog
+* Add minikube gate script as backlog
+* Add administrative operations for some resources
+* Support webhook
+* Fix the hard code about source type
+* Remove Mistral references
+* Support kubernetes python client 4.0.0
+* Fix job handler
+* Fix function service expiration handler
+* Fix docker image function
+* Fix function service cron job failure
+* Filter executions by status
+* Introduce etcd to qinling
+* Detach function from underlying orchestrator
+* Execution operations by admin user
+* Support to get workers by admin user
+* Admin user should not delete other project's function
+* Support admin user get functions of other projects
+* Improve Document for Qinling
+* Function execution concurrency improvement
+* Improve function execution performance
+* Fix the deprecated usage of "get\_transport"
+* Limit resource consumption of function
+* Fix releasenotes job is failure
+* Limit cpu resource consumption of function
+* Limit function memory consumption
+* Fix function package update
+* Switch from ostestr to stestr
+* Support to update function code
+* Enable some off-by-default checks
+* Remove unused variables ‘LOG'
+* Fix new release note in releasenotes
+* Migrate to Zuulv3
+* Add python-zaqarclient to python runtime
+* Fix the job task failure
+* TrivialFix: make correction for error notes
+* Remove unsupported attribute for local.conf in docs
+* Fix 'cover' tox job fails for option --coverage not recognized
+* Minor fix for log message in rest\_utils.py
+* Add license for example code
+* tests: replace .testr.conf with .stestr.conf
+* Fix the depreciate warning of get\_transport
+* Improve swift python sample code
+* Support filtering for execution query
+* Create trust for functions
+* Do not remove /run/openvswitch folder
+* Correct devstack config in the doc
+* Just a test
+* Add session support for function
+* Add functional tests for execution
+* Add tempest tests for functions
+* Support policy check for api access
+* [DOC BLD FIX] Correct reST field lists in docstrings
+* Add devstack installation doc
+* Improve runtime functional tests
+* Using openstack theme for doc
+* Add functional tests for runtime
+* Scale down function
+* Fix gate script for devstack-gate
+* Add devstack plugin and scripts
+* Fix logs query for executions
+* Add scale up ability for function execution
+* Concurrency support for python runtime
+* Documentation improvement
+* Fix delete function with running job associated
+* Improve doc
+* Add unit test for execution operations
+* Add unit test for function operations
+* Improve doc
+* Update and replace http with https for doc links in qinling
+* Doc improvement
+* [Trivialfix]Fix typos in qinling
+* Re-orginze documentation
+* Support function execution log query
+* Fix job creation with pattern
+* Do not get openstack session in container
+* Fix log message
+* Fix a command in README
+* Fix getting update params
+* Add job update api
+* Fix authentication failure when token expires
+* Fix relationship of function service mapping
+* Log improvement
+* Fully support sync/async execution
+* Fix a bug in job periodic task
+* Implement periodic task for jobs
+* Add jobs api
+* Disable python buffer for stdout/stderr
+* Python runtime improvement
+* Capture module load exception
+* Add additional information for README
+* Improve config options
+* Add UT for runtime API operation
+* Add documentation to use qinling CLI
+* Fix file pattern in git ignore
+* Ignore .patch files
+* Fix minor typos
+* Add basic test for engine
+* Updated from global requirements
+* Add basic unit test structure
+* Support Keystone session in python runtime
+* Support update runtime
+* Support function update
+* Fix function deletion
+* Support to sepcify module.function for python function
+* Support python function input
+* Add Qinling pronunciation in README
+* Add irc channel info
+* Add expiry handler for function service
+* Support sync/async execution
+* Support docker image as function code
+* Update README.rst
+* Add swift object support for function creation
+* Add some documentation for Qinling
+* Complete basic workflow(Finally!)
+* Add runtimes rest api
+* Add engine service and rpc layer
+* Initial API code structure
+* Make api service work
+* Make api service work
+* Initial commit for qinling project

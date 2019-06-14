@@ -1,0 +1,176 @@
+#
+# (C) Copyright 2015 Hewlett Packard Enterprise Development Company LP
+# Copyright (c) 2017 SUSE LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+# implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+name: monasca-persister
+
+alarmHistoryConfiguration:
+  batchSize: %MONASCA_PERSISTER_BATCH_SIZE%
+  numThreads: 1
+  maxBatchTime: %MONASCA_PERSISTER_MAX_BATCH_TIME%
+  commitBatchTime: %MONASCA_PERSISTER_COMMIT_BATCH_TIME%
+# See http://kafka.apache.org/documentation.html#api for semantics and defaults.
+  topic: alarm-state-transitions
+  groupId: 1_alarm-state-transitions
+  consumerId: "mini-mon"
+  clientId: 1
+
+metricConfiguration:
+  batchSize: %MONASCA_PERSISTER_BATCH_SIZE%
+  numThreads: %MONASCA_PERSISTER_METRIC_THREADS%
+  maxBatchTime: %MONASCA_PERSISTER_MAX_BATCH_TIME%
+  commitBatchTime: %MONASCA_PERSISTER_COMMIT_BATCH_TIME%
+# See http://kafka.apache.org/documentation.html#api for semantics and defaults.
+  topic: metrics
+  groupId: 1_metrics
+  consumerId: "mini-mon"
+  clientId: 1
+
+#Kafka settings.
+kafkaConfig:
+# See http://kafka.apache.org/documentation.html#api for semantics and defaults.
+  zookeeperConnect: "%ZOOKEEPER_HOST%:2181"
+  socketTimeoutMs: 30000
+  socketReceiveBufferBytes : 65536
+  fetchMessageMaxBytes: 1048576
+  queuedMaxMessageChunks: 10
+  rebalanceMaxRetries: 4
+  fetchMinBytes:  1
+  fetchWaitMaxMs:  100
+  rebalanceBackoffMs: 2000
+  refreshLeaderBackoffMs: 200
+  autoOffsetReset: largest
+  consumerTimeoutMs:  1000
+  zookeeperSessionTimeoutMs : 60000
+  zookeeperConnectionTimeoutMs : 60000
+  zookeeperSyncTimeMs: 2000
+
+# uncomment if database type is cassandra
+cassandraDbConfiguration:
+  contactPoints:
+    - %CASSANDRADB_HOST%
+  port: 9042
+  user: cassandra
+  password: cassandra
+  keyspace: monasca
+  localDataCenter: datacenter1
+  maxConnections: 5
+  maxRequests: 2048
+  # socket time out in milliseconds when creating a new connection
+  connectionTimeout: 5000
+  # how long the driver waits for a response from server. Must be
+  # longer than the server side timeouts in the cassandra.yaml
+  readTimeout: 60000
+
+  # number of retries in upsert query. The retry interval is exponential,
+  # i.e., 1, 2, 4, 8 ... seconds. Retry is blocking.
+  maxWriteRetries: 5
+  maxBatches: 250
+  maxDefinitionCacheSize: 2000000
+  #    ANY(0),
+  #    ONE(1),
+  #    TWO(2),
+  #    THREE(3),
+  #    QUORUM(4),
+  #    ALL(5),
+  #    LOCAL_QUORUM(6),
+  #    EACH_QUORUM(7),
+  #    SERIAL(8),
+  #    LOCAL_SERIAL(9),
+  #    LOCAL_ONE(10);
+  consistencyLevel: ONE
+  # number of days metric retention
+  retentionPolicy: 45
+
+verticaMetricRepoConfig:
+  maxCacheSize: 2000000
+
+databaseConfiguration:
+  databaseType: %MONASCA_PERSISTER_DB_TYPE%
+
+# Uncomment if databaseType is influxdb
+influxDbConfiguration:
+  # Retention policy may be left blank to indicate default policy.
+  retentionPolicy:
+  maxHttpConnections: 100
+  gzip: true
+  name: "mon"
+  url: "http://%INFLUXDB_HOST%:8086"
+  user: "mon_persister"
+  password: "password"
+
+
+# Uncomment if databaseType is vertica
+dataSourceFactory:
+  driverClass: com.vertica.jdbc.Driver
+  url: "jdbc:vertica://%VERTICA_HOST%:5433/mon"
+  user: "mon_persister"
+  password: "password"
+  properties:
+      ssl: false
+  # the maximum amount of time to wait on an empty pool before throwing an exception
+  maxWaitForConnection: 1s
+  # the SQL query to run when validating a connection's liveness
+  validationQuery: "/* MyService Health Check */ SELECT 1"
+  # the minimum number of connections to keep open
+  minSize: 8
+  # the maximum number of connections to keep open
+  maxSize: 41
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: false
+  # the maximum lifetime of an idle connection
+  maxConnectionAge: 1 minute
+
+metrics:
+  frequency: 1 second
+
+
+# Logging settings.
+logging:
+
+  # The default level of all loggers. Can be OFF, ERROR, WARN, INFO,
+  # DEBUG, TRACE, or ALL.
+  level: WARN
+
+  # Logger-specific levels.
+  loggers:
+
+    # Sets the level for 'com.example.app' to DEBUG.
+      com.example.app: DEBUG
+    # com.hpcloud: debug
+    # com.hpcloud.mon.persister.repository: DEBUG
+
+  appenders:
+
+    - type: file
+      threshold: INFO
+      archive: true
+      currentLogFilename: "%MONASCA_PERSISTER_LOG_DIR%/monasca-persister.log"
+      archivedLogFilenamePattern: "%MONASCA_PERSISTER_LOG_DIR%/monasca-persister.log-%d.log.gz"
+      archivedFileCount: 5
+      # The timezone used to format dates. HINT: USE THE DEFAULT, UTC.
+      timeZone: UTC
+
+server:
+  applicationConnectors:
+    - type: http
+      port: %MONASCA_PERSISTER_APP_PORT%
+      bindHost: %MONASCA_PERSISTER_BIND_HOST%
+  adminConnectors:
+    - type: http
+      port: %MONASCA_PERSISTER_ADMIN_PORT%
+      bindHost: %MONASCA_PERSISTER_BIND_HOST%

@@ -1,0 +1,228 @@
+- project:
+    templates:
+      - check-requirements
+      - openstack-cover-jobs
+      - openstack-lower-constraints-jobs
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        - watcher-tempest-functional
+        - watcher-grenade
+        - watcher-tempest-dummy_optim
+        - watcher-tempest-actuator
+        - watcher-tempest-basic_optim
+        - watcher-tempest-vm_workload_consolidation
+        - watcher-tempest-workload_balancing
+        - watcherclient-tempest-functional
+        - watcher-tempest-zone_migration
+        - watcher-tempest-host_maintenance
+        - watcher-tempest-storage_balance
+        - watcher-tls-test
+    gate:
+      queue: watcher
+      jobs:
+        - watcher-tempest-functional
+
+- job:
+    name: watcher-tempest-dummy_optim
+    parent: watcher-tempest-multinode
+    voting: false
+    vars:
+      tempest_test_regex: watcher_tempest_plugin.tests.scenario.test_execute_dummy_optim
+
+- job:
+    name: watcher-tempest-actuator
+    parent: watcher-tempest-multinode
+    voting: false
+    vars:
+      tempest_test_regex: watcher_tempest_plugin.tests.scenario.test_execute_actuator
+
+- job:
+    name: watcher-tempest-basic_optim
+    parent: watcher-tempest-multinode
+    voting: false
+    vars:
+      tempest_test_regex: watcher_tempest_plugin.tests.scenario.test_execute_basic_optim
+
+- job:
+    name: watcher-tempest-vm_workload_consolidation
+    parent: watcher-tempest-multinode
+    voting: false
+    vars:
+      tempest_test_regex: watcher_tempest_plugin.tests.scenario.test_execute_vm_workload_consolidation
+      devstack_local_conf:
+        test-config:
+          $WATCHER_CONFIG:
+            watcher_strategies.vm_workload_consolidation:
+              datasource: ceilometer
+
+- job:
+    name: watcher-tempest-workload_balancing
+    parent: watcher-tempest-multinode
+    voting: false
+    vars:
+      tempest_test_regex: watcher_tempest_plugin.tests.scenario.test_execute_workload_balancing
+
+- job:
+    name: watcher-tempest-zone_migration
+    parent: watcher-tempest-multinode
+    voting: false
+    vars:
+      tempest_test_regex: watcher_tempest_plugin.tests.scenario.test_execute_zone_migration
+
+- job:
+    name: watcher-tempest-host_maintenance
+    parent: watcher-tempest-multinode
+    voting: false
+    vars:
+      tempest_test_regex: watcher_tempest_plugin.tests.scenario.test_execute_host_maintenance
+
+- job:
+    name: watcher-tempest-storage_balance
+    parent: watcher-tempest-multinode
+    voting: false
+    vars:
+      tempest_test_regex: watcher_tempest_plugin.tests.scenario.test_execute_storage_balance
+      devstack_local_conf:
+        test-config:
+          $TEMPEST_CONFIG:
+            volume:
+              backend_names: ['BACKEND_1', 'BACKEND_2']
+            volume-feature-enabled:
+              multi_backend: true
+
+- job:
+    name: watcher-tls-test
+    parent: watcher-tempest-multinode
+    group-vars:
+      subnode:
+          devstack_services:
+            tls-proxy: true
+    vars:
+      devstack_services:
+        tls-proxy: true
+
+- job:
+    name: watcher-tempest-multinode
+    parent: watcher-tempest-functional
+    nodeset: openstack-two-node
+    roles:
+      - zuul: openstack/tempest
+    group-vars:
+      subnode:
+        devstack_local_conf:
+          post-config:
+            $WATCHER_CONF:
+              watcher_cluster_data_model_collectors.compute:
+                period: 120
+              watcher_cluster_data_model_collectors.baremetal:
+                period: 120
+              watcher_cluster_data_model_collectors.storage:
+                period: 120
+        devstack_services:
+          watcher-api: false
+          watcher-decision-engine: true
+          watcher-applier: false
+          # We need to add TLS support for watcher plugin
+          tls-proxy: false
+          ceilometer: false
+          ceilometer-acompute: false
+          ceilometer-acentral: false
+          ceilometer-anotification: false
+          watcher: false
+          gnocchi-api: false
+          gnocchi-metricd: false
+          rabbit: false
+          mysql: false
+    vars:
+      devstack_local_conf:
+        post-config:
+          $WATCHER_CONF:
+            watcher_cluster_data_model_collectors.compute:
+              period: 120
+            watcher_cluster_data_model_collectors.baremetal:
+              period: 120
+            watcher_cluster_data_model_collectors.storage:
+              period: 120
+        test-config:
+          $TEMPEST_CONFIG:
+            compute:
+              min_compute_nodes: 2
+            compute-feature-enabled:
+              live_migration: true
+              block_migration_for_live_migration: true
+      devstack_plugins:
+        ceilometer: https://git.openstack.org/openstack/ceilometer
+
+- job:
+    name: watcher-tempest-functional
+    parent: devstack-tempest
+    timeout: 7200
+    required-projects:
+      - openstack/ceilometer
+      - openstack-infra/devstack-gate
+      - openstack/python-openstackclient
+      - openstack/python-watcherclient
+      - openstack/watcher
+      - openstack/watcher-tempest-plugin
+      - openstack/tempest
+    vars:
+      devstack_plugins:
+        watcher: https://git.openstack.org/openstack/watcher
+      devstack_services:
+        tls-proxy: false
+        watcher-api: true
+        watcher-decision-engine: true
+        watcher-applier: true
+        tempest: true
+        s-account: false
+        s-container: false
+        s-object: false
+        s-proxy: false
+      devstack_localrc:
+        TEMPEST_PLUGINS: /opt/stack/watcher-tempest-plugin
+      tempest_test_regex: watcher_tempest_plugin.tests.api
+      tox_envlist: all
+      tox_environment:
+        # Do we really need to set this? It's cargo culted
+        PYTHONUNBUFFERED: 'true'
+      zuul_copy_output:
+        /etc/hosts: logs
+
+- job:
+    name: watcher-grenade
+    parent: legacy-dsvm-base
+    timeout: 10800
+    run: playbooks/legacy/grenade-devstack-watcher/run.yaml
+    post-run: playbooks/legacy/grenade-devstack-watcher/post.yaml
+    irrelevant-files:
+      - ^(test-|)requirements.txt$
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^watcher/hacking/.*$
+      - ^watcher/tests/.*$
+      - ^releasenotes/.*$
+      - ^setup.cfg$
+      - ^tools/.*$
+      - ^tox.ini$
+    required-projects:
+      - openstack-dev/grenade
+      - openstack-infra/devstack-gate
+      - openstack/watcher
+      - openstack/python-watcherclient
+      - openstack/watcher-tempest-plugin
+
+- job:
+    # This job is used in python-watcherclient repo
+    name: watcherclient-tempest-functional
+    parent: watcher-tempest-functional
+    voting: false
+    timeout: 4200
+    vars:
+      tempest_concurrency: 1
+      tempest_test_regex: watcher_tempest_plugin.tests.client_functional

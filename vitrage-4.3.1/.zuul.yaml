@@ -1,0 +1,153 @@
+- project:
+    templates:
+      - check-requirements
+      - openstack-lower-constraints-jobs
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - openstack-python37-jobs
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        - vitrage-dsvm-api-py27
+        - vitrage-dsvm-datasources-py27
+        - vitrage-dsvm-mock-py27
+        - vitrage-dsvm-api-py35
+        - vitrage-dsvm-datasources-py35
+        - vitrage-dsvm-mock-py35
+        - grenade-vitrage
+    gate:
+      queue: vitrage
+      jobs:
+        - vitrage-dsvm-api-py27
+        - vitrage-dsvm-datasources-py27
+        - vitrage-dsvm-api-py35
+        - vitrage-dsvm-datasources-py35
+        - grenade-vitrage
+
+- job:
+    name: vitrage-dsvm-api-py27
+    parent: legacy-dsvm-base
+    run: playbooks/legacy/vitrage-dsvm-api-py27/run.yaml
+    post-run: playbooks/legacy/vitrage-dsvm-api-py27/post.yaml
+    timeout: 7800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/aodh
+      - openstack/mistral
+      - openstack/python-vitrageclient
+      - openstack/vitrage
+      - openstack/vitrage-tempest-plugin
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+
+- job:
+    name: vitrage-dsvm-api-py35
+    parent: legacy-dsvm-base
+    run: playbooks/legacy/vitrage-dsvm-api-py35/run.yaml
+    post-run: playbooks/legacy/vitrage-dsvm-api-py35/post.yaml
+    timeout: 7800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/aodh
+      - openstack/mistral
+      - openstack/python-vitrageclient
+      - openstack/vitrage
+      - openstack/vitrage-tempest-plugin
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+
+- job:
+    name: vitrage-dsvm-datasources-py27
+    parent: legacy-dsvm-base
+    run: playbooks/legacy/vitrage-dsvm-datasources-py27/run.yaml
+    post-run: playbooks/legacy/vitrage-dsvm-datasources-py27/post.yaml
+    timeout: 7800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/aodh
+      - openstack/mistral
+      - openstack/python-vitrageclient
+      - openstack/vitrage
+      - openstack/vitrage-tempest-plugin
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+
+- job:
+    name: vitrage-dsvm-datasources-py35
+    parent: legacy-dsvm-base
+    run: playbooks/legacy/vitrage-dsvm-datasources-py35/run.yaml
+    post-run: playbooks/legacy/vitrage-dsvm-datasources-py35/post.yaml
+    timeout: 7800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/aodh
+      - openstack/mistral
+      - openstack/python-vitrageclient
+      - openstack/vitrage
+      - openstack/vitrage-tempest-plugin
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+
+- job:
+    name: vitrage-dsvm-mock-py27
+    parent: legacy-dsvm-base
+    voting: false
+    run: playbooks/legacy/vitrage-dsvm-mock-py27/run.yaml
+    post-run: playbooks/legacy/vitrage-dsvm-mock-py27/post.yaml
+    timeout: 7800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/python-vitrageclient
+      - openstack/vitrage
+      - openstack/vitrage-tempest-plugin
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+
+- job:
+    name: vitrage-dsvm-mock-py35
+    parent: legacy-dsvm-base
+    voting: false
+    run: playbooks/legacy/vitrage-dsvm-mock-py35/run.yaml
+    post-run: playbooks/legacy/vitrage-dsvm-mock-py35/post.yaml
+    timeout: 7800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/python-vitrageclient
+      - openstack/vitrage
+      - openstack/vitrage-tempest-plugin
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+
+- job:
+    name: grenade-vitrage
+    parent: legacy-dsvm-base
+    run: playbooks/legacy/vitrage-grenade/run.yaml
+    post-run: playbooks/legacy/vitrage-grenade/post.yaml
+    timeout: 7800
+    required-projects:
+      - openstack-dev/grenade
+      - openstack-infra/devstack-gate
+      - openstack/vitrage
+      - openstack/python-vitrageclient
+    irrelevant-files:
+      - ^(test-|)requirements.txt$
+      - ^.*\.rst$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+      - ^setup.cfg$
+    vars:
+      branch_override: default

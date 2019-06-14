@@ -1,0 +1,27 @@
+- project:
+    templates:
+      - openstack-cover-jobs
+      - openstack-lower-constraints-jobs
+      - check-requirements
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - publish-openstack-docs-pti
+    check:
+      jobs:
+        - karbor-dsvm-fullstack:
+            voting: false
+
+- job:
+    name: karbor-dsvm-fullstack
+    parent: legacy-dsvm-base
+    run: playbooks/legacy/karbor-dsvm-fullstack/run.yaml
+    post-run: playbooks/legacy/karbor-dsvm-fullstack/post.yaml
+    timeout: 7800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/karbor
+      - openstack/python-karborclient
+      - openstack/trove
+      - openstack/trove-dashboard
+      - openstack/manila-tempest-plugin

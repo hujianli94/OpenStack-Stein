@@ -1,0 +1,16 @@
+name: _masakari
+poll_interval: 60
+allow_exec_api: true
+authentication: !ref keystone_admin_auth_config
+api_endpoint: !ref masakari_api_endpoint
+tables:
+  segments:
+    poll:
+      api_path: segments
+      api_method: get
+      jsonpath: $.segments[:]
+  notifications:
+    poll:
+      api_path: notifications
+      api_method: get
+      jsonpath: $.notifications[:]

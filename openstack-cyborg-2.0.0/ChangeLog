@@ -1,0 +1,185 @@
+CHANGES
+=======
+
+2.0.0
+-----
+
+* let conductor to update DB and placement
+* Add driver-side OVO functions
+* Add gpu driver
+* Fix undefined name 'api\_dep' error in deployables.py
+* Add the module used but not be imported
+* Add the params default value for method \_paginate\_query()
+* Fix method 'test\_discover' assertError in test\_driver.py
+* Improve Intel FPGA driver
+* Fix failures in v1 accelerator API. Updated documentation
+* Report data to conductor
+* Fix bug: deployable object related bugs
+* Modify the deployable's api for new database work
+* Bug fix: Change object definition according to the newest DB
+* Fix:add python-glanceclient to cyborg requirements
+* Add New Driver OVO
+* Modified the Deployable Object
+* Add Device and DeviceProfile objects
+* Add AttachHandle and ControlpathID objects
+* Modify "extended\_accelerator\_requests" table "project\_id" field
+* Fix New DB Schema problems
+* Add ExtArq and ARQ object
+* Add new DB schema: sqlachemy and alembic scripts
+* Fix tox -e py27
+* Update the API content in the document to Rocky
+* Add OS-limitation in the devstack\_setup doc
+* Add "Report device data to cyborg"
+* Devstack enablement for OPAE FPGA driver
+* List accelerators for all-tenants by default
+* [Docs] Install cyborg from source code
+* Replacing the HTTP protocal with HTTPS in devstack\_setup.rst
+* Added downloading bitstream when programming fpga
+* Add cyborg-status upgrade check command framework
+* bug fix: fix 2 bugs for image client
+* use context to get project\_id and user\_id
+* Fix imports in spdk driver
+* [docs] Deploy cyborg api under WSGI server
+* Deploy cyborg-api via uwsgi
+* Don't quote {posargs} in tox.ini
+* Add WSGI support script for cyborg API
+* PY3 : Replice dict.iteritems() with dict.items()
+* Bug fix: add missing fields required when adding deployables
+* Added Glance Client for Image downloading
+* Increment versioning with pbr instruction
+* python2/3 compatibilty for spdk/util using oslo.log
+* switch documentation job to new PTI
+* import zuul job settings from project-config
+* Improve pep8 checking along with hacking
+* Quota usage support in Cyborg
+* Fix deployable attribute object issues and unit test failures
+* Update reno for stable/rocky
+* Follow the new PTI for document build
+* Update html\_theme so cyborg doc page displays in standard page theme
+
+1.0.0
+-----
+
+* support sub provider
+* Fix deployable get all sort issue and unit test failure
+* Docs: Autogenerate config documentation
+* Imply new cyborg deployable api
+* Added rest API for FPGA programming
+* Switch to stestr
+
+1.0.0.0b3
+---------
+
+* Add "interface\_type" field in deployable DB
+* Improve .gitignore for project
+* remove AUTHORS file from git
+* Move specs under doc/source so they build
+* fix tox python3 overrides
+* Bug fix in setup.cfg for rocky ms2
+* Introduce Cyborg Resource Quota -- Usage Part
+* Fix tox -egenconfig
+* Added bitstream metadata standardization spec
+* Specification for Cyborg/Nova interaction for scheduling
+* Added cyborg fpga programming spec
+* use config options from keystoneauth1 under placement
+
+1.0.0.0b2
+---------
+
+* Specification for Cyborg Agent-Driver API
+* Load cyborg-api app with paste\_deploy
+* Add note to dev\_setup doc
+* Fix Deployable get\_by\_host
+* doc fix: devstack setup doc can not display well
+* Specification for Cyborg/Nova/Glance interaction in the compute node, including os-acc library API
+* change service type to "accelerator"
+* Add doc8 to pep8 check for cyborg project
+* Added attribute object and its unit tests
+* uncap eventlet
+* Fix remote call conductor error
+* bug fix: endpoint register, import and devstack broken issues
+
+1.0.0.0b1
+---------
+
+* Enable mutable config in Cyborg
+* Implemented the Objects and APIs for vf/pf
+* bug fix: devstack can not start cyborg
+* Add default configuration files to data\_files
+* Remove etc/cyborg/cyborg.conf.sample from project
+* queens release doc fix part 3
+* It's releasenotes - plural
+* Remove ChangeLog
+* Fix doc build warnings
+* queens release doc fix part 2
+* Add release pkg related files
+
+0.1.0
+-----
+
+* bug fix: devstack adds cyborg account and endpoint
+* bug fix: rename accelerator to Accelerator
+* bug fix: missing i18n.\_()
+* add test case for agent resource tracker
+* queens release doc fix part 1
+* Provide reference implementation for Cyborg
+* Added Unit tests for object Accelerator and Deployable
+* Add Cyborg SPDK Driver
+* Implement FPGA data model and corresponding API
+* FPGA driver support
+* aggent support resource tracker for FPGA
+* Zuul: Remove project name
+* Added NOVA Placement API Client and unit tests. This feature is used for updating the placement DB on NOVA side Cyborg DB should be kept up to date with the placement DB all the time
+* Fix bug in cyborg/devstack script
+* Added proposal for fpga modelling
+* Internal API spec
+* Let user to setup and run Cyborg by devstack
+* Supplementing accelerator CRUD api
+* Cyborg FPGA driver support
+* Move legacy jobs to project
+* Fix 500 error when creating accelerators
+* Indicating the location tests directory in oslo\_debug\_helper
+* Auto generate cyborg.conf with oslo-config-generator
+* Replace jsonutils by common json package
+* Cyborg Nova interaction take 2
+* Cleanup test-requirements
+* Add Cyborg SPDK driver
+* Fix issues with devstack script
+* add api unit test
+* Pike doc clean up
+* Update and replace http with https for doc links in cyborg
+* Add devstack plugin for Cyborg
+* add authtoken-middleware
+* Add Release Notes and Architecture Docs
+* Update contributing guide
+* Updated Hacking doc
+* Replace all occurences of Nomad with Cyborg
+* Replace DbMigrationError with DBMigrationError
+* add policy support
+* Cyborg deployment script
+* Modify tox.ini to reflect patch tests
+* add cyborg-conductor & db
+* add cyborg-api v1 & hooks
+* Rename nomad to cyborg
+* Updating the link of docs,bugs,bps in README.rst
+* Database interface using sqlalchemy
+* Add cyborg-api command
+* Add Pecan/WSME framework for API
+* Create driver directories and prototype generic driver
+* Cyborg Conductor Stubs
+* Removed older version of python added 3.5
+* Initial cyborg api and db design proposal
+* Agent Stubs
+* Accelerator class for internal representation
+* Drop MANIFEST.in - it's not needed by pbr
+* Don't include openstack/common in flake8 exclude list
+* Add basic gitignore file
+* Add spec for Cyborg generic driver implementation
+* Cyborg Agent Spec
+* Conductor spec
+* Setup sandbox and specs folder
+* Rename old Nomad files to Cyborg
+* Rename project in .gitreview
+* Cleanup tox.ini: Remove obsolete constraints
+* initial setup "correct tox.ini testr and test-requirement.txt requirement , add .testr.cof"
+* Added .gitreview

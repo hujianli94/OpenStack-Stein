@@ -1,0 +1,39 @@
+[console_scripts]
+zun-api = zun.cmd.api:main
+zun-compute = zun.cmd.compute:main
+zun-db-manage = zun.cmd.db_manage:main
+zun-rootwrap = oslo_rootwrap.cmd:main
+zun-status = zun.cmd.status:main
+zun-wsproxy = zun.cmd.wsproxy:main
+
+[oslo.config.opts]
+zun.conf = zun.conf.opts:list_opts
+
+[oslo.config.opts.defaults]
+zun = zun.common.config:set_cors_middleware_defaults
+
+[oslo.policy.policies]
+zun = zun.common.policies:list_rules
+
+[wsgi_scripts]
+zun-api-wsgi = zun.api.wsgi:init_application
+
+[zun.database.migration_backend]
+sqlalchemy = zun.db.sqlalchemy.migration
+
+[zun.image.driver]
+docker = zun.image.docker.driver:DockerDriver
+glance = zun.image.glance.driver:GlanceDriver
+
+[zun.network.driver]
+kuryr = zun.network.kuryr_network:KuryrNetwork
+
+[zun.scheduler.driver]
+chance_scheduler = zun.scheduler.chance_scheduler:ChanceScheduler
+fake_scheduler = zun.tests.unit.scheduler.fakes:FakeScheduler
+filter_scheduler = zun.scheduler.filter_scheduler:FilterScheduler
+
+[zun.volume.driver]
+cinder = zun.volume.driver:Cinder
+local = zun.volume.driver:Local
+

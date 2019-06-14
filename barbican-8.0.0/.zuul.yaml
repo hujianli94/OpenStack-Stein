@@ -1,0 +1,209 @@
+- job:
+    name: barbican-devstack-functional-base
+    # start running with Pike
+    branches: ^(?!stable/ocata).*$
+    parent: legacy-dsvm-base
+    vars:
+      database: sql
+      python_version: py27
+      services: tempest,rabbit,mysql,key
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/barbican
+      - openstack/barbican-tempest-plugin
+      - openstack/python-barbicanclient
+    run: playbooks/legacy/barbican-devstack-functional-base/run.yaml
+    post-run: playbooks/legacy/barbican-devstack-functional-base/post.yaml
+    timeout: 4200
+
+- job:
+    name: barbican-devstack-base
+    parent: legacy-base
+    vars:
+      database: sql
+      python_version: py27
+      services: tempest,keystone
+    required-projects:
+      - openstack-dev/devstack
+      - openstack-infra/devstack-gate
+      - openstack/barbican
+      - openstack/barbican-tempest-plugin
+      - openstack/python-barbicanclient
+    run: playbooks/legacy/barbican-devstack-base/run.yaml
+    post-run: playbooks/legacy/barbican-devstack-base/post.yaml
+    timeout: 4200
+
+- job:
+    name: barbican-devstack-tempest-base
+    parent: legacy-dsvm-base
+    vars:
+      python_version: py27
+      database: sql
+      castellan_from_git: 0
+      cursive: 0
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/barbican
+      - openstack/barbican-tempest-plugin
+      - openstack/castellan
+      - openstack/cursive
+      - openstack/python-barbicanclient
+      - openstack/tempest
+    run: playbooks/legacy/barbican-devstack-tempest-base/run.yaml
+    post-run: playbooks/legacy/barbican-devstack-tempest-base/post.yaml
+    timeout: 4200
+
+- job:
+    name: barbican-dogtag-devstack-functional-fedora-latest
+    nodeset: devstack-single-node-fedora-latest
+    parent: barbican-devstack-functional-base
+    vars:
+      services: barbican-dogtag,tempest,rabbit,mysql,key
+      plugin: dogtag
+    post-run: playbooks/legacy/barbican-devstack-functional-base/dogtag-post.yaml
+
+- job:
+    name: barbican-vault-devstack-functional
+    parent: barbican-devstack-functional-base
+    vars:
+      services: barbican-vault,tempest,rabbit,mysql,key
+      plugin: vault
+
+- job:
+    name: barbican-kmip-devstack-functional
+    parent: barbican-devstack-functional-base
+    vars:
+      services: barbican-pykmip,pykmip-server,tempest,rabbit,mysql,key
+      plugin: kmip
+
+- job:
+    name: barbican-simple-crypto-devstack-functional
+    parent: barbican-devstack-functional-base
+    vars:
+      plugin: simple-crypto
+
+- job:
+    name: barbican-simple-crypto-devstack-functional-postgres
+    parent: barbican-devstack-functional-base
+    voting: false
+    vars:
+      database: postgres
+      plugin: simple-crypto
+
+- job:
+    name: barbican-simple-crypto-devstack-functional-py35
+    parent: barbican-devstack-functional-base
+    vars:
+      python_version: py35
+      plugin: simple-crypto
+
+- job:
+    name: barbican-dogtag-devstack-fedora-latest
+    nodeset: devstack-single-node-fedora-latest
+    parent: barbican-devstack-base
+    vars:
+      services: barbican-dogtag,tempest,keystone
+      plugin: dogtag
+
+- job:
+    name: barbican-simple-crypto-devstack
+    parent: barbican-devstack-base
+    vars:
+      plugin: simple-crypto
+
+- job:
+    name: barbican-simple-crypto-devstack-postgres
+    parent: barbican-devstack-base
+    voting: false
+    vars:
+      plugin: simple-crypto
+      database: postgres
+
+- job:
+    name: barbican-simple-crypto-devstack-tempest
+    parent: barbican-devstack-tempest-base
+
+- job:
+    name: barbican-simple-crypto-devstack-tempest-castellan-from-git
+    parent: barbican-devstack-tempest-base
+    vars:
+      castellan_from_git: 1
+
+- job:
+    name: barbican-simple-crypto-devstack-tempest-cursive
+    parent: barbican-devstack-tempest-base
+    vars:
+      cursive: 1
+
+- job:
+    name: barbican-simple-crypto-devstack-tempest-py35
+    parent: barbican-devstack-tempest-base
+    voting: false
+    vars:
+      python_version: py35
+
+- job:
+    name: grenade-devstack-barbican
+    parent: legacy-dsvm-base
+    # Start testing with pike
+    branches: ^(?!stable/ocata).*$
+    irrelevant-files:
+      - ^(test-|)requirements.txt$
+      - ^setup.cfg$
+    run: playbooks/legacy/grenade-devstack-barbican/run.yaml
+    post-run: playbooks/legacy/grenade-devstack-barbican/post.yaml
+    required-projects:
+      - openstack-dev/grenade
+      - openstack-infra/devstack-gate
+      - openstack/barbican
+      - openstack/barbican-tempest-plugin
+      - openstack/python-barbicanclient
+    timeout: 7800
+
+- project:
+    templates:
+      - check-requirements
+      - openstack-cover-jobs
+      - openstack-lower-constraints-jobs
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - openstack-python37-jobs
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        - barbican-simple-crypto-devstack-tempest
+        - barbican-simple-crypto-devstack-functional
+        - barbican-simple-crypto-devstack-functional-py35
+        - barbican-simple-crypto-devstack-functional-postgres
+        - barbican-dogtag-devstack-functional-fedora-latest
+        - barbican-kmip-devstack-functional:
+            voting: false
+        - barbican-vault-devstack-functional
+        - grenade-devstack-barbican:
+            voting: false
+        # TripleO jobs that deploy Barbican.
+        # Note we don't use a project-template here, so it's easier
+        # to disable voting on one specific job if things go wrong.
+        # tripleo-ci-centos-7-scenario002-standalone will
+        # run in Pike and beyond.
+        # If you need any support to debug these jobs in case of
+        # failures, please reach us on #tripleo IRC channel.
+        - tripleo-ci-centos-7-scenario002-standalone:
+            voting: false
+        - octavia-v2-dsvm-tls-barbican:
+            voting: false
+    gate:
+      queue: barbican
+      jobs:
+        - barbican-simple-crypto-devstack-tempest
+        - barbican-simple-crypto-devstack-functional
+        - barbican-simple-crypto-devstack-functional-py35
+        - barbican-dogtag-devstack-functional-fedora-latest
+        - barbican-vault-devstack-functional
+        - grenade-devstack-barbican:
+            voting: false
+    experimental:
+      jobs:
+        - barbican-simple-crypto-devstack-tempest-py35

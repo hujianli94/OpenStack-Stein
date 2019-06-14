@@ -1,0 +1,216 @@
+- job:
+    name: monasca-tempest-base
+    parent: devstack-tempest
+    description: |
+      Base job for running tempest tests with monasca-api devstack plugin.
+    timeout: 7800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/monasca-agent
+      - openstack/monasca-api
+      - openstack/monasca-common
+      - openstack/monasca-grafana-datasource
+      - openstack/monasca-notification
+      - openstack/monasca-persister
+      - openstack/monasca-statsd
+      - openstack/monasca-thresh
+      - openstack/monasca-ui
+      - openstack/python-monascaclient
+      - openstack/tempest
+      - openstack/monasca-tempest-plugin
+    vars:
+      devstack_services:
+        # Disable unneeded services.
+        etcd3: false
+        g-api: false
+        g-reg: false
+        n-api: false
+        n-api-meta: false
+        n-cauth: false
+        n-cond: false
+        n-cpu: false
+        n-novnc: false
+        n-obj: false
+        n-sch: false
+        placement-api: false
+        s-account: false
+        s-container: false
+        s-object: false
+        s-proxy: false
+        c-api: false
+        c-bak: false
+        c-sch: false
+        c-vol: false
+        cinder: false
+        horizon: false
+      tox_envlist: all
+      tempest_test_regex: monasca_tempest_tests.tests.api
+      devstack_plugins:
+        monasca-api: https://git.openstack.org/openstack/monasca-api
+      zuul_copy_output:
+        /var/log/kafka: logs
+        /etc/kafka/server.properties: logs
+        /etc/kafka/producer.properties: logs
+        /etc/kafka/consumer.properties: logs
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^.*\.md$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+
+- job:
+    name: monasca-tempest-python2-influxdb
+    parent: monasca-tempest-base
+    vars:
+      devstack_localrc:
+        MONASCA_API_IMPLEMENTATION_LANG: python
+        MONASCA_PERSISTER_IMPLEMENTATION_LANG: python
+        MONASCA_METRICS_DB: influxdb
+        TEMPEST_PLUGINS: /opt/stack/monasca-tempest-plugin
+
+- job:
+    name: monasca-tempest-python3-influxdb
+    parent: monasca-tempest-base
+    vars:
+      devstack_localrc:
+        USE_PYTHON3: true
+        MONASCA_API_IMPLEMENTATION_LANG: python
+        MONASCA_PERSISTER_IMPLEMENTATION_LANG: python
+        MONASCA_METRICS_DB: influxdb
+        TEMPEST_PLUGINS: /opt/stack/monasca-tempest-plugin
+
+- job:
+    name: monasca-tempest-java-influxdb
+    parent: monasca-tempest-base
+    voting: false
+    vars:
+      devstack_localrc:
+        MONASCA_API_IMPLEMENTATION_LANG: python
+        MONASCA_PERSISTER_IMPLEMENTATION_LANG: java
+        MONASCA_METRICS_DB: influxdb
+        TEMPEST_PLUGINS: /opt/stack/monasca-tempest-plugin
+
+- job:
+    name: monasca-tempest-python2-cassandra
+    parent: monasca-tempest-base
+    vars:
+      devstack_localrc:
+        MONASCA_API_IMPLEMENTATION_LANG: python
+        MONASCA_PERSISTER_IMPLEMENTATION_LANG: python
+        MONASCA_METRICS_DB: cassandra
+        TEMPEST_PLUGINS: /opt/stack/monasca-tempest-plugin
+
+- job:
+    name: monasca-tempest-python3-cassandra
+    parent: monasca-tempest-base
+    voting: false
+    vars:
+      devstack_localrc:
+        USE_PYTHON3: true
+        MONASCA_API_IMPLEMENTATION_LANG: python
+        MONASCA_PERSISTER_IMPLEMENTATION_LANG: python
+        MONASCA_METRICS_DB: cassandra
+        TEMPEST_PLUGINS: /opt/stack/monasca-tempest-plugin
+
+- job:
+    name: monasca-tempest-python2-java-cassandra
+    parent: monasca-tempest-base
+    vars:
+      devstack_localrc:
+        MONASCA_API_IMPLEMENTATION_LANG: python
+        MONASCA_PERSISTER_IMPLEMENTATION_LANG: java
+        MONASCA_METRICS_DB: cassandra
+        TEMPEST_PLUGINS: /opt/stack/monasca-tempest-plugin
+
+- job:
+    name: monasca-tempest-python3-java-cassandra
+    parent: monasca-tempest-base
+    voting: false
+    vars:
+      devstack_localrc:
+        USE_PYTHON3: true
+        MONASCA_API_IMPLEMENTATION_LANG: python
+        MONASCA_PERSISTER_IMPLEMENTATION_LANG: java
+        MONASCA_METRICS_DB: cassandra
+        TEMPEST_PLUGINS: /opt/stack/monasca-tempest-plugin
+
+
+- project:
+    templates:
+      - check-requirements
+      - openstack-cover-jobs
+      - openstack-lower-constraints-jobs
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        - monasca-tempest-python2-influxdb
+        - monasca-tempest-python3-influxdb
+        - monasca-tempest-java-influxdb
+        - monasca-tempest-python2-cassandra
+        - monasca-tempest-python3-cassandra
+        - monasca-tempest-python2-java-cassandra
+        - monasca-tempest-python3-java-cassandra
+        - monascalog-python3-tempest
+        - docker-build-monasca-service
+    gate:
+      queue: monasca
+      jobs:
+        - monasca-tempest-python2-influxdb
+        - monasca-tempest-python3-influxdb
+        - monasca-tempest-java-influxdb
+        - monasca-tempest-python2-cassandra
+        - monasca-tempest-python3-cassandra
+        - monasca-tempest-python2-java-cassandra
+        - monasca-tempest-python3-java-cassandra
+        - monascalog-python3-tempest
+    post:
+      jobs:
+        - docker-publish-monasca-api
+    periodic:
+      jobs:
+        - docker-publish-monasca-api
+    release:
+      jobs:
+        - docker-publish-monasca-api
+
+- job:
+    name: docker-publish-monasca-api
+    parent: docker-build-monasca-service
+    post-run: playbooks/docker-publish.yml
+    required-projects:
+      - openstack/monasca-common
+    vars:
+      publisher: true
+    secrets:
+      - doker_hub_login_api
+
+- secret:
+    name: doker_hub_login_api
+    data:
+      user: !encrypted/pkcs1-oaep
+        - JQCFFaHjbMstCHOxW9JxepuFbsdOKhs/swCkfbzgqiNDyL91e2AF6tazGf8EtMxX6brP4
+          vCGWFEkMUGxBxVbpwRMUf4mSCOzs2+3/4S1NVr5+ppQEgYVDON4S5BbC2jnwawuB4DKLa
+          tDYkmgTMIPqxK29giQN/W/wbo0uIAObpRJuCyHY/eNxfC4fzajpGisyu2D3b606Cw15uA
+          KRw5GexwxN/D0pPvAgT/lwlVrm8Lz9NUziQANL+55gjo9Xs0OIu+OXwiUhZE45TmfpBLF
+          VO9oOWT+Fhpv2LTA8M1m5vrDo5H03qbn/MNZaiqcPYnPJtnd4pQ0o7DewUk6OBZcPnnVB
+          RGJm3aO0cs19s0LEwbXxe9URzWeilp/IQdRY42FySmz/OcBqicie0FEr+W0vkq+6lvkmZ
+          Z9UTw7WDaF0kauhS/yy8wgcbdARmKemBQWWJLZg+2HuVLFqMLlo6bMMagtIN1x/bPj+SX
+          4VuPfqCJoynvroQTqY+QuDBJy9Q6IoRGlWUGyIW3kOskRZRsYpaAKZExgNkmkumJ7jJr9
+          vI9DOTYxQMBlRptEAExy5OOkIypmpYqoPEF9PnutjIGEHN4gy+ZPHMwD7ht3aG+riDhHl
+          P1BUBH4cRVOpkHcsqP46hw1uty3QEZMjlk2j8831bfr+opagsaGTqK1CVMM6zg=
+
+      password: !encrypted/pkcs1-oaep
+        - r5q4gVugtWsad/4/BeTmu6PFdlHkxe+q8R3TOnsitUrnnpQH4y0jq4edIgzQtfQUyk+bV
+          9Z4mr7UkI/Yd2Ia1IgzgyjSNLxABtm1JevzLD0XeQTtr/uurTXTMoQJqcveAWWfumrlVx
+          sIxlr9uujByrmS1OLhFc3S0TBcpwk5hg786RNC6MJVnrQJwKy8MVZaGvh95OoGXuEGkIg
+          z06afI+QGcJExV1n+zp1aCX1SKIOZlEG0Y70HJYUSfBjtXTCmpybsHk7exqL2Krwb/Oyo
+          fsWuQbjbN1kdBh7tVg/w0KR2jSvNnh9tLDX97b3qB0iN14cqD45kApF/LclDUy4xryj6+
+          ij6YbvBQLWDiMMy47FhVCZQ5sfM6MYvaDA3DpJe7DZXOQFxZp9KGB50zAlVm+PssCNY/g
+          kBqBJA0qd0Nwixkku8trokwShUzVFAaWfPr9zj0/lAk5jFDz42NK5pfM0o0M84Duof+7u
+          wxp5H4wnwPXauDbC+LhI12s3J0teDnaXNwCTTPd+NWi1w50N0JH8nDVkz+g3cZA7mAW83
+          cvrC3If9SyQZi/9GNphNzVPfG6llOeAkNno5f4CXoGxuoMgw17Px7HnCO50XPYLUfORzo
+          eLG2QHqbHIiMgIpy30YvVKRsvjLvKId6I2s51oj918U96mt/jef6Ct0Q5jybTs=

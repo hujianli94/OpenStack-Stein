@@ -1,0 +1,11 @@
+name: _cve
+allow_exec_api: true
+poll_interval: 86400  # one day
+api_endpoint: https://cve.circl.lu/api/
+tables:
+  linux_kernel:
+    gin_index: false
+    poll:
+      api_path: search/linux/kernel
+      api_method: get
+      jsonpath: $[:]

@@ -1,0 +1,20 @@
+#!/bin/sh
+'/opt/monasca-agent/bin/monasca-setup' \
+    -u 'monasca-agent' \
+    -p 'password' \
+    -s '%MONASCA_SERVICE_TYPE%'  \
+    \
+    --keystone_url '%KEYSTONE_AUTH_URI%' \
+    --project_name 'mini-mon' \
+    --project_domain_name '%SERVICE_DOMAIN_NAME%' \
+    --user_domain_name '%SERVICE_DOMAIN_NAME%' \
+    \
+    --service_type '%MONASCA_SERVICE_TYPE%' \
+    --endpoint_type 'public' \
+    --region_name '%REGION_NAME%' \
+    \
+    --check_frequency '15'  \
+    --log_level 'DEBUG'  \
+    --overwrite \
+    --system_only \
+    --monasca_statsd_port %MONASCA_STATSD_PORT%

@@ -1,0 +1,90 @@
+# DevStack settings
+#------------------
+
+# Congress Configuration
+# ----------------------
+
+# Set up default directories
+CONGRESS_DIR=$DEST/congress
+CONGRESS_AUTH_CACHE_DIR=${CONGRESS_AUTH_CACHE_DIR:-/var/cache/congress}
+CONGRESSDASHBOARD_DIR=$DEST/congress-dashboard
+CONGRESS_Z3_DIR=$DEST/z3
+
+# Support entry points installation of console scripts
+if [[ -d $CONGRESS_DIR/bin/congress-server ]]; then
+    CONGRESS_BIN_DIR=$CONGRESS_DIR/bin
+else
+    CONGRESS_BIN_DIR=$(get_python_exec_prefix)
+fi
+
+CONGRESS_CONF_DIR=/etc/congress
+CONGRESS_CONF=$CONGRESS_CONF_DIR/congress.conf
+
+# Flag for disabling congress-agent
+ENABLE_CONGRESS_AGENT=$(trueorfalse True ENABLE_CONGRESS_AGENT)
+# Validator Agent conf
+CONGRESS_AGT_CONF=$CONGRESS_CONF_DIR/congress-agent.conf
+
+# Default Congress Port
+CONGRESS_PORT=${CONGRESS_PORT:-1789}
+# Default Congress Host
+CONGRESS_HOST=${CONGRESS_HOST:-$SERVICE_HOST}
+# Default admin username
+CONGRESS_ADMIN_USERNAME=${CONGRESS_ADMIN_USERNAME:-congress}
+# Default auth strategy
+CONGRESS_AUTH_STRATEGY=${CONGRESS_AUTH_STRATEGY:-keystone}
+# Default name for Congress database
+CONGRESS_DB_NAME=${CONGRESS_DB_NAME:-congress}
+# To run congress in HA mode
+CONGRESS_REPLICATED=${CONGRESS_REPLICATED:-False}
+# Mutli process deployment
+CONGRESS_MULTIPROCESS_DEPLOYMENT=${CONGRESS_MULTIPROCESS_DEPLOYMENT:-False}
+# Directory path to library policy files
+CONGRESS_LIBRARY_DIR=$CONGRESS_CONF_DIR/library
+# File path to predefined policy and rules
+CONGRESS_PREDEFINED_POLICY_FILE=${CONGRESS_PREDEFINED_POLICY_FILE:-""}
+
+# Flag for enabling Z3 in Congress
+ENABLE_CONGRESS_Z3=$(trueorfalse False ENABLE_CONGRESS_Z3)
+# Flag to indicate that we prefer to use a precompiled release
+USE_Z3_RELEASE=${USE_Z3_RELEASE:-None}
+
+# Flag for enabling experimental JSON ingester
+# Requires DATABASE_TYPE: postgresql
+ENABLE_CONGRESS_JSON=$(trueorfalse False ENABLE_CONGRESS_JSON)
+CONGRESS_JSON_DB_NAME=${CONGRESS_JSON_DB_NAME:-congress_json}
+CONGRESS_JSON_CONF_DIR=$CONGRESS_CONF_DIR/json_ingesters
+CONGRESS_JSON_CONF_REUSABLES_PATH=$CONGRESS_CONF_DIR/config_reusables.yaml
+CONGRESS_JSON_USER_ROLE=${CONGRESS_JSON_USER_ROLE:-jgress_user}
+CONGRESS_JSON_INGESTER_ROLE=${CONGRESS_JSON_INGESTER_ROLE:-root}
+
+
+TEMPEST_DIR=$DEST/tempest
+TEMPEST_CONFIG_DIR=${TEMPEST_CONFIG_DIR:-$TEMPEST_DIR/etc}
+TEMPEST_CONFIG=$TEMPEST_CONFIG_DIR/tempest.conf
+
+# Setup default directories for client
+#-------------------------------------
+
+# congress service
+CONGRESS_REPO=${CONGRESS_REPO:-${GIT_BASE}/openstack/congress.git}
+CONGRESS_BRANCH=${CONGRESS_BRANCH:-master}
+
+# congress client library test
+GITREPO["python-congressclient"]=${CONGRESSCLIENT_REPO:-${GIT_BASE}/openstack/python-congressclient.git}
+GITBRANCH["python-congressclient"]=${CONGRESSCLIENT_BRANCH:-master}
+GITDIR["python-congressclient"]=$DEST/python-congressclient
+
+# congress dashboard
+CONGRESSDASHBOARD_REPO=${CONGRESSDASHBOARD_REPO:-${GIT_BASE}/openstack/congress-dashboard.git}
+CONGRESSDASHBOARD_BRANCH=${CONGRESSDASHBOARD_BRANCH:-master}
+
+# z3
+CONGRESS_Z3_REPO=${CONGRESS_Z3_REPO:-https://github.com/Z3Prover/z3.git}
+CONGRESS_Z3_BRANCH=${CONGRESS_Z3_BRANCH:-master}
+
+enable_service congress congress-api congress-engine congress-datasources
+if [[ $ENABLE_CONGRESS_AGENT == "True" ]] ; then
+  enable_service congress-agent
+fi
+

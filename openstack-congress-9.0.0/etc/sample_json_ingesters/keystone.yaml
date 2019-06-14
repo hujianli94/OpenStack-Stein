@@ -1,0 +1,51 @@
+name: _identity
+poll_interval: 60
+allow_exec_api: true
+authentication: !ref keystone_admin_auth_config
+api_endpoint: !ref keystone_api_endpoint
+tables:
+  domains:
+    poll:
+      api_path: v3/domains
+      api_method: get
+      jsonpath: $.domains[:]
+  groups:
+    poll:
+      api_path: v3/groups
+      api_method: get
+      jsonpath: $.groups[:]
+  projects:
+    poll:
+      api_path: v3/projects
+      api_method: get
+      jsonpath: $.projects[:]
+  regions:
+    poll:
+      api_path: v3/regions
+      api_method: get
+      jsonpath: $.regions[:]
+  roles:
+    poll:
+      api_path: v3/roles
+      api_method: get
+      jsonpath: $.roles[:]
+  services:
+    poll:
+      api_path: v3/services
+      api_method: get
+      jsonpath: $.services[:]
+  endpoints:
+    poll:
+      api_path: v3/endpoints
+      api_method: get
+      jsonpath: $.endpoints[:]
+  registered_limits:
+    poll:
+      api_path: v3/registered_limits
+      api_method: get
+      jsonpath: $.registered_limits[:]
+  users:
+    poll:
+      api_path: v3/users
+      api_method: get
+      jsonpath: $.users[:]

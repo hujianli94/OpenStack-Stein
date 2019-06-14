@@ -1,0 +1,173 @@
+Aaron Rosen <aaronorosen@gmail.com>
+Abhishek Chanda <abhishek@cloudscaling.com>
+Aimee Ukasick <aimeeu.opensource@gmail.com>
+Alexander Yip <ayip@vmware.com>
+Amey Bhide <abhide@vmware.com>
+Andreas Jaeger <aj@suse.com>
+Andrey Kurilin <andr.kurilin@gmail.com>
+Anh Tran <anhtt@vn.fujitsu.com>
+Anusha Ramineni <anusha.ramineni@nectechnologies.in>
+AvnishPal <avnish.pal@nectechnologies.in>
+Ben Nemec <bnemec@redhat.com>
+Bertrand Lallau <bertrand.lallau@gmail.com>
+Bin Zhou <zhou.bin9@zte.com.cn>
+Boden R <bodenvmw@gmail.com>
+Béla Vancsics <vancsics@inf.u-szeged.hu>
+Cao Xuan Hoang <hoangcx@vn.fujitsu.com>
+Carlos Goncalves <carlos.goncalves@neclab.eu>
+ChangBo Guo(gcb) <eric.guo@easystack.cn>
+Chaolei Li <chaoleili2@gmail.com>
+Claudiu Belu <cbelu@cloudbasesolutions.com>
+Cleber Rosa <cleber.gnu@gmail.com>
+Conner Ferguson <conner.ferguson1@marist.edu>
+Corey Bryant <corey.bryant@canonical.com>
+Davanum Srinivas <davanum@gmail.com>
+David Cheperdak <djbchepe@gmail.com>
+David Höppner <0xffea@gmail.com>
+Deepak <deepak.os31@yahoo.com>
+Doug Hellmann <doug@doughellmann.com>
+Duan Jiong <jduan@fiberhome.com>
+Emilien Macchi <emilien@redhat.com>
+Eric K <ekcs.openstack@gmail.com>
+Eric Kao <ekcs.openstack@gmail.com>
+Fabio Giannetti <fgiannet@cisco.com>
+Flavio Percoco <flaper87@gmail.com>
+Guoqiang Ding <dingguoqiang@cloudin.cn>
+Haiwei Xu <xu-haiwei@mxw.nes.nec.co.jp>
+Harrison Kelly <harrison.kelly@plexxi.com>
+Harrison kelly <harrison.kelly@plexxi.com>
+Hidekazu Nakamura <hid-nakamura@vf.jp.nec.com>
+Hieu LE <hieulq@vn.fujitsu.com>
+Hiro Kobayashi <kobayashi.hiroaki@lab.ntt.co.jp>
+Hironori Shiina <shiina.hironori@jp.fujitsu.com>
+Hong Wong <hong.wong@hp.com>
+Ian Wienand <iwienand@redhat.com>
+Ihar Hrachyshka <ihrachys@redhat.com>
+Iswarya_Vakati <v.iswarya@nectechnologies.in>
+Jacek Tomasiak <jacek.tomasiak@gmail.com>
+James E. Blair <jeblair@redhat.com>
+James Zabala <james.zabala@gmail.com>
+Janet Yu <jwy@cs.stanford.edu>
+Javier Pena <jpena@redhat.com>
+Jeremy Liu <liujiong@gohighsec.com>
+Jeremy Stanley <fungi@yuggoth.org>
+John Strassner <strazpdj@gmail.com>
+Joon-Myung Kang <joon-myung.kang@hp.com>
+Ken'ichi Ohmichi <ken-oomichi@wx.jp.nec.com>
+Kiran_totad <kiran.totad@nectechnologies.in>
+Lance Bragstad <lbragstad@gmail.com>
+LeopardMa <mabao@inspur.com>
+Liam Young <liam.young@canonical.com>
+Lianhao Lu <lianhao.lu@intel.com>
+Lin Yang <lin.a.yang@intel.com>
+Longgeek <longgeek@thstack.com>
+Luong Anh Tuan <tuanla@vn.fujitsu.com>
+Madhu Mohan N S <mmohan@mvista.com>
+Madhu Mohan Nelemane <mmnelemane@suse.com>
+Madhu Mohan Nelemane <mmohan@mvista.com>
+Marc Koderer <marc@koderer.com>
+Martin <martin.casado@gmail.com>
+Masahito Muroi <muroi.masahito@lab.ntt.co.jp>
+Michael Krotscheck <krotscheck@gmail.com>
+Monty Taylor <mordred@inaugust.com>
+Nam Nguyen Hoai <namnh@vn.fujitsu.com>
+Nguyen Hai <nguyentrihai93@gmail.com>
+Nguyen Hung Phuong <phuongnh@vn.fujitsu.com>
+Nguyen Van Trung <trungnv@vn.fujitsu.com>
+OpenStack Release Bot <infra-root@openstack.org>
+Peter Balland <pballand@vmware.com>
+Peter Balland <peter@balland.net>
+Peter Balland <peter@congress-dev.localdomain>
+Peter Balland <peter@ubuntu.(none)>
+Pierre Crégut <pierre.cregut@orange.com>
+Pierre Ettori <pe.ettori@gmail.com>
+Prabhakar Kudva <oskudva@hotmail.com>
+Prajakta Naik <nkprajakta@gmail.com>
+Rafael Rivero <rafael@cloudscaling.com>
+Rajdeep Dua <dua_rajdeep@yahoo.com>
+Rajiv Kumar <rajiv.kumar@nectechnologies.in>
+Roey Chen <roeyc@vmware.com>
+Ronald Bradford <ronald.bradford@gmail.com>
+Rui Chen <chenrui.momo@gmail.com>
+Ryota MIBU <r-mibu@cq.jp.nec.com>
+SH <shargan@twopensource.com>
+Sabha Parameswaran <sabhap@pivotal.io>
+Samta <srangare@mvista.com>
+Samta Rangare <srangare@mvista.com>
+Sayaji <sayaji15@gmail.com>
+Sean McGinnis <sean.mcginnis@gmail.com>
+Sean Roberts <seanrob@yahoo-inc.com>
+Sean Roberts <seanroberts66@gmail.com>
+Sergey Vilgelm <sergey@vilgelm.info>
+Shiv Haris <sharis@brocade.com>
+Shuquan Huang <huang.shuquan@99cloud.net>
+Songming Yan <yan.songming@zte.com.cn>
+Srinivasa Rao Ragolu <sragolu@mvista.com>
+Steven Tran <steven.tran2@hp.com>
+Swapnil Kulkarni (coolsvap) <me@coolsvap.net>
+Takashi NATSUME <natsume.takashi@lab.ntt.co.jp>
+Thierry Carrez <thierry@openstack.org>
+Thomas Goirand <zigo@debian.org>
+Tim Hinrichs <thinrichs@vmware.com>
+Tim Hinrichs <timothy.l.hinrichs@gmail.com>
+Tin Lam <tl3438@att.com>
+Torin Sandall <torinsandall@gmail.com>
+Trevor McCasland <TM2086@att.com>
+Valentin Matton <vmatt.openstack@gmail.com>
+VeenaSL <mveenasl@gmail.com>
+Victor Ryzhenkin <vryzhenkin@mirantis.com>
+Victor Stinner <vstinner@redhat.com>
+Vishakha Agarwal <agarwalvishakha18@gmail.com>
+Vu Cong Tuan <tuanvc@vn.fujitsu.com>
+XieYingYun <smokony@sina.com>
+Xinhui Li <lxinhui@vmware.com>
+Yaroslav Morkovnikov <ymorkovn@cisco.com>
+Yingxin <yingxin.cheng@intel.com>
+Yingxin Cheng <yingxin.cheng@intel.com>
+Yuanbin.Chen <cybing4@gmail.com>
+Zhenzan Zhou <zhenzan.zhou@intel.com>
+ZhiQiang Fan <aji.zqfan@gmail.com>
+ZhongShengping <chdzsp@163.com>
+aimee.ukasick <au7569@att.com>
+akhil <akhil.jain@india.nec.com>
+akhiljain23 <akhil.jain@india.nec.com>
+akhiljain23 <akhil.jain@nectechnologies.in>
+armando-migliaccio <armamig@gmail.com>
+avnish <avnish.pal@nectechnologies.in>
+chao liu <liuc@rc.inesa.com>
+chenaidong1 <chen.aidong@zte.com.cn>
+cloudtoad <ccie15672@gmail.com>
+deepakmourya <deepak.mourya@nectechnologies.in>
+dongwenjuan <dong.wenjuan@zte.com.cn>
+gecong1973 <ge.cong@zte.com.cn>
+ghanshyam <ghanshyam.mann@nectechnologies.in>
+ghanshyam <ghanshyammann@gmail.com>
+ghanshyam <gmann@ghanshyammann.com>
+inspurericzhang <zhanglf01@inspur.com>
+liyingjun <liyingjun1988@gmail.com>
+loooosy <syluo5695@fiberhome.com>
+melissaml <ma.lei@99cloud.net>
+rajat29 <rajat.sharma@nectechnologies.in>
+ricolin <rico.lin@easystack.cn>
+shangxiaobj <shangxiaobj@inspur.com>
+sharat.sharma <sharat.sharma@nectechnologies.in>
+shashi.kant <shashi.kant@nectechnologies.in>
+skseeker <er.sksumit@gmail.com>
+spipe007 <pe.ettori@gmail.com>
+su_zhang <su_zhang@symantec.com>
+tengqm <tengqim@cn.ibm.com>
+ubuntu <dua_rajdeep@yahoo.com>
+venkatamahesh <Venkata.Kotha@infinite.com>
+venkatamahesh <venkatamaheshkotha@gmail.com>
+vishal mahajan <vishal.mahajan@nectechnologies.in>
+wanghui <wang_hui@inspur.com>
+wangqi <wang.qi@99cloud.net>
+wudong <wudongbj@inspur.com>
+xiaoyun feng <fengxy@awcloud.com>
+xpress <anonymous.freelancer@yahoo.com>
+yatin <ykarel@redhat.com>
+zhangdebo1987 <zhangdebo@inspur.com>
+zhanghongtao <zhanghongtao0826@126.com>
+zhangyanxian <zhangyanxianmail@163.com>
+zhouguowei <zhouguowei@inspur.com>
+zhurong <aaronzhu1121@gmail.com>

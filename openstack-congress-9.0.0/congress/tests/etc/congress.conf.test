@@ -1,0 +1,7 @@
+[DEFAULT]
+policy_library_path = 'library'
+encryption_key_path = 'congress/tests/etc/keys'
+
+[database]
+connection = 'sqlite://'
+# connection = mysql+pymysql://root:password@127.0.0.1/congress?charset=utf8

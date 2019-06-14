@@ -1,0 +1,20 @@
+# Sample health policy based on node health checking
+type: senlin.policy.health
+version: 1.0
+description: A policy for maintaining node health from a cluster.
+properties:
+  detection:
+    # Type for health checking, valid values include:
+    # NODE_STATUS_POLLING, LB_STATUS_POLLING, LIFECYCLE_EVENTS
+    type: NODE_STATUS_POLLING
+
+    options:
+      # Number of seconds between two adjacent checking
+      interval: 600
+
+  recovery:
+    # Action that can be retried on a failed node, will improve to
+    # support multiple actions in the future. Valid values include:
+    # REBOOT, REBUILD, RECREATE
+    actions:
+      - name: RECREATE

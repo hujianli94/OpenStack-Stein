@@ -1,0 +1,20 @@
+---
+features:
+  - |
+    Congress now loads all in-tree drivers automatically without the need for
+    special configuration using the ``drivers`` config option.
+    The value of ``drivers`` config option will be silently ignored.
+    To prevent a driver from being loaded, specify the driver name in the new
+    config option ``disable_drivers``. To load additional third-partiy or
+    downstream, specify the driver endpoint in the new config option
+    ``custom_driver_endpoints``.
+
+upgrade:
+  - |
+    Any of the third-party drivers added to ``drivers`` config option should add
+    the corresponding endpoint to ``custom_drivers_endpoint`` to be able to load
+    their drivers on service startup.
+
+deprecations:
+  - |
+    ``drivers`` config option is deprecated and would be silently ignored.

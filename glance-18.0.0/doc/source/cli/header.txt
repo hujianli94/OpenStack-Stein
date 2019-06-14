@@ -1,0 +1,8 @@
+
+:Author: OpenStack Glance Project Team
+:Contact: glance@lists.launchpad.net
+:Date: 2018-02-28
+:Copyright: OpenStack Foundation
+:Version: 16.0.0
+:Manual section: 1
+:Manual group: cloud computing

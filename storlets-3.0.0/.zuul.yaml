@@ -1,0 +1,21 @@
+- project:
+    templates:
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - openstack-python37-jobs
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        - storlets-functional
+    gate:
+      jobs:
+        - storlets-functional
+
+- job:
+    name: storlets-functional
+    pre-run: playbooks/storlets-functional/pre.yaml
+    run: playbooks/storlets-functional/run.yaml
+    post-run: playbooks/storlets-functional/post.yaml
+    timeout: 2400

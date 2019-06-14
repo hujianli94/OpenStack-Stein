@@ -1,0 +1,209 @@
+#
+# (C) Copyright 2015 Hewlett Packard Enterprise Development LP
+# Copyright 2017 FUJITSU LIMITED
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+# implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+# The following two variables allow switching between java and python for the implementations
+# of the Monasca API and the Monasca Persister. These variables can be set here
+# or in the DevStack local.conf file.
+
+# MONASCA_API_IMPLEMENTATION_LANG=${MONASCA_API_IMPLEMENTATION_LANG:-java}
+MONASCA_API_IMPLEMENTATION_LANG=${MONASCA_API_IMPLEMENTATION_LANG:-python}
+
+# MONASCA_PERSISTER_IMPLEMENTATION_LANG=${MONASCA_PERSISTER_IMPLEMENTATION_LANG:-java}
+MONASCA_PERSISTER_IMPLEMENTATION_LANG=${MONASCA_PERSISTER_IMPLEMENTATION_LANG:-python}
+
+# MONASCA_METRICS_DB=${MONASCA_METRICS_DB:-vertica}
+# MONASCA_METRICS_DB=${MONASCA_METRICS_DB:-cassandra}
+MONASCA_METRICS_DB=${MONASCA_METRICS_DB:-influxdb}
+
+# Turn on all the Monasca services by default. Currently enabling specific services
+# has no effect. All services are enabled by default. There is currently no mechanism
+# implemented to turn off specific Monasca services.
+
+#
+# Monasca top level service that enables all other services
+#
+enable_service monasca
+
+#
+# Monasca infrastructure services
+#
+
+# devstack zookeeper
+enable_service monasca-zookeeper
+
+# Monasca databases
+# MySQL is already enabled in devstack
+enable_service monasca-influxdb
+
+# Apache Storm
+enable_service monasca-storm
+enable_service monasca-storm-nimbus
+enable_service monasca-storm-supervisor
+disable_service monasca-storm-ui
+disable_service monasca-storm-logviewer
+
+# monasca-kafka depends on monasca-zookeeper
+enable_service monasca-kafka
+
+#
+# Monasca core services
+#
+
+# monasca-api depends on monasca-influxdb, MySQL, monasca-kafka
+enable_service monasca-api
+
+# monasca-persister depends on monasca-influxdb, monasca-kafka
+enable_service monasca-persister
+
+# monasca-notification depends on MySQL, monasca-kafka
+enable_service monasca-notification
+
+# monasca-thresh depends on MySQL, monasca-kafka, monasca-storm
+enable_service monasca-thresh
+
+# monasca-agent depends on monasca-api
+enable_service monasca-agent
+
+# monasca-cli depends on monasca-api
+enable_service monasca-cli
+
+#
+# Dependent Software Versions
+#
+
+# Set the InfluxDB version to use for the Java and Python API
+# InfluxDB has modified the result sets for SHOW SERIES. The
+# Python API has been modified to support those changes, but the
+# Java API hasn't yet. These two environment variables allow you
+# to deploy either the Java or Python API without having to
+# also set the INFLUXDB_VERSION when switching between the two.
+INFLUXDB_JAVA_VERSION=${INFLUXDB_JAVA_VERSION:-0.9.5}
+INFLUXDB_PYTHON_VERSION=${INFLUXDB_PYTHON_VERSION:-1.3.9}
+
+# To set the same version of InfluxDB for both languages use the
+# following variable. This will override both the Java and Python
+# specific variables above.
+# INFLUXDB_VERSION=${INFLUXDB_VERSION:-0.9.5}
+
+VERTICA_VERSION=${VERTICA_VERSION:-8.0.0-0}
+CASSANDRA_VERSION=${CASSANDRA_VERSION:-311x}
+# Kafka deb consists of the version of scala plus the version of kafka
+BASE_KAFKA_VERSION=${BASE_KAFKA_VERSION:-1.0.1}
+SCALA_VERSION=${SCALA_VERSION:-2.11}
+KAFKA_VERSION=${KAFKA_VERSION:-${SCALA_VERSION}-${BASE_KAFKA_VERSION}}
+STORM_VERSION=${STORM_VERSION:-1.1.3}
+GO_VERSION=${GO_VERSION:-"1.7.1"}
+NODE_JS_VERSION=${NODE_JS_VERSION:-"4.0.0"}
+NVM_VERSION=${NVM_VERSION:-"0.32.1"}
+
+# Path settings
+MONASCA_BASE=${DEST}
+MONASCA_SCHEMA_DIR=${DEST}/monasca/schema
+
+# Repository settings
+MONASCA_API_REPO=${MONASCA_API_REPO:-${GIT_BASE}/openstack/monasca-api.git}
+MONASCA_API_BRANCH=${MONASCA_API_BRANCH:-master}
+MONASCA_API_DIR=${MONASCA_BASE}/monasca-api
+
+MONASCA_PERSISTER_REPO=${MONASCA_PERSISTER_REPO:-${GIT_BASE}/openstack/monasca-persister.git}
+MONASCA_PERSISTER_BRANCH=${MONASCA_PERSISTER_BRANCH:-master}
+MONASCA_PERSISTER_DIR=${MONASCA_BASE}/monasca-persister
+
+MONASCA_NOTIFICATION_REPO=${MONASCA_NOTIFICATION_REPO:-${GIT_BASE}/openstack/monasca-notification.git}
+MONASCA_NOTIFICATION_BRANCH=${MONASCA_NOTIFICATION_BRANCH:-master}
+MONASCA_NOTIFICATION_DIR=${MONASCA_BASE}/monasca-notification
+
+MONASCA_THRESH_REPO=${MONASCA_THRESH_REPO:-${GIT_BASE}/openstack/monasca-thresh.git}
+MONASCA_THRESH_BRANCH=${MONASCA_THRESH_BRANCH:-master}
+MONASCA_THRESH_DIR=${MONASCA_BASE}/monasca-thresh
+
+MONASCA_CLIENT_REPO=${MONASCA_CLIENT_REPO:-${GIT_BASE}/openstack/python-monascaclient.git}
+MONASCA_CLIENT_BRANCH=${MONASCA_CLIENT_BRANCH:-master}
+MONASCA_CLIENT_DIR=${MONASCA_BASE}/python-monascaclient
+
+MONASCA_AGENT_REPO=${MONASCA_AGENT_REPO:-${GIT_BASE}/openstack/monasca-agent.git}
+MONASCA_AGENT_BRANCH=${MONASCA_AGENT_BRANCH:-master}
+MONASCA_AGENT_DIR=${MONASCA_BASE}/monasca-agent
+
+MONASCA_UI_REPO=${MONASCA_UI_REPO:-${GIT_BASE}/openstack/monasca-ui.git}
+MONASCA_UI_BRANCH=${MONASCA_UI_BRANCH:-master}
+MONASCA_UI_DIR=${MONASCA_BASE}/monasca-ui
+
+MONASCA_COMMON_REPO=${MONASCA_COMMON_REPO:-${GIT_BASE}/openstack/monasca-common.git}
+MONASCA_COMMON_BRANCH=${MONASCA_COMMON_BRANCH:-master}
+MONASCA_COMMON_DIR=${MONASCA_BASE}/monasca-common
+
+MONASCA_STATSD_REPO=${MONASCA_STATSD_REPO:-${GIT_BASE}/openstack/monasca-statsd.git}
+MONASCA_STATSD_BRANCH=${MONASCA_STATSD_BRANCH:-master}
+MONASCA_STATSD_DIR=${MONASCA_BASE}/monasca-statsd
+
+MONASCA_GRAFANA_DATASOURCE_REPO=${MONASCA_GRAFANA_DATASOURCE_REPO:-${GIT_BASE}/openstack/monasca-grafana-datasource.git}
+MONASCA_GRAFANA_DATASOURCE_BRANCH=${MONASCA_GRAFANA_DATASOURCE_BRANCH:-master}
+MONASCA_GRAFANA_DATASOURCE_DIR=${MONASCA_BASE}/monasca-grafana-datasource
+
+GRAFANA_REPO=${GRAFANA_REPO:-"https://github.com/monasca/grafana.git"}
+GRAFANA_BRANCH=${GRAFANA_BRANCH:-"grafana4"}
+GRAFANA_DIR=${MONASCA_BASE}/grafana
+GRAFANA_INIT_LOG_LEVEL=DEBUG
+GRAFANA_URL=http://localhost:3000
+GRAFANA_USERNAME=mini-mon
+GRAFANA_PASSWORD=password
+DATASOURCE_TYPE=monasca
+DATASOURCE_URL=http://localhost/metrics
+DATASOURCE_ACCESS_MODE=proxy
+DATASOURCE_AUTH=Keystone
+DASHBOARDS_DIR=/dashboards.d
+
+GITDIR["python-monascaclient"]=${MONASCA_CLIENT_DIR}
+GITDIR["monasca-common"]=${MONASCA_COMMON_DIR}
+GITDIR["monasca-statsd"]=${MONASCA_STATSD_DIR}
+
+# Database settings
+MONASCA_DATABASE_USE_ORM=false
+
+# Other settings
+DOWNLOAD_FILE_TIMEOUT=${DOWNLOAD_FILE_TIMEOUT:-30}
+PLUGIN_FILES=$MONASCA_API_DIR/devstack/files
+# APACHE_MIRROR=  # force specific APACHE_MIRROR if the one that got picked fails
+# Apache Kafka 0.9.0.1 is only available in Apache Archives
+APACHE_ARCHIVES=${APACHE_ARCHIVES:-"https://archive.apache.org/dist/"}
+
+# Public configuration
+## monasca-statsd
+MONASCA_STATSD_PORT=${MONASCA_STATSD_PORT:-8125}
+
+## monasca-api
+MONASCA_API_SERVICE_HOST=${MONASCA_API_SERVICE_HOST:-${SERVICE_HOST}}
+MONASCA_API_SERVICE_PORT=${MONASCA_API_SERVICE_PORT:-8070}
+MONASCA_API_ADMIN_PORT=${MONASCA_API_ADMIN_PORT:-8081}  # for java
+MONASCA_API_SERVICE_PROTOCOL=${MONASCA_API_SERVICE_PROTOCOL:-${SERVICE_PROTOCOL}}
+MONASCA_API_SERVICE_TIMEOUT=${MONASCA_API_SERVICE_TIMEOUT:-${SERVICE_TIMEOUT}}
+
+MONASCA_API_CONF_DIR=${MONASCA_API_CONF_DIR:-/etc/monasca}
+MONASCA_API_CONF=${MONASCA_API_CONF:-$MONASCA_API_CONF_DIR/monasca-api.conf}
+MONASCA_API_PASTE_INI=${MONASCA_API_PASTE_INI:-$MONASCA_API_CONF_DIR/api-config.ini}
+MONASCA_API_LOGGING_CONF=${MONASCA_API_LOGGING_CONF:-$MONASCA_API_CONF_DIR/api-logging.conf}
+MONASCA_API_LOG_DIR=${MONASCA_API_LOG_DIR:-/var/log/monasca/api}
+MONASCA_API_USE_MOD_WSGI=${MONASCA_API_USE_MOD_WSGI:-$ENABLE_HTTPD_MOD_WSGI_SERVICES}
+MONASCA_API_UWSGI_CONF=${MONASCA_API_UWSGI_CONF:-$MONASCA_API_CONF_DIR/api-uwsgi.ini}
+
+
+## storm settings
+STORM_UI_HOST=${STORM_UI_HOST:-${SERVICE_HOST}}
+STORM_UI_PORT=${STORM_UI_PORT:-8089}
+STORM_LOGVIEWER_PORT=${STORM_LOGVIEWER_PORT:-8090}

@@ -1,0 +1,7 @@
+[paste.filter_factory]
+storlet_handler = storlets.swift_middleware.storlet_handler:filter_factory
+
+[storlets.gateways]
+docker = storlets.gateway.gateways.docker:StorletGatewayDocker
+stub = storlets.gateway.gateways.stub:StorletGatewayStub
+

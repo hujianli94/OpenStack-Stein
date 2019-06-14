@@ -1,0 +1,52 @@
+.. -*- rst -*-
+
+==============
+API extensions
+==============
+
+Lists available Shared File Systems API extensions.
+
+
+List extensions
+===============
+
+.. rest_method::  GET /v2/{tenant_id}/extensions
+
+Lists all extensions.
+
+Response codes
+--------------
+
+.. rest_status_code:: success status.yaml
+
+   - 200
+
+.. rest_status_code:: error status.yaml
+
+   - 400
+   - 401
+   - 403
+
+Request
+-------
+
+.. rest_parameters:: parameters.yaml
+
+   - tenant_id: tenant_id_path
+
+Response parameters
+-------------------
+
+.. rest_parameters:: parameters.yaml
+
+   - name: extension_name
+   - links: extension_links
+   - description: extension_description
+   - alias: extension_alias
+   - updated: extension_updated
+
+Response example
+----------------
+
+.. literalinclude:: samples/extensions-list-response.json
+   :language: javascript

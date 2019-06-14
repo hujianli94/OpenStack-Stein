@@ -1,0 +1,17 @@
+---
+name: BadFlavors
+description: "Error on any server using a flavor that is not permitted"
+rules:
+  -
+    comment: "User should customize this.  Permitted flavors."
+    rule: permitted_flavor('m1.tiny')
+  -
+    comment: "User should customize this.  Permitted flavors."
+    rule: permitted_flavor('m1.large')
+  -
+    rule: >
+      server_with_bad_flavor(id) :- nova:servers(id=id,flavor_id=flavor_id),
+      nova:flavors(id=flavor_id, name=flavor), not permitted_flavor(flavor)
+  -
+    rule: >
+      error(id) :- server_with_bad_flavor(id)

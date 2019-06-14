@@ -1,0 +1,69 @@
+- job:
+    name: monasca-events-tempest-base
+    parent: devstack-tempest
+    timeout: 7800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/monasca-events-api
+      - openstack/monasca-agent
+      - openstack/monasca-api
+      - openstack/monasca-common
+      - openstack/monasca-grafana-datasource
+      - openstack/monasca-notification
+      - openstack/monasca-persister
+      - openstack/monasca-statsd
+      - openstack/monasca-thresh
+      - openstack/monasca-ui
+      - openstack/python-monascaclient
+      - openstack/monasca-kibana-plugin
+      - openstack/tempest
+      - openstack/monasca-tempest-plugin
+      - openstack/monasca-log-api
+    vars:
+      tox_envlist: all
+      tempest_test_regex: monasca_tempest_tests.tests.event_api
+      devstack_plugins:
+        monasca-api: https://git.openstack.org/openstack/monasca-api
+        monasca-log-api: https://git.openstack.org/openstack/monasca-log-api
+        monasca-events-api: https://git.openstack.org/openstack/monasca-events-api
+        monasca-tempest-plugin: https://git.openstack.org/openstack/monasca-tempest-plugin
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^.*\.md$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+
+- job:
+    name: monasca-events-python2
+    parent: monasca-events-tempest-base
+    vars:
+      devstack_localrc:
+        TEMPEST_PLUGINS: /opt/stack/monasca-tempest-plugin
+
+- job:
+    name: monasca-events-python3
+    parent: monasca-events-tempest-base
+    vars:
+      devstack_localrc:
+        USE_PYTHON3: true
+        TEMPEST_PLUGINS: /opt/stack/monasca-tempest-plugin
+
+- project:
+    templates:
+      - openstack-cover-jobs
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - openstack-python37-jobs
+      - check-requirements
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        - monasca-events-python2
+        - monasca-events-python3
+    gate:
+      queue: monasca
+      jobs:
+        - monasca-events-python2
+        - monasca-events-python3

@@ -1,0 +1,44 @@
+[congress.datasource.drivers]
+aodh = congress.datasources.aodh_driver:AodhDriver
+cinder = congress.datasources.cinder_driver:CinderDriver
+cloudfoundryv2 = congress.datasources.cloudfoundryv2_driver:CloudFoundryV2Driver
+config = congress.datasources.cfgvalidator_driver:ValidatorDriver
+doctor = congress.datasources.doctor_driver:DoctorDriver
+fake_datasource = congress.tests.fake_datasource:FakeDataSource
+glancev2 = congress.datasources.glancev2_driver:GlanceV2Driver
+heat = congress.datasources.heatv1_driver:HeatV1Driver
+ironic = congress.datasources.ironic_driver:IronicDriver
+keystone = congress.datasources.keystone_driver:KeystoneDriver
+keystonev3 = congress.datasources.keystonev3_driver:KeystoneV3Driver
+mistral = congress.datasources.mistral_driver:MistralDriver
+monasca = congress.datasources.monasca_driver:MonascaDriver
+monasca_webhook = congress.datasources.monasca_driver:MonascaWebhookDriver
+murano = congress.datasources.murano_driver:MuranoDriver
+neutronv2 = congress.datasources.neutronv2_driver:NeutronV2Driver
+neutronv2_qos = congress.datasources.neutronv2_qos_driver:NeutronV2QosDriver
+nova = congress.datasources.nova_driver:NovaDriver
+plexxi = congress.datasources.plexxi_driver:PlexxiDriver
+swift = congress.datasources.swift_driver:SwiftDriver
+tacker = congress.datasources.tacker_driver:TackerDriver
+vcenter = congress.datasources.vCenter_driver:VCenterDriver
+vitrage = congress.datasources.vitrage_driver:VitrageDriver
+
+[console_scripts]
+congress-cfg-validator-agt = congress.cfg_validator.agent.agent:main
+congress-db-manage = congress.db.migration.cli:main
+congress-server = congress.server.congress_server:main
+congress-status = congress.cmd.status:main
+
+[oslo.config.opts]
+congress = congress.opts:list_opts
+congress-agent = congress.cfg_validator.agent.opts:list_opts
+
+[oslo.config.opts.defaults]
+congress = congress.common.config:set_config_defaults
+
+[oslo.policy.enforcer]
+congress = congress.common.policy:get_enforcer
+
+[oslo.policy.policies]
+congress = congress.common.policies:list_rules
+

@@ -1,0 +1,65 @@
+- job:
+    name: ec2-api-functional-neutron
+    parent: legacy-dsvm-base
+    run: playbooks/legacy/ec2-api-functional-neutron/run.yaml
+    post-run: playbooks/legacy/ec2-api-functional-neutron/post.yaml
+    timeout: 7800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/ec2-api
+      - openstack/neutron
+      - openstack/neutron-tempest-plugin
+      - openstack/ec2api-tempest-plugin
+
+- job:
+    name: ec2-api-functional-neutron-full
+    parent: legacy-dsvm-base
+    run: playbooks/legacy/ec2-api-functional-neutron-full/run.yaml
+    post-run: playbooks/legacy/ec2-api-functional-neutron-full/post.yaml
+    timeout: 10800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/ec2-api
+      - openstack/neutron
+      - openstack/swift3
+      - openstack/neutron-tempest-plugin
+      - openstack/ec2api-tempest-plugin
+
+- job:
+    name: ec2-api-rally-fakevirt
+    parent: legacy-dsvm-base
+    run: playbooks/legacy/ec2-api-rally-fakevirt/run.yaml
+    post-run: playbooks/legacy/ec2-api-rally-fakevirt/post.yaml
+    timeout: 7800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/ec2-api
+      - openstack/rally
+
+- project:
+    templates:
+      - check-requirements
+      - openstack-lower-constraints-jobs
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - publish-openstack-docs-pti
+    check:
+      jobs:
+        - ec2-api-functional-neutron
+    gate:
+      queue: ec2-api
+      jobs:
+        - ec2-api-functional-neutron
+    experimental:
+      jobs:
+        - ec2-api-functional-neutron-full
+        - ec2-api-rally-fakevirt
+        # TripleO jobs that deploy ec2-api.
+        # Note we don't use a project-template here, so it's easier
+        # to disable voting on one specific job if things go wrong.
+        # tripleo-ci-centos-7-scenario002-multinode-oooq-container will
+        # run in Pike and beyond.
+        # If you need any support to debug these jobs in case of
+        # failures, please reach us on #tripleo IRC channel.
+        - tripleo-ci-centos-7-scenario002-standalone

@@ -1,0 +1,8 @@
+---
+prelude: >
+features:
+  - |
+    An experimental new policy kind *z3* that will be evaluated using Microsoft
+    Research's state-of-the-art prover. To use the feature, the prover must be
+    installed. For instructions, see https://docs.openstack.org/congress/latest/install/index.html
+

@@ -1,0 +1,406 @@
+- secret:
+    name: magnum_docker_login
+    data:
+      user: !encrypted/pkcs1-oaep
+        - LfP9zghLZsxH4uz1SWMQpjdvuni01WSTtSJyp0V1mb1X6B8VqX4H/Z5AaI2oQF/ZfcbiL
+          H2mnwGPVDvFIncuUgCib48PaDu3SHHWIkuSmGGFgVJSfenm4mKnH2DT/zmsyoQ7UuIGkC
+          uzCVTK6Zc6c1f6lFaeu6c2jlSf18XuS1z6U0ou5TRl1dQv0FDlbNfBNIXkDXviY6oTZZ3
+          AttA6C34OnLp7Vs8PMVcAXt5cH2ibcpxget4MZG+De2AiTaojKZ0pMw+HRFeke+Pq37uk
+          zwtqxsSZkCgxdxPJsvhUziJzy2GhljyIRfbhf+/bze/3MFUkedk32wFsAjbWg6SJByXos
+          5FeUVby1Pu6fZu5Ag0VV+i37xcIgplfyTzW/P47eoq9A1S7bleKyqhxfVNnAjBJJPPlt3
+          YLYNH+zTdtm/qSBu24NKH9ju1reET99QuWNw26KT1Re2C2IeBfRGnqGcXBonO4xZ8uYkk
+          0nRU/d5zvT5zKAx+HXopuyLITU8JnTQ9Kzc5hiSyTF8aMozQxCGxbgzGsIXSSX50vuaH6
+          LuDTL7bnHrUKcWISbNcFxdqG9Wc9JNgaQGv4yHycdgTvulEvR9wJUtx0bjuk+JL5EhEsF
+          XYNeESI2v1hf+50sxijlIycyMypeXXiuQRyzqG32bjq3RihsBcHnIxZ0KCzggw=
+      password: !encrypted/pkcs1-oaep
+        - Sj67sS+3GfFvJKB3EUhPzakxgf2t0IB4tBjEVZP7VFmuSrSmNu0L1aZtyMTW4uTq2GlNM
+          +y7Oury0YjfgRUj3Crxkfdk26YMPEAMT3+5diMkmYbNcu9AKkA76XYqLI88DJm71gdkBv
+          ExEciK0/zrwy2fG0cAs2d/0c9SCR87xEBEs2NP3DIcEuoLQZRIVZtsss9U/7EKeVpvjCv
+          zzcuYP9WtFmBvUn+5Jyev8evwTVFZIqT8eimOtAfK4KLlT6K17kT8kUuDAMWeub7BGtVB
+          Jln6AsXetnYmo5VF6vDbp7tZrFO9tBKm2LNjDvtgahcilh2yt5DK9QfjUo4I0tmeLoK01
+          ZYogPLfjVyUQNhCiZOuwgVsIiB6OkGK8F/re3CyR5Ff1c0oD0TqWhREoqWKM9fSMhLxKn
+          fAVW/kOZdqQxTwGj3JYiqtqnZAD4P7vdujhZWzb1LPJLD+42j6BaM4H0YQ8cvM+q9LtbF
+          DrcSsxmi+krRwE8u8Yvxr5PPNv/2kNFspAQ9C5L5u2t0uUpb7rZ26iKdPEY/XHca7bpYI
+          P4CkqWvPbnWL9CwUCeJDdo9WDV3Evd/+dXcK0EtTCgDzEzTiv/YsERIbwKF0pFnwjYme2
+          SX+Z3JkB5ne4VY+zKL3hltZHzMnu5yfitWWwcqYj4lETkkAZhNVa4aJPMQ1dXA=
+
+- job:
+    name: magnum-functional-base
+    parent: legacy-dsvm-base
+    timeout: 7800
+    pre-run: playbooks/pre/prepare-workspace.yaml
+    run: playbooks/magnum-functional-base.yaml
+    post-run: playbooks/post/upload-logs.yaml
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/diskimage-builder
+      - openstack/ironic
+      - openstack/ironic-lib
+      - openstack/ironic-python-agent
+      - openstack/magnum
+      - openstack/magnum-tempest-plugin
+      - openstack/pyghmi
+      - openstack/python-ironicclient
+      - openstack/python-magnumclient
+      - openstack/virtualbmc
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^dockerfiles/.*$
+    vars:
+      ironic: 0
+      ceilometer: 0
+      swift: 0
+      horizon: 0
+      multinode: 0
+      neutron: 1
+      tempest: 0
+      branch_override: default
+      devstack_python3: 1
+
+- job:
+    name: magnum-functional-base-python2
+    parent: legacy-dsvm-base
+    timeout: 7800
+    pre-run: playbooks/pre/prepare-workspace.yaml
+    run: playbooks/magnum-functional-base.yaml
+    post-run: playbooks/post/upload-logs.yaml
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/diskimage-builder
+      - openstack/ironic
+      - openstack/ironic-lib
+      - openstack/ironic-python-agent
+      - openstack/magnum
+      - openstack/magnum-tempest-plugin
+      - openstack/pyghmi
+      - openstack/python-ironicclient
+      - openstack/python-magnumclient
+      - openstack/virtualbmc
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^dockerfiles/.*$
+    vars:
+      ironic: 0
+      ceilometer: 0
+      swift: 0
+      horizon: 0
+      multinode: 0
+      neutron: 1
+      tempest: 0
+      branch_override: default
+      devstack_python3: 0
+
+- job:
+    name: magnum-functional-multinode-base
+    parent: legacy-dsvm-base-multinode
+    timeout: 7800
+    pre-run: playbooks/pre/prepare-workspace.yaml
+    run: playbooks/magnum-functional-base.yaml
+    post-run: playbooks/post/upload-logs.yaml
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/diskimage-builder
+      - openstack/ironic
+      - openstack/ironic-lib
+      - openstack/ironic-python-agent
+      - openstack/magnum
+      - openstack/pyghmi
+      - openstack/python-ironicclient
+      - openstack/python-magnumclient
+      - openstack/virtualbmc
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^dockerfiles/.*$
+    vars:
+      ironic: 0
+      ceilometer: 0
+      swift: 0
+      horizon: 0
+      multinode: 1
+      neutron: 1
+      tempest: 0
+      branch_override: default
+      devstack_python3: 1
+
+- job:
+    name: magnum-functional-api
+    parent: magnum-functional-base
+    vars:
+      coe: api
+
+- job:
+    name: magnum-functional-api-python2
+    parent: magnum-functional-base-python2
+    vars:
+      coe: api
+
+- job:
+    name: magnum-functional-coe
+    parent: magnum-functional-base
+    nodeset:
+      nodes:
+        - name: primary
+          label: ubuntu-bionic-vexxhost
+
+- job:
+    name: magnum-functional-k8s
+    parent: magnum-functional-coe
+    voting: false
+    vars:
+      coe: k8s
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^magnum/drivers/swarm.*$
+      - ^magnum/drivers/mesos.*$
+
+- job:
+    name: magnum-functional-swarm-mode
+    parent: magnum-functional-coe
+    voting: false
+    branches: ^(?!stable/(newton|ocata)).*$
+    vars:
+      coe: swarm-mode
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^magnum/drivers/swarm_fedora_atomic_v1/.*$
+      - ^magnum/drivers/k8s.*$
+      - ^magnum/drivers/mesos.*$
+
+- job:
+    name: magnum-functional-dcos
+    parent: magnum-functional-coe
+    voting: false
+    branches: ^(?!stable/(newton|ocata)).*$
+    vars:
+      coe: dcos
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^magnum/drivers/k8s.*$
+      - ^magnum/drivers/mesos.*$
+      - ^magnum/drivers/swarm.*$
+
+- job:
+    name: magnum-functional-mesos
+    parent: magnum-functional-coe
+    voting: false
+    vars:
+      coe: mesos
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^magnum/drivers/k8s.*$
+      - ^magnum/drivers/swarm.*$
+
+- job:
+    name: magnum-functional-swarm
+    parent: magnum-functional-coe
+    voting: false
+    vars:
+      coe: swarm
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^magnum/drivers/swarm_fedora_atomic_v2/.*$
+      - ^magnum/drivers/k8s.*$
+      - ^magnum/drivers/mesos.*$
+
+- job:
+    name: magnum-functional-k8s-ironic
+    parent: magnum-functional-coe
+    voting: false
+    vars:
+      coe: k8s
+      ironic: 1
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^magnum/drivers/swarm.*$
+      - ^magnum/drivers/mesos.*$
+
+- job:
+    name: magnum-functional-swarm-ironic
+    parent: magnum-functional-coe
+    voting: false
+    vars:
+      coe: swarm
+      ironic: 1
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^magnum/drivers/k8s.*$
+      - ^magnum/drivers/mesos.*$
+
+- job:
+    name: magnum-functional-k8s-multinode
+    parent: magnum-functional-multinode-base
+    voting: false
+    vars:
+      coe: k8s
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^magnum/drivers/swarm.*$
+      - ^magnum/drivers/mesos.*$
+
+- job:
+    name: magnum-functional-swarm-mode-multinode
+    parent: magnum-functional-multinode-base
+    voting: false
+    branches: ^(?!stable/(newton|ocata)).*$
+    vars:
+      coe: swarm-mode
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^magnum/drivers/k8s.*$
+      - ^magnum/drivers/mesos.*$
+      - ^magnum/drivers/swarm_fedora_atomic_v1/.*$
+
+- job:
+    name: magnum-buildimages-base
+    parent: legacy-publish-openstack-artifacts
+    timeout: 3600
+    pre-run: playbooks/pre/prepare-workspace-images.yaml
+    run: playbooks/magnum-buildimages-base.yaml
+    post-run: playbooks/post/upload-images.yaml
+    required-projects:
+      - openstack/dib-utils
+      - openstack/diskimage-builder
+      - openstack/magnum
+
+- job:
+    name: magnum-dib-buildimage-fedora-atomic-25
+    parent: magnum-buildimages-base
+    vars:
+      image_name: fedora-atomic-25
+
+- job:
+    name: magnum-dib-buildimage-ubuntu-mesos
+    parent: magnum-buildimages-base
+    vars:
+      image_name: ubuntu-mesos
+
+- job:
+    name: magnum-dib-buildimage-centos-dcos
+    parent: magnum-buildimages-base
+    vars:
+      image_name: centos-dcos
+
+- job:
+    name: container-build
+    pre-run: playbooks/container-builder-setup-gate.yaml
+    run: playbooks/container-builder.yaml
+    post-run: playbooks/container-builder-copy-logs.yaml
+    roles:
+      - zuul: openstack-infra/openstack-zuul-jobs
+    timeout: 1200
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^specs/.*$
+      - ^install-guide/.*$
+      - ^releasenotes/.*$
+      - ^magnum/.*$
+
+- job:
+    name: container-publish
+    parent: container-build
+    post-run: playbooks/container-publish.yaml
+    secrets:
+      - magnum_docker_login
+    timeout: 1200
+
+- project:
+    templates:
+      - openstack-cover-jobs
+      - openstack-lower-constraints-jobs
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - check-requirements
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        - magnum-functional-api
+        - magnum-functional-api-python2
+        - openstack-tox-cover:
+           voting: false
+        - container-build
+    gate:
+      queue: magnum
+      jobs:
+        - magnum-functional-api
+        - magnum-functional-api-python2
+    experimental:
+      jobs:
+        - magnum-functional-dcos
+        - magnum-functional-mesos
+        - magnum-functional-swarm
+        - magnum-functional-k8s-ironic
+        - magnum-functional-swarm-ironic
+        - magnum-functional-k8s-multinode
+        - magnum-functional-swarm-mode-multinode
+    periodic:
+      jobs:
+        - magnum-dib-buildimage-fedora-atomic-25
+        - magnum-dib-buildimage-ubuntu-mesos
+        - magnum-dib-buildimage-centos-dcos
+    post:
+      jobs:
+        - container-publish

@@ -1,0 +1,24 @@
+[console_scripts]
+cyborg-agent = cyborg.cmd.agent:main
+cyborg-api = cyborg.cmd.api:main
+cyborg-conductor = cyborg.cmd.conductor:main
+cyborg-dbsync = cyborg.cmd.dbsync:main
+cyborg-status = cyborg.cmd.status:main
+
+[cyborg.accelerator.driver]
+intel_fpga_driver = cyborg.accelerator.drivers.fpga.intel.driver:IntelFPGADriver
+nvidia_gpu_driver = cyborg.accelerator.drivers.gpu.nvidia.driver:NVIDIAGPUDriver
+nvmf_spdk_driver = cyborg.accelerator.drivers.spdk.nvmf.nvmf:NVMFDRIVER
+
+[cyborg.database.migration_backend]
+sqlalchemy = cyborg.db.sqlalchemy.migration
+
+[oslo.config.opts]
+cyborg = cyborg.conf.opts:list_opts
+
+[oslo.policy.policies]
+cyborg.api = cyborg.common.policy:list_policies
+
+[wsgi_scripts]
+cyborg-wsgi-api = cyborg.api.wsgi_app:init_application
+

@@ -1,0 +1,322 @@
+- project:
+    templates:
+      - check-requirements
+      - openstack-cover-jobs
+      - openstack-lower-constraints-jobs
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - periodic-stable-jobs
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        # Non-voting until job is fixed, remove it if it works,
+        # it's part of openstack-cover-jobs template.
+        - openstack-tox-cover:
+            voting: false
+        - trove-functional-mysql
+        - trove-scenario-mariadb-single:
+            voting: false
+        - trove-scenario-mariadb-multi:
+            voting: false
+        - trove-scenario-mysql-single
+        - trove-scenario-mysql-multi
+        - trove-scenario-postgresql-single:
+            voting: false
+        - trove-scenario-postgresql-multi:
+            voting: false
+        - trove-scenario-pxc-single:
+            voting: false
+        - trove-scenario-pxc-multi:
+            voting: false
+        - trove-scenario-redis-single:
+            voting: false
+        - trove-scenario-redis-multi:
+            voting: false
+        - trove-tox-fakemodetests
+        - trove-tox-apiexamples
+        - trove-tox-bandit-baseline:
+            voting: false
+        - openstack-tox-pylint
+    gate:
+      queue: trove
+      jobs:
+        - trove-functional-mysql
+        - trove-scenario-mysql-single
+        - trove-scenario-mysql-multi
+        - trove-tox-fakemodetests
+        - trove-tox-apiexamples
+        - openstack-tox-pylint
+    experimental:
+      jobs:
+        - trove-grenade
+        - trove-scenario-cassandra-single
+        - trove-scenario-cassandra-multi
+        - trove-scenario-couchbase-single
+        - trove-scenario-couchdb-single
+        - trove-scenario-mongodb-single
+        - trove-scenario-mongodb-multi
+        - trove-scenario-percona-single
+        - trove-scenario-percona-multi
+
+- job:
+    name: trove-legacy-dsvm-base
+    parent: legacy-dsvm-base
+    abstract: true
+    timeout: 10800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/diskimage-builder
+      - openstack/python-troveclient
+      - openstack/tripleo-image-elements
+      - openstack/trove
+      - openstack/trove-dashboard
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^apidocs/.*$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+      - ^tools/.*$
+      - ^trove/hacking/.*$
+      - ^trove/tests/unittests/.*$
+
+- job:
+    name: trove-devstack-base
+    parent: devstack-xenial
+    abstract: true
+    timeout: 10800
+    required-projects:
+      - openstack/tempest
+      - openstack/diskimage-builder
+      - openstack/python-troveclient
+      - openstack/tripleo-image-elements
+      - openstack/trove
+      - openstack/trove-dashboard
+    vars:
+      devstack_services:
+        tempest: true
+        tls-proxy: false
+      devstack_plugins:
+        trove: git://git.openstack.org/openstack/trove
+      # NOTE(zhaochao): we have to override the default settings from the
+      # the base devstack job about "SERVICE_HOST" and "HOST_IP", as trove
+      # guestagent should use public addresses to access the underlying
+      # components(MQ and Swift), and the previous devstack-gate jobs didn't
+      # set these variables. However we cannot unset variables in job
+      # definition, so we just set SERVICE_HOST and HOST_IP to empty strings,
+      # and VNCSERVER_PROXYCLIENT_ADDRESS to 127.0.0.1 instead.
+      devstack_localrc:
+        SERVICE_HOST: ''
+        HOST_IP: ''
+        VNCSERVER_PROXYCLIENT_ADDRESS: 127.0.0.1
+    run: playbooks/trove-devstack-base.yaml
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^apidocs/.*$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+      - ^tools/.*$
+      - ^trove/hacking/.*$
+      - ^trove/tests/unittests/.*$
+
+- job:
+    name: trove-fakemodetests-base
+    parent: openstack-tox-py27
+    abstract: true
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^apidocs/.*$
+      - ^contrib/.*$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+      - ^setup.cfg$
+      - ^tools/.*$
+      - ^trove/hacking/.*$
+      - ^trove/tests/api/.*$
+      - ^trove/tests/db/.*$
+      - ^trove/tests/scenario/.*$
+      - ^trove/tests/unittests/.*$
+
+- job:
+    name: trove-functional-mysql
+    parent: trove-devstack-base
+    vars:
+      devstack_localrc:
+        TROVE_RESIZE_TIME_OUT: 1800
+      trove_resize_time_out: 1800
+
+- job:
+    name: trove-grenade
+    parent: trove-legacy-dsvm-base
+    run: playbooks/legacy/grenade-dsvm-trove/run.yaml
+    post-run: playbooks/legacy/grenade-dsvm-trove/post.yaml
+    required-projects:
+      - openstack-dev/grenade
+      - openstack-infra/devstack-gate
+      - openstack/trove
+      - openstack/trove-dashboard
+
+- job:
+    name: trove-scenario-cassandra-single
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: cassandra
+      trove_test_group: cassandra-supported-single
+
+- job:
+    name: trove-scenario-cassandra-multi
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: cassandra
+      trove_test_group: cassandra-supported-multi
+
+- job:
+    name: trove-scenario-couchdb-single
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: couchdb
+      trove_test_group: couchdb-supported-single
+
+- job:
+    name: trove-scenario-couchbase-single
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: couchbase
+      trove_test_group: couchbase-supported-single
+
+- job:
+    name: trove-scenario-mariadb-single
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: mariadb
+      trove_test_group: mariadb-supported-single
+
+- job:
+    name: trove-scenario-mariadb-multi
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: mariadb
+      trove_test_group: mariadb-supported-multi
+
+- job:
+    name: trove-scenario-mongodb-single
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: mongodb
+      trove_test_group: mongodb-supported-single
+
+- job:
+    name: trove-scenario-mongodb-multi
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: mongodb
+      trove_test_group: mongodb-supported-multi
+
+- job:
+    name: trove-scenario-mysql-single
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: mysql
+      trove_test_group: mysql-supported-single
+
+- job:
+    name: trove-scenario-mysql-multi
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: mysql
+      trove_test_group: mysql-supported-multi
+
+- job:
+    name: trove-scenario-percona-multi
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: percona
+      trove_test_group: percona-supported-multi
+
+- job:
+    name: trove-scenario-percona-single
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: percona
+      trove_test_group: percona-supported-single
+
+- job:
+    name: trove-scenario-postgresql-single
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: postgresql
+      trove_test_group: postgresql-supported-single
+
+- job:
+    name: trove-scenario-postgresql-multi
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: postgresql
+      trove_test_group: postgresql-supported-multi
+
+- job:
+    name: trove-scenario-pxc-single
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: pxc
+      trove_test_group: pxc-supported-single
+
+- job:
+    name: trove-scenario-pxc-multi
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: pxc
+      trove_test_group: pxc-supported-multi
+
+- job:
+    name: trove-scenario-redis-single
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: redis
+      trove_test_group: redis-supported-single
+
+- job:
+    name: trove-scenario-redis-multi
+    parent: trove-devstack-base
+    vars:
+      trove_test_datastore: redis
+      trove_test_group: redis-supported-multi
+
+- job:
+    name: trove-tox-fakemodetests
+    parent: trove-fakemodetests-base
+    vars:
+      tox_envlist: fakemodetests
+
+- job:
+    name: trove-tox-apiexamples
+    parent: trove-fakemodetests-base
+    vars:
+      tox_envlist: apiexamples
+
+- job:
+    name: trove-tox-bandit-baseline
+    parent: openstack-tox
+    timeout: 2400
+    vars:
+      tox_envlist: bandit-baseline
+    required-projects:
+      - openstack/requirements
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^.*\.txt$
+      - ^api-ref/.*$
+      - ^apidocs/.*$
+      - ^contrib/.*$
+      - ^doc/.*$
+      - ^etc/.*$
+      - ^releasenotes/.*$
+      - ^setup.cfg$
+      - ^tools/.*$
+      - ^trove/hacking/.*$
+      - ^trove/tests/scenario/.*$
+      - ^trove/tests/unittests/.*$

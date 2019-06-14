@@ -1,0 +1,54 @@
+Metadata-Version: 1.1
+Name: panko
+Version: 6.0.0
+Summary: Event storage publisher and API for Ceilometer
+Home-page: https://docs.openstack.org/panko/latest/
+Author: OpenStack
+Author-email: openstack-dev@lists.openstack.org
+License: UNKNOWN
+Description: panko
+        =====
+        
+        
+        -------------
+        Documentation
+        -------------
+        
+        Documentation for the project can be found at:
+        https://docs.openstack.org/panko/latest/
+        
+        Launchpad Projects
+        ------------------
+        - Server: https://launchpad.net/panko
+        - Client: https://launchpad.net/python-pankoclient
+        
+        Code Repository
+        ---------------
+        - Server: https://github.com/openstack/panko
+        - Client: https://github.com/openstack/python-pankoclient
+        
+        Bug Tracking
+        ------------
+        - Bugs: https://bugs.launchpad.net/panko
+        
+        IRC
+        ---
+        IRC Channel: #openstack-telemetry on Freenode.
+        
+        Release notes
+        -------------
+        Release notes: https://docs.openstack.org/releasenotes/panko/
+        
+        
+Platform: UNKNOWN
+Classifier: Environment :: OpenStack
+Classifier: Intended Audience :: Information Technology
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.5
+Classifier: Topic :: System :: Monitoring

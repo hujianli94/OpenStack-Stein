@@ -1,0 +1,800 @@
+CHANGES
+=======
+
+0.3.0
+-----
+
+* Replace openstack.org git:// URLs with https://
+* Reconfigure tempest configuration
+* add python 3.7 unit test job
+* Change openstack-dev to openstack-discuss
+* fix tox python3 overrides
+* Added validations
+* Refactor devstack-plugin
+* Remove setup.py check from pep8 job
+
+0.2.0
+-----
+
+* Use the tenant\_id from context to name the index in ES
+* Don't quote {posargs} in tox.ini
+* fix tox python3 overrides
+* Fix body validation for Python 3
+* Update links in README
+* Update reno for stable/rocky
+
+0.1.0
+-----
+
+* Add mechanism that send msg again if request fail
+* Use openstack-tox-cover template
+* Change incorrect default policy role
+* add python 3.6 unit test job
+* switch documentation job to new PTI
+* import zuul job settings from project-config
+* Fix README.rst and add syntax check
+* Fix coverage job
+* uncap eventlet
+* Zuul: Remove project name
+* changed self oslo.policy enforcement to monasca-common oslo.policy  enforcement engine
+* Download Kafka from Apache Archives
+* updated gitignore to ignore .venv
+* Add events endpoint
+* Remove -U from pip install
+* Avoid tox\_install.sh for constraints support
+* Zuul: add file extension to playbook path
+* Remove setting of version/release from releasenotes
+* Create devstack plugin for monasca-events
+* Fix pep8 test
+* Monasca-events-api spec documentation
+* Add sample configuration files to documentation
+* Provide oslo.policies
+* Preparing infrastructure for events-api
+* Remove non used import
+* Cleanup the amount of conditionals and temp variables in patch
+* Take away the ability to patch certain fields
+* Return empty list on getting fire actions if it is not there
+* Add the ability to patch stream definitions
+
+0.0.6
+-----
+
+* Changed monasca-events-api port to 8072
+
+0.0.5
+-----
+
+* Updated .gitignore
+* Removing soft delete functionality
+* Fixes for functional test
+* added in api examples to readme
+* Now with 100% more demo
+* Added auto commit true
+* Modified post\_webhook script
+
+0.0.4
+-----
+
+* Fixed message format problem
+* stream def fix
+
+0.0.3
+-----
+
+* added missing greenlet in req
+* added graphing
+* Added demo webhook poster
+* demo folder
+
+0.0.2
+-----
+
+* fixed requirements
+* added versions to api and updated requirements falcon==0.2.0
+* transform bug fixes in mysql clause and in get single transform
+* fixed mysql formatting
+* Refactored transform repo
+* Fixed broken unit tests
+* Cleanup and deleted unused message formats
+* Cleanup and deleted unused message formats
+* Added oslo.log to requirements
+* bug fixes and pagination fixes
+* lots of bug fixes for the limit and transform query cleanup
+* fix pagination helper
+* the real limit fixes
+* added get specific transform and bug fixes
+* Fixed unit tests broken due to recent changes
+* lots of bug fixes for the limit and transform query cleanup
+* fix pagination helper
+* the real limit fixes
+* added get specific transform and bug fixes
+* Fixes for flake8 compatibility
+* added example yaml open file
+* added yaml loads to transforms
+* Modified to use oslo libraries
+* Removed comment
+* Added batch handling
+* Removed the mocks for validate
+* Made changes to the validation test
+* Removed the regular post method. Left the validation one in
+* Made review changes for validation
+* Added validation tests
+* Added review changes to the events,transform and stream
+* Added test for GET and POST methods in events api
+* Added review changes to the events,transform and stream
+* Added test for GET and POST methods in events api
+* improved event Post validation
+* multi-tenant support for post and get events and stream-definitions
+* added transforms to talk with kafka
+* added transform test and updated requirements
+* added get\_all\_stream\_definitions to keep it common
+* send bad request when action is PAGERDUTY type
+* test\_stream\_definition\_post can now run more than once
+* fixes for api\_func\_test, and log dir
+* Updated tox setup
+* Updated api functional test
+* Moved default port from 8080 to 8082
+* Removed unused code
+* Upgrade to Falcon 0.2
+* Removed unused import
+* Updated requirements
+* Updated functional tests
+* Updated functional tests
+* Added functional test script
+* Removed printout
+* Refactorig API structure
+* Updated documentation
+* Updated documentation
+* Cleanup
+* Cleanup
+* Cleanup
+* Cleanup
+* Removed README.md because of merge conflict
+* streams definition POST, GET, GET (id), DELETE
+* Initial commit
+* Allow unicode in metric definitions
+* Added two GET api methods for events
+* Let any user with valid keystone token get version
+* Remove Influxdb 8
+* Allow unicode in response
+* AlarmStateTransitionedEvent timestamp now in ms
+* Make gzip responses from Influxdb configurable
+* Check for null pointer in dimension name validation
+* Add a check on the alarm definition match\_by field
+* Update doc for value-meta value
+* Allow empty values for value\_meta
+* Accept gzip results from influxdb
+* Remove warnings
+* Cleanup multiple metrics exception handling
+* Allow tenant\_id without delegate role if same
+* Correct the 'reference' format transform method
+* Deb only installs jar and example config now
+* Fix bug with alarm\_state\_history query and tenant\_id
+* Store tenant\_id and region as private
+* Return "updated\_at" field with alarms
+* Remove extra, unnecessary id column from measurement
+* Fix id of alarm-state-history-list
+* Metric name optional for metric-list and alarm-list resources
+* Update docs
+* Add new resource to return a list of unique metric names
+* Refactored the notification method Impl code
+* Update docs for Influxdb 9 and pagination
+* Added java -jar monasca-api.jar --version
+* Values from statistics query return doubles
+* Add sub\_alarms column to select statement
+* Fix problem with limit 0 when using Influxdb V8
+* URL encode query parms of next link
+* Update copyright date to 2015
+* Add pagination support
+* Added option to define project for admin user
+* Change to use maven 3
+* Change version resource to return a JSON object
+* Update docs for change from JSON array to JSON object
+* Wrap all lists in JSON object
+* Conversion to milliseconds
+* Conversion to milliseconds
+* Duplicate named AlarmDefinition for a specific TenantID
+* Events (already distilled) will be posted to transformed-events
+* Add measurement valueMeta
+* Add error field to Series
+* Handle error message from influxdb 9 when no measurement found
+* Translate 'mean' -> 'avg' and 'time' -> 'timestamp' in stats query
+* Adding Alarm State subAlarms to Influx9
+* Fix date parsing for Alarm State History for Influxdb V9 RC4
+* Translate avg to mean for influxdb v9
+* Influxdb 9 RC4 support
+* Adding sub alarms information to Alarm State History
+* Add more entries to .gitignore
+* Add Influxdb 0.9.0 support
+* creation\_time to use utc timestamp for metrics and events
+* application/json in only valid patch Content-Type
+* Converted the three sql statements to one sql
+* Fixing log property
+* Fix find AlarmDefinition by dimension
+* Change the maximum metric name length to be 255
+* Removed references to SMS support
+* Integrating monasca-api with keystonemiddleware
+* Limit the changes that can be made to Alarm Definition
+* Update version of docker-java
+* Patch for Alarm Definitions failed if expression not given
+* Use consistent Version for the Java API
+* Get the java build working in StackForge
+* Fixed Pagerduty missing information, schema, and added some tests
+* First step to removing use of application/json-patch+json
+* Set default severity of Alarm Definitions to LOW
+* Setup the api-config.yml so it can be used with mini-mon
+* Added pagerduty support to the Java API
+* Distribute messages better among the Kafka partitions
+* Removing imports of classes instead of modules
+* Remove limit parameter from measurement-list resource
+* Fix NPE bug in metric-list introduced by pagination changes
+* Fix bug where metric name regex matches prefixes
+* Restrict changes to existing Alarm Definitions
+* Add pagination
+* URL encode metric name when it is used as offset for metric list
+* Dimension values that contained a colon were mishandled
+* Fix metric name and dimension values matching
+* Add pagination
+* Check alarm description for NoneType
+* Don't treat the Agent role as a restriction
+* Factor out SubAlarmDefinition class into separate file
+* Removed HealthCheck from MonascaAPI
+* Factor out common code
+* Remove peewee and replace with mysqldb
+* Improve the speed of retrieving alarms by using a single query
+* Added a link to the API spec docs
+* Distribute the AlarmStateTransitionEvents better
+* Removed swagger
+* Add requirements
+* Move tenant id to front for serie name
+* Move tenant id to front for serie name
+* Allow localhost as a valid email domain
+* Fix http return codes and rename method
+* Add alarm definition update and alarm definition patch resources
+* implementation specific requirement files
+* enable microservice
+* Fixing security issue for deleting alarms
+* Improve alarm update logic
+* Fixes validation of emails and webhooks. Fixed the incorrect indentation as well. Added unit tests as well
+* Added support for webhook in Python port of monasca API
+* Send alarm transitioned events on patch and update
+* Add alarm patch resource
+* Check for valid state on alarm update
+* Add alarm update resource
+* Adding support to WEBHOOK notification
+* Minor corrrections. Specify avg as arithmetic average
+* Switch to MySQLdb
+* Add alarm history resource
+* Add alarm delete resource
+* Log helpful messages when keystone connection is misconfigured
+* Add alarm show resource
+* Refactor redundant code
+* Add alarm list resource
+* Add check for NULL in where clause to get\_alarm\_definition method
+* Add alarm definition show resource
+* Add \_\_init\_\_ methods for cooperative multiple inheritance
+* Add Alarms resources files
+* Fix sql injection vulnerability
+* Add alarm definition list resource
+* Closes-Bug: Typo in MonApiModule.java where vertica was spelled vertiva
+* Add alarm definition delete resource
+* Update API doc for Alarm Definitions
+* Spread the metrics better across kafka partitions
+* Use properties in alarm expression parser
+* Change alarm\_id to alarm\_definition\_id in alarm\_action table
+* Change alarm\_id to alarm\_definition\_id in alarm\_action table
+* Remove unused imports
+* Add alarm definition create resource
+* Fix Swagger initialization
+* Update alarm expression BNF documentation
+* JAH-775 Monasca-api is encountering SSL problems
+* common method for read http and init driver, fix metric validate
+* Notifications resource support, helpers.py link functions
+* Fix the path in the alarm\_definition link
+* Update alarm expression BNF documentation
+* Update alarm expression BNF documentation
+* Update alarm expression BNF documentation
+* Update alarm expression documentation
+* Simplify list comprehension logic
+* Fix alarm expression documentation
+* Remove the alarmDefinitionId field in the Alarm JSON
+* Fix alarm expression documentation
+* Fix the query to get all the AlarmStateHistory objects
+* Add AlarmDefinition information to returned Alarm json
+* Fix config file for case sensitivity
+* Add metric statistics resource
+* Switch crossTenantId for tenant ID in metrics that are published downstream
+* Add timestamp parameter to measurement-list resource
+* Use new monasca-common package names
+* Fix the tests that should have been part of previous change
+* Remove incorrect metric value validation. Allow unusually large/small values to be truncated as documented
+* Add measurement-list resource
+* Change to use monasca everywhere
+* Set severity in the AlarmStateTransitionEvent
+* Change abstract classes to use six
+* Change creation of AlarmUpdatedEvent and AlarmDeletedEvent
+* Return metric list from InfluxDB as JSON
+* Fix resource path
+* Add new alarm definition resources
+* Start of initial reference implementation and re-factored
+* Document cross tenant id query param for posting metrics
+* WIP - Alarmed metrics API changes - Changed alarms resource to alarm-definitions - Added new alarms resource that tracks alarm/metric associations
+* Fixed posting of cross-tenant metrics. X-Roles header is now added by the PostAuthentication servlet filter to make roles accessible from resources
+* Add version information to maven plugins
+* Split methods for better modularity
+* initial python implementation
+* Refactor serie name decoder
+* Remove unnecessary sanitize for URL encoded strings
+* Fix 500 server error when metric name does not exist
+* Series name contains metadata
+* Relieve some compile warnings
+* Fix the capitalization of AlarmMySqlRepositoryImplTest.java
+* Added a tar ball to the package target
+* Remove all dependencies on hpcloud maven repository
+* Added TOC
+* Return only names matching exactly
+* Add copyrights to files without them
+* Fix problems with capitalization in file names
+* Partition metrics by name instead of tenant id
+* Added highlighting of some special chars
+* Added horizontal rules to api spec
+* updated configuration file
+* Remove tenant\_id and region from metric list
+* add roles for reading and writing to the api
+* Updated the dimensions sections to include changes to handle special characters
+* Add details on HTTP headers for CORS supported by api
+* Add tenant\_id to where clause
+* Fix bug jah431
+* Changes to work with new monasca\_common build
+* Allow unicode chars
+* Removed v2.0 from versions path. Fixed up one Request Body
+* Use DatabaseConfiguration from mon-influxdb
+* Allow additional chars in SQL [=,:,%,/,?,&]
+* Fixed alarm expression BNF description to not require colons between metric name and dimensions. Added quoting around constants in API descriptions
+* Allow additional chars in SQL [=,:,%,/,?,&]
+* Use InfluxDbConfiguration from mon-influxdb
+* Added common eror codes and misc clean-up
+* Converted to new template
+* Changed document names to Monasca. Removed overivew. Updated README
+* Fixed formatting problem
+* Added alarm specification as well as many other improvements
+* Check port 8080 for availability before running instance of monasca api
+* Wait for docker images to be pulled
+* Added more detail to the overview section
+* Updated the documentation
+* Change docker-version
+* Migrate docker images to monasca repo
+* Get initial build to work
+* Add config file for integration testing
+* Make docker integration tests work from CL with 'mvn verify'
+* Find the latest built shaded jar automatically
+* Delete AlarmStateHistoryInfluxDBRepositoryImplTest.java
+* UTC Date
+* Make tests use UTC dates
+* Updated executable api jar
+* Add integration tests with docker
+* Add integration tests using docker
+* Delete NotificationMethodMySQLRepositoryImpl.java
+* Delete AlarmMySQLRepositoryImpl.java
+* Delete StatisticInfluxDBRepositoryImpl.java
+* Delete MetricDefinitionInfluxDBRepositoryImpl.java
+* Delete InfluxDBConfig.java
+* Delete AlarmStateHistoryInfluxDBRepositoryImpl.java
+* Delete MeasurementInfluxDBRepositoryImpl.java
+* Fix unit test
+* Remove dependencies
+* Make tests use UTC for dates
+* Fixed class name case mismatches
+* fixing middleware disabled
+* Do not use auth filters if middleware is disabled
+* Removed unused imports
+* Added ability to filter alarms by name
+* Renamed a few classes according to google style guide's naming conventions
+* Killed compile warnings
+* Formatted code according to google style guide
+* Organized persistence code around technology specific packages
+* Fixed import warnings
+* Moved db config classes to persistence package
+* Only enable the http methods for CORS that grafana needs
+* Remove unneccesary cast
+* Add CORS support and switch back to vertica in conf
+* Add CORS support and switch back to vertica in conf
+* Make seq number a long. Format dates with UTC indicator 'Z'
+* Fix all time cast exceptions. Format sequence number and measurement to be non-exponential
+* Fix time bug
+* changed code to include changes for mon-middleware
+* merged middle changes
+* Added cross-origin servlet filter
+* removing middleware code from mon-api
+* removing middleware code from mon-api
+* restructured middleware into hpcloud
+* removing hard coded parameters and removing debugging
+* changed to original pom file
+* fixing pom.xml after merge
+* had to add the influx db dependency back after the merge removed it
+* merge complete
+* removed old files added configuration options
+* remove unused classes and cleaning up caching code
+* cleaning up code
+* removed unused files
+* commented out unnecessary files and code
+* Added order by time\_stamp, id to query in MeasurementVerticaRepositoryImpl
+* Add sample config file
+* Add unit tests
+* Inject InfluxDB connection
+* Refactor code to remove duplication. Add unit tests
+* Prevent SQL injection attacks
+* still need to fix problem when pool is at max
+* Optimize the query for series names
+* Allow queries with no dimensions specified
+* Allow InfluxDBConfiguration to be null
+* Rename Vertica driver implementations
+* Add copyright header
+* Remove sys.err messages on bad DB detected
+* Replace string cat with StringBuilder in tight for loop with potential for many iterations
+* testing authentication
+* Remove empty statement
+* Throw ProvisionException when unknown DB is encountered
+* Add influxDB Support
+* Added metric name to measuremnts query
+* Update README.md
+* Update README.md
+* Update README.md
+* Update README.md
+* not authenticating
+* Add region configuration and use region as meta for all posted metrics
+* updated to get middleware working
+* JAH-1891 Threshold Engine will not update State properly if user has changed state via the API
+* Changes so it will use mon-common from the local snapshot. Change URLs to github
+* Add in checkConnectionOnBorrow: true to sample config file to prevent connection problems when idle overnight
+* Only check for action existence once across all action types
+* fix for end\_time parameter problem
+* bug fix for handling case insensitive statistics
+* correct the input for state
+* Change enabled field to actions\_enabled for alarm PATCH calls
+* Allow severity to not be set. Will default to low
+* remove log folder
+* merged craig's changes
+* Modified README.md
+* Delete prod-hpmiddleware-truststore.jks
+* Delete prod-hpmiddleware-truststore.jks
+* Delete prod-hpmiddleware-keystore.jks
+* Delete prod-hpmiddleware-keystore.jks
+* merged craig's changes
+* minor changes after the merge
+* minor changes after the merge
+* fixed test
+* fixed test
+* updated with severity code
+* updated with severity code
+* fixed update to persist data to database
+* fixed update to persist data to database
+* added severity
+* added severity
+* More updates
+* More updates
+* Converted from MaaS to Mon
+* Converted from MaaS to Mon
+* Added support for alarm state history queries Moved some dimension querying code to a separate utility class
+* Added support for alarm state history queries Moved some dimension querying code to a separate utility class
+* Update README.md
+* Update README.md
+* Renamed mon-api-spec.md
+* Renamed mon-api-spec.md
+* Update README.md
+* Update README.md
+* Updated README
+* Updated README
+* Added mon-api-overview and mon-api-spec
+* Added mon-api-overview and mon-api-spec
+* Update README.md
+* Update README.md
+* Update README.md
+* Update README.md
+* Added copyright and license to README.md
+* Added copyright and license to README.md
+* Update to build 51 of mon-common so MetricEnvelope gets a timestamp before sending on the Kafka queue
+* Update to build 51 of mon-common so MetricEnvelope gets a timestamp before sending on the Kafka queue
+* Modified the AlarmRepositoryImplTest to test getting sub alarms without dimensions in the Metric as well as ones with dimensions
+* The SQL for the Sub Alarms was not returning Sub Alarms with no dimensions. Added an outer join
+* Removed direct write of Alarm State Transitioned to Vertica table MonAlarms.StateHistory. No longer need to pass a AlarmStateHistoryRepository to AlarmService
+* Removed direct write of Alarm State Transitioned to Vertica table MonAlarms.StateHistory. No longer need to pass a AlarmStateHistoryRepository to AlarmService
+* updated joins with outer joins to view queries without dimensions
+* updated joins with outer joins to view queries without dimensions
+* Added "left outer join" to sql query to handle alarms with no dimensions supplied
+* Added "left outer join" to sql query to handle alarms with no dimensions supplied
+* Add ordering for alarm state history, descending by timestamp
+* Add ordering for alarm state history, descending by timestamp
+* cleaning up commented out code
+* cleaning up commented out code
+* committed out AlarmResourceTest
+* committed out AlarmResourceTest
+* Removed swagger specific stuff from index.html
+* Removed swagger specific stuff from index.html
+* Persister is expecting the timestamp on the AlarmStateTransitionedEvent to be in seconds, not milliseconds
+* Persister is expecting the timestamp on the AlarmStateTransitionedEvent to be in seconds, not milliseconds
+* Update README.md
+* Update README.md
+* allowed more fields from the alarm tables on query
+* allowed more fields from the alarm tables on query
+* filter alarms by dimensions and status
+* filter alarms by dimensions and status
+* Tighten up the post authentication filter's URI pattern to ignore the swagger-ui path
+* Tighten up the post authentication filter's URI pattern to ignore the swagger-ui path
+* Removed a couple of errant @author tags
+* Removed a couple of errant @author tags
+* Added license file
+* Added license file
+* Removed mon-http dependencies updated mon-common dep
+* Removed mon-http dependencies updated mon-common dep
+* Added initial alarm expression data support Added license to all files Removed @author tags from all Javadoc
+* Added initial alarm expression data support Added license to all files Removed @author tags from all Javadoc
+* Added initial support for alarm expression data Updated mock auth filter to return proper errors when missing auth data
+* Added initial support for alarm expression data Updated mock auth filter to return proper errors when missing auth data
+* Allow requests without an auth token
+* Allow requests without an auth token
+* Convert auth token to tenant id for local environments
+* Convert auth token to tenant id for local environments
+* Updated timestamps to be ISO 8601 formatted
+* Updated timestamps to be ISO 8601 formatted
+* Dimensions should not be required for statistics
+* Dimensions should not be required for statistics
+* Implemented alarm state history resource and persistence for JAH-98
+* Implemented alarm state history resource and persistence for JAH-98
+* Use try-with blocks for opening DB handles
+* Use try-with blocks for opening DB handles
+* Update readme to add swagger-ui link
+* Update readme to add swagger-ui link
+* Added initial swagger-ui support
+* Added initial swagger-ui support
+* WIP
+* WIP
+* Remove comment
+* Remove comment
+* parse proper field for expression when doing an Alarm patch
+* parse proper field for expression when doing an Alarm patch
+* updated values to statistics and name of class
+* updated values to statistics and name of class
+* Send alarm state transitions to related topic
+* Send alarm state transitions to related topic
+* Send alarm state transitioned events
+* Send alarm state transitioned events
+* Use common method for building statistic dimensions in query
+* Use common method for building statistic dimensions in query
+* Killing some compiler warnings and whitespace
+* Killing some compiler warnings and whitespace
+* Added description to AlarmUpdatedEvent
+* Added description to AlarmUpdatedEvent
+* removed temp files
+* removed temp files
+* updated statistics format
+* updated statistics format
+* updated
+* updated
+* updating for new format
+* updating for new format
+* removed log
+* removed log
+* removed unused variables
+* removed unused variables
+* removing logs
+* removing logs
+* updated to support Statistics
+* updated to support Statistics
+* making changes for statistics
+* making changes for statistics
+* Added support for changed sub alarm expressions which are sent in the AlarmUpdatedEvent
+* Added support for changed sub alarm expressions which are sent in the AlarmUpdatedEvent
+* Change measurements JSON response format to be tabular
+* Change measurements JSON response format to be tabular
+* Fixed alarms test for actions\_enabled
+* Fixed alarms test for actions\_enabled
+* AlarmResource should not always return an Accept header
+* AlarmResource should not always return an Accept header
+* Alarm enabled -> actionsEnabled
+* Alarm enabled -> actionsEnabled
+* Updated metric and measurement queries to support new normalized db schema
+* Updated metric and measurement queries to support new normalized db schema
+* Undo code changes / reformatting
+* Undo code changes / reformatting
+* Fix formatting
+* Fix formatting
+* Add Swagger infrastructure
+* Add Swagger infrastructure
+* Add logging config for dropwizard 0.7.0-rc3
+* Add logging config for dropwizard 0.7.0-rc3
+* Update dropwizard version. Get basic logging config working
+* Update dropwizard version. Get basic logging config working
+* Allow alarms without dimensions
+* Allow alarms without dimensions
+* Added tenant id to metric def and measurement queries
+* Added tenant id to metric def and measurement queries
+* updated sample yaml config file
+* updated sample yaml config file
+* Measurement timestamps should be in seconds, not millis
+* Measurement timestamps should be in seconds, not millis
+* Removed name/dimensions requirements for metric and measurement queries
+* Removed name/dimensions requirements for metric and measurement queries
+* readme improvements re: layering
+* readme improvements re: layering
+* Removed requirement that new alarms have alarm actions
+* Removed requirement that new alarms have alarm actions
+* DB cleanup, readying stubs
+* DB cleanup, readying stubs
+* Added basic metric def repo impl test
+* Added basic metric def repo impl test
+* Added support for metric definition queries
+* Added support for metric definition queries
+* Initial support for filtering measurement queries by start and end times
+* Initial support for filtering measurement queries by start and end times
+* Test cleanup
+* Test cleanup
+* pony power
+* pony power
+* Updated column naming for new vertica schema
+* Updated column naming for new vertica schema
+* Added initial support for querying measurements
+* Added initial support for querying measurements
+* Added initial alarm history stubs
+* Added initial alarm history stubs
+* Added alarm history links to responses Stubbed out alarm history types
+* Added alarm history links to responses Stubbed out alarm history types
+* Enabled statistic and measurement resources Wires statistic and measurement repos
+* Enabled statistic and measurement resources Wires statistic and measurement repos
+* Send alarm state and enabled values with updated events
+* Send alarm state and enabled values with updated events
+* Naming fixes
+* Naming fixes
+* Added support for alarm patches Removed AlarmDetail
+* Added support for alarm patches Removed AlarmDetail
+* Handle null dimensions
+* Handle null dimensions
+* dropwiz rc-2 upgrade
+* dropwiz rc-2 upgrade
+* No need to compensate for alarm update failures
+* No need to compensate for alarm update failures
+* Patches should do simply passthrough to app service
+* Patches should do simply passthrough to app service
+* Tidying up
+* Tidying up
+* Added AlarmService unit tests
+* Added AlarmService unit tests
+* Added alarm update test. Added initial PATCH support for all resources
+* Added alarm update test. Added initial PATCH support for all resources
+* Better notification method update test
+* Better notification method update test
+* Add JSON Consumers annotations to update request handlers
+* Add JSON Consumers annotations to update request handlers
+* Finished alarm update persistence implementation / tests
+* Finished alarm update persistence implementation / tests
+* Update alarm resource test to green
+* Update alarm resource test to green
+* Implemented alarm udpates Broke apart metric resource into new measurement and statistics resources Repaired the metric resource test Created statistic resource test
+* Implemented alarm udpates Broke apart metric resource into new measurement and statistics resources Repaired the metric resource test Created statistic resource test
+* Pretty POM
+* Pretty POM
+* Remove auth token from resources/app layer services
+* Remove auth token from resources/app layer services
+* Restrict metric posting for HPCS service (not name)
+* Restrict metric posting for HPCS service (not name)
+* Better application name
+* Better application name
+* Removed jersey client config
+* Removed jersey client config
+* Removed resource ownership verification service and implementations. Removed identity service implementations
+* Removed resource ownership verification service and implementations. Removed identity service implementations
+* Add separate methods for various metric queries
+* Add separate methods for various metric queries
+* Make ServletHandler happy for now
+* Make ServletHandler happy for now
+* upstart restart is unreliable changed to stop/start
+* upstart restart is unreliable changed to stop/start
+* Removed root element from notification method resource representations. Added support for updating notification methods via PUT
+* Removed root element from notification method resource representations. Added support for updating notification methods via PUT
+* Test renaming
+* Test renaming
+* Removed the horrible root element/wrapper stuff from resource representations
+* Removed the horrible root element/wrapper stuff from resource representations
+* Fixed tests for alarm JSON changes
+* Fixed tests for alarm JSON changes
+* Added alarm description, enabled, okactions, undetermined actions. Namespace -> Service Better organized metric name / dimension validation Removed required dimension validation Added alarm state to alarm actions
+* Added alarm description, enabled, okactions, undetermined actions. Namespace -> Service Better organized metric name / dimension validation Removed required dimension validation Added alarm state to alarm actions
+* updated the mysql connector to a version that is compatible with the database
+* updated the mysql connector to a version that is compatible with the database
+* Added application layer tests
+* Added application layer tests
+* Added representation tests
+* Added representation tests
+* metric namespace -> name
+* metric namespace -> name
+* removing backup file
+* removing backup file
+* update mon-api.conf
+* update mon-api.conf
+* updated from som user to mon
+* updated from som user to mon
+* More namespace -> name conversion
+* More namespace -> name conversion
+* updated pom
+* updated pom
+* merged pom with master
+* merged pom with master
+* merged pom file
+* merged pom file
+*  updated pom with Debian code to produce .deb file
+*  updated pom with Debian code to produce .deb file
+* Update POM to point to initial mon-common release
+* Update POM to point to initial mon-common release
+* Metric Namespace -> name
+* Metric Namespace -> name
+* Formatting
+* Formatting
+* Point to proper test config file
+* Point to proper test config file
+*  updated pom with Debian code to produce .deb file
+*  updated pom with Debian code to produce .deb file
+* Committing initial disabled metric and alarm integration tests
+* Committing initial disabled metric and alarm integration tests
+* Pushing disabled alarm and metric tests. Will enable once metric schema is finalized
+* Pushing disabled alarm and metric tests. Will enable once metric schema is finalized
+* Implemented initial notification method integration test
+* Implemented initial notification method integration test
+* Add repository test implementations
+* Add repository test implementations
+* Remove unneeded test config from module
+* Remove unneeded test config from module
+* Added version and notification method resource tests
+* Added version and notification method resource tests
+* Added constraint violation exception mapper
+* Added constraint violation exception mapper
+* Set initial API version to v2.0
+* Set initial API version to v2.0
+* Massively cleaned/simplified request validation
+* Massively cleaned/simplified request validation
+* Massively cleaned/simplified request validation
+* Massively cleaned/simplified request validation
+* Removed secondary resource IDs from compute resource verification service (Bravo FTW)!
+* Removed secondary resource IDs from compute resource verification service (Bravo FTW)!
+* Rename service runner -> application runner
+* Rename service runner -> application runner
+* Command validation work. Added support for multi-metric publishing
+* Command validation work. Added support for multi-metric publishing
+* Removed some servlet filters, we don't need
+* Removed some servlet filters, we don't need
+* Added registration for alarm, metrics, notificaiton method repos, and added a few missing bindings
+* Added registration for alarm, metrics, notificaiton method repos, and added a few missing bindings
+* Remove unused stuff from MetricService
+* Remove unused stuff from MetricService
+* Add kafka health check
+* Add kafka health check
+* Fixed jersey client version conflict
+* Fixed jersey client version conflict
+* Consolidated the modules. Added a few missing bindings
+* Consolidated the modules. Added a few missing bindings
+* Remove some unused config
+* Remove some unused config
+* Remove address validation for now
+* Remove address validation for now
+* Dropwiz test package changes
+* Dropwiz test package changes
+* FIx slf4j conflict
+* FIx slf4j conflict
+* Remove LockService for now
+* Remove LockService for now
+* Use default kafka partitioner
+* Use default kafka partitioner
+* Added some domain model tests
+* Added some domain model tests
+* Added infrastructure services for resource verification and identity
+* Added infrastructure services for resource verification and identity
+* Added initial Kafka support
+* Added initial Kafka support
+* Added InvalidEntityException and Mapper
+* Added InvalidEntityException and Mapper
+* Removed Zookeeper and LockService for now
+* Removed Zookeeper and LockService for now
+* Added key and trust stores
+* Added key and trust stores
+* Added initial readme
+* Initial commit
+* Initial commit

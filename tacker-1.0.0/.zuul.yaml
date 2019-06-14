@@ -1,0 +1,137 @@
+- nodeset:
+    name: openstack-2-nodes
+    nodes:
+      - name: controller
+        label: ubuntu-bionic
+      - name: compute1
+        label: ubuntu-bionic
+    groups:
+      # Nodes running the compute service
+      - name: compute
+        nodes:
+          - controller
+          - compute1
+      # Nodes that are not the controller
+      - name: subnode
+        nodes:
+          - compute1
+      # Switch node for multinode networking setup
+      - name: switch
+        nodes:
+          - controller
+      # Peer nodes for multinode networking setup
+      - name: peers
+        nodes:
+          - compute1
+
+- job:
+    name: tacker-functional-devstack-multinode
+    parent: devstack
+    description: |
+      Base multinodes job for devstack-based functional tests
+    nodeset: openstack-2-nodes
+    pre-run: playbooks/devstack/pre.yaml
+    run: playbooks/devstack/run.yaml
+    post-run: playbooks/devstack/post.yaml
+    roles:
+      - zuul: openstack-infra/devstack
+    timeout: 9000
+    required-projects:
+      - openstack/aodh
+      - openstack/blazar
+      - openstack/blazar-nova
+      - openstack/horizon
+      - openstack/barbican
+      - openstack/ceilometer
+      - openstack/heat
+      - openstack/mistral
+      - openstack/mistral-dashboard
+      - openstack/networking-sfc
+      - openstack/python-barbicanclient
+      - openstack/python-blazarclient
+      - openstack/python-mistralclient
+      - openstack/python-tackerclient
+      - openstack/tacker
+      - openstack/tacker-horizon
+    vars:
+      devstack_localrc:
+        CELLSV2_SETUP: singleconductor
+        Q_DVR_MODE: dvr
+      test_matrix_configs: [neutron]
+      devstack_services:
+        horizon: false
+        swift: false
+        s-account: false
+        s-container: false
+        s-object: false
+        s-proxy: false
+        c-bak: false
+      zuul_work_dir: src/git.openstack.org/openstack/tacker
+    host-vars:
+      controller:
+        devstack_plugins:
+          heat: https://git.openstack.org/openstack/heat
+          networking-sfc: https://git.openstack.org/openstack/networking-sfc
+          aodh: https://git.openstack.org/openstack/aodh
+          ceilometer: https://git.openstack.org/openstack/ceilometer
+          barbican: https://git.openstack.org/openstack/barbican
+          mistral: https://git.openstack.org/openstack/mistral
+          tacker: https://git.openstack.org/openstack/tacker
+          blazar: https://git.openstack.org/openstack/blazar
+        devstack_services:
+          horizon: false
+          swift: false
+          s-account: false
+          s-container: false
+          s-object: false
+          s-proxy: false
+          c-bak: false
+          tacker: true
+          tacker-conductor: true
+          q-svc: true
+        tox_install_siblings: false
+        tox_envlist: dsvm-functional
+    group-vars:
+      subnode:
+        devstack_localrc:
+          CELLSV2_SETUP: singleconductor
+          PHYSICAL_NETWORK: mgmtphysnet0
+        devstack_services:
+          q-agt: true
+          n-api: false
+          n-api-meta: false
+          n-cauth: false
+          n-cond: false
+          n-cpu: true
+          n-novnc: false
+          n-obj: false
+          n-sch: false
+          horizon: false
+          tls-proxy: false
+
+- job:
+    name: tacker-functional-devstack-multinode-python3
+    parent: tacker-functional-devstack-multinode
+    description: |
+      Run tacker functional tests using python3 against a master devstack
+    vars:
+      tacker_environment:
+        TACKER_TOX_PYTHON: python3
+
+- project:
+    templates:
+      - check-requirements
+      - openstack-cover-jobs
+      - openstack-lower-constraints-jobs
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - openstack-python37-jobs
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        - tacker-functional-devstack-multinode:
+            voting: false
+        - tacker-functional-devstack-multinode-python3:
+            voting: false

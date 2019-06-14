@@ -1,0 +1,4 @@
+---
+upgrade:
+  - |
+    Add support for ElasticSearch 5.x

@@ -1,0 +1,404 @@
+#!/bin/bash
+#
+# lib/zun
+# Functions to control the configuration and operation of the **zun** service
+
+# Dependencies:
+#
+# - ``functions`` file
+# - ``DEST``, ``DATA_DIR``, ``STACK_USER`` must be defined
+# - ``SERVICE_{TENANT_NAME|PASSWORD}`` must be defined
+
+# ``stack.sh`` calls the entry points in this order:
+#
+# - install_zun
+# - configure_zun
+# - create_zun_conf
+# - create_zun_accounts
+# - init_zun
+# - start_zun
+# - stop_zun
+# - cleanup_zun
+
+# Save trace setting
+XTRACE=$(set +o | grep xtrace)
+set +o xtrace
+
+
+# Defaults
+# --------
+
+# Set up default directories
+ZUN_REPO=${ZUN_REPO:-${GIT_BASE}/openstack/zun.git}
+ZUN_BRANCH=${ZUN_BRANCH:-$TARGET_BRANCH}
+ZUN_DIR=$DEST/zun
+ZUN_TEMPEST_PLUGIN_REPO=${ZUN_TEMPEST_PLUGIN_REPO:-${GIT_BASE}/openstack/zun-tempest-plugin.git}
+ZUN_TEMPEST_PLUGIN_BRANCH=${ZUN_TEMPEST_PLUGIN_BRANCH:-master}
+ZUN_TEMPEST_PLUGIN_DIR=$DEST/zun-tempest-plugin
+
+GITREPO["python-zunclient"]=${ZUNCLIENT_REPO:-${GIT_BASE}/openstack/python-zunclient.git}
+GITBRANCH["python-zunclient"]=${ZUNCLIENT_BRANCH:-master}
+GITDIR["python-zunclient"]=$DEST/python-zunclient
+
+ZUN_STATE_PATH=${ZUN_STATE_PATH:=$DATA_DIR/zun}
+ZUN_AUTH_CACHE_DIR=${ZUN_AUTH_CACHE_DIR:-/var/cache/zun}
+
+ZUN_CONF_DIR=/etc/zun
+ZUN_CONF=$ZUN_CONF_DIR/zun.conf
+ZUN_API_PASTE=$ZUN_CONF_DIR/api-paste.ini
+
+if is_ssl_enabled_service "zun" || is_service_enabled tls-proxy; then
+    ZUN_SERVICE_PROTOCOL="https"
+fi
+
+# Toggle for deploying ZUN-API under a wsgi server
+ZUN_USE_UWSGI=${ZUN_USE_UWSGI:-True}
+
+
+# Public facing bits
+ZUN_SERVICE_HOST=${ZUN_SERVICE_HOST:-$SERVICE_HOST}
+ZUN_SERVICE_PORT=${ZUN_SERVICE_PORT:-9517}
+ZUN_SERVICE_PORT_INT=${ZUN_SERVICE_PORT_INT:-19517}
+ZUN_SERVICE_PROTOCOL=${ZUN_SERVICE_PROTOCOL:-$SERVICE_PROTOCOL}
+
+ZUN_TRUSTEE_DOMAIN_ADMIN_PASSWORD=${ZUN_TRUSTEE_DOMAIN_ADMIN_PASSWORD:-secret}
+
+# Support entry points installation of console scripts
+if [[ -d $ZUN_DIR/bin ]]; then
+    ZUN_BIN_DIR=$ZUN_DIR/bin
+else
+    ZUN_BIN_DIR=$(get_python_exec_prefix)
+fi
+
+ZUN_UWSGI=$ZUN_BIN_DIR/zun-api-wsgi
+ZUN_UWSGI_CONF=$ZUN_CONF_DIR/zun-api-uwsgi.ini
+
+DOCKER_REMOTE_API_PORT=2375
+ZUN_DRIVER=${ZUN_DRIVER:-docker}
+ZUN_DB_TYPE=${ZUN_DB_TYPE:-sql}
+
+ZUN_ETCD_VERSION=${ZUN_ETCD_VERSION:-v3.0.13}
+ZUN_ETCD_PORT=${ZUN_ETCD_PORT:-2379}
+ZUN_WEBSOCKET_PROXY_PORT=${ZUN_WEBSOCKET_PROXY_PORT:-6784}
+ZUN_WEBSOCKET_PROXY_IP=${ZUN_WEBSOCKET_PROXY_IP:-0.0.0.0}
+if is_ubuntu; then
+    UBUNTU_RELEASE_BASE_NUM=`lsb_release -r | awk '{print $2}' | cut -d '.' -f 1`
+fi
+
+ZUN_DOCKER_IMAGES=${ZUN_DOCKER_IMAGES:-kubernetes/pause}
+
+# Functions
+# ---------
+
+# cleanup_zun() - Remove residual data files, anything left over from previous
+# runs that a clean run would need to clean up
+function cleanup_zun {
+    sudo rm -rf $ZUN_STATE_PATH $ZUN_AUTH_CACHE_DIR
+
+    # Destroy old containers
+    local container_name_prefix=${CONTAINER_NAME_PREFIX:-zun-}
+    local containers
+    containers=`sudo docker ps -a | grep $container_name_prefix | sed "s/.*\($container_name_prefix[0-9a-zA-Z-]*\).*/\1/g"`
+    if [ ! "$containers" = "" ]; then
+        sudo docker rm -f $containers || true
+    fi
+
+    remove_uwsgi_config "$ZUN_UWSGI_CONF" "$ZUN_UWSGI"
+    sudo rm -rf $ZUN_CONF_DIR
+}
+
+# configure_zun() - Set config files, create data dirs, etc
+function configure_zun {
+    # Put config files in ``/etc/zun`` for everyone to find
+    if [[ ! -d $ZUN_CONF_DIR ]]; then
+        sudo mkdir -p $ZUN_CONF_DIR
+        sudo chown $STACK_USER $ZUN_CONF_DIR
+    fi
+
+    configure_rootwrap zun
+
+    # Rebuild the config file from scratch
+    create_zun_conf
+
+    if is_service_enabled zun-api; then
+        create_api_paste_conf
+
+        write_uwsgi_config "$ZUN_UWSGI_CONF" "$ZUN_UWSGI" "/container"
+
+        if [[ "$USE_PYTHON3" = "True" ]]; then
+            # Switch off glance->swift communication as swift fails under py3.x
+            iniset /etc/glance/glance-api.conf glance_store default_store file
+        fi
+    fi
+}
+
+# upload_images() - Upload docker images to glance
+function upload_images {
+    echo_summary "Uploading images"
+
+    if "${ZUN_DRIVER}" == "docker" && is_service_enabled g-api; then
+        for image in ${ZUN_DOCKER_IMAGES//,/ }; do
+            sudo docker pull $image
+            sudo docker save $image | openstack image create $image --public --container-format docker --disk-format raw
+        done
+    fi
+}
+
+# create_zun_accounts() - Set up common required ZUN accounts
+#
+# Project              User         Roles
+# ------------------------------------------------------------------
+# SERVICE_PROJECT_NAME  zun         service
+function create_zun_accounts {
+
+    create_service_user "zun" "admin"
+
+    if is_service_enabled zun-api; then
+
+        local zun_api_url
+        if [[ "$ZUN_USE_UWSGI" == "True" ]]; then
+            zun_api_url="$ZUN_SERVICE_PROTOCOL://$ZUN_SERVICE_HOST/container"
+        else
+            zun_api_url="$ZUN_SERVICE_PROTOCOL://$ZUN_SERVICE_HOST:$ZUN_SERVICE_PORT"
+        fi
+
+        local zun_service=$(get_or_create_service "zun" \
+            "container" "Container As Service")
+        get_or_create_endpoint $zun_service \
+            "$REGION_NAME" \
+            "$zun_api_url/v1" \
+            "$zun_api_url/v1" \
+            "$zun_api_url/v1"
+    fi
+
+}
+
+# create_zun_conf() - Create a new zun.conf file
+function create_zun_conf {
+
+    # (Re)create ``zun.conf``
+    rm -f $ZUN_CONF
+    if [[ ${ZUN_DRIVER} == "docker" ]]; then
+        iniset $ZUN_CONF DEFAULT container_driver docker.driver.DockerDriver
+    fi
+    if [[ ${ZUN_DB_TYPE} == "etcd" ]]; then
+        iniset $ZUN_CONF DEFAULT db_type etcd
+    elif [[ ${ZUN_DB_TYPE} == "sql" ]]; then
+        iniset $ZUN_CONF DEFAULT db_type sql
+    fi
+    iniset $ZUN_CONF DEFAULT debug "$ENABLE_DEBUG_LOG_LEVEL"
+    iniset $ZUN_CONF DEFAULT my_ip "$HOST_IP"
+    iniset $ZUN_CONF DEFAULT default_cpu 0
+    iniset $ZUN_CONF DEFAULT default_memory 0
+    iniset $ZUN_CONF DEFAULT default_disk 0
+    iniset_rpc_backend zun $ZUN_CONF
+    iniset $ZUN_CONF database connection `database_connection_url zun`
+    iniset $ZUN_CONF etcd etcd_host "$SERVICE_HOST"
+    iniset $ZUN_CONF etcd etcd_port "$ZUN_ETCD_PORT"
+    iniset $ZUN_CONF websocket_proxy wsproxy_port "$ZUN_WEBSOCKET_PROXY_PORT"
+    iniset $ZUN_CONF websocket_proxy wsproxy_host "$ZUN_WEBSOCKET_PROXY_IP"
+    iniset $ZUN_CONF websocket_proxy base_url "ws://${SERVICE_HOST}:${ZUN_WEBSOCKET_PROXY_PORT}/"
+    iniset $ZUN_CONF api host_ip "$ZUN_SERVICE_HOST"
+    iniset $ZUN_CONF api port "$ZUN_SERVICE_PORT"
+    iniset $ZUN_CONF docker docker_remote_api_host "$HOST_IP"
+
+    iniset $ZUN_CONF keystone_auth auth_type password
+    iniset $ZUN_CONF keystone_auth username zun
+    iniset $ZUN_CONF keystone_auth password $SERVICE_PASSWORD
+    iniset $ZUN_CONF keystone_auth project_name $SERVICE_PROJECT_NAME
+    iniset $ZUN_CONF keystone_auth project_domain_id default
+    iniset $ZUN_CONF keystone_auth user_domain_id default
+
+    configure_auth_token_middleware $ZUN_CONF zun $ZUN_AUTH_CACHE_DIR
+
+    iniset $ZUN_CONF keystone_auth auth_url $KEYSTONE_AUTH_URI_V3
+    # FIXME(pauloewerton): keystone_authtoken section is deprecated. Remove it
+    # after deprecation period.
+    iniset $ZUN_CONF keystone_authtoken www_authenticate_uri $KEYSTONE_SERVICE_URI_V3
+    iniset $ZUN_CONF keystone_authtoken auth_url $KEYSTONE_AUTH_URI_V3
+    iniset $ZUN_CONF keystone_authtoken auth_version v3
+
+    iniset $ZUN_CONF glance images_directory $ZUN_STATE_PATH/images
+
+    if is_fedora || is_suse; then
+        # zun defaults to /usr/local/bin, but fedora and suse pip like to
+        # install things in /usr/bin
+        iniset $ZUN_CONF DEFAULT bindir "/usr/bin"
+    fi
+
+    if [ -n "$ZUN_STATE_PATH" ]; then
+        iniset $ZUN_CONF DEFAULT state_path "$ZUN_STATE_PATH"
+        iniset $ZUN_CONF oslo_concurrency lock_path "$ZUN_STATE_PATH"
+    fi
+
+    if [ "$SYSLOG" != "False" ]; then
+        iniset $ZUN_CONF DEFAULT use_syslog "True"
+    fi
+
+    # Format logging
+    setup_logging $ZUN_CONF
+
+    # Register SSL certificates if provided
+    if is_ssl_enabled_service zun; then
+        ensure_certificates zun
+
+        iniset $ZUN_CONF DEFAULT ssl_cert_file "$ZUN_SSL_CERT"
+        iniset $ZUN_CONF DEFAULT ssl_key_file "$ZUN_SSL_KEY"
+
+        iniset $ZUN_CONF DEFAULT enabled_ssl_apis "$ZUN_ENABLED_APIS"
+    fi
+}
+
+function create_api_paste_conf {
+    # copy api_paste.ini
+    cp $ZUN_DIR/etc/zun/api-paste.ini $ZUN_API_PASTE
+}
+
+# create_zun_cache_dir() - Part of the init_ZUN() process
+function create_zun_cache_dir {
+    # Create cache dir
+    sudo mkdir -p $ZUN_AUTH_CACHE_DIR
+    sudo chown $STACK_USER $ZUN_AUTH_CACHE_DIR
+    rm -f $ZUN_AUTH_CACHE_DIR/*
+}
+
+
+# init_zun() - Initialize databases, etc.
+function init_zun {
+    # Only do this step once on the API node for an entire cluster.
+    if is_service_enabled zun-api; then
+        if is_service_enabled $DATABASE_BACKENDS; then
+            # (Re)create zun database
+            recreate_database zun
+
+            # Migrate zun database
+            $ZUN_BIN_DIR/zun-db-manage upgrade
+        fi
+
+        if is_service_enabled zun-etcd; then
+            install_etcd_server
+        fi
+        create_zun_cache_dir
+    fi
+}
+
+# install_zunclient() - Collect source and prepare
+function install_zunclient {
+    if use_library_from_git "python-zunclient"; then
+        git_clone_by_name "python-zunclient"
+        setup_dev_lib "python-zunclient"
+        sudo install -D -m 0644 -o $STACK_USER {${GITDIR["python-zunclient"]}/tools/,/etc/bash_completion.d/}zun.bash_completion
+    fi
+}
+
+# install_zun() - Collect source and prepare
+function install_zun {
+    git_clone $ZUN_REPO $ZUN_DIR $ZUN_BRANCH
+    setup_develop $ZUN_DIR
+
+    git_clone $ZUN_TEMPEST_PLUGIN_REPO $ZUN_TEMPEST_PLUGIN_DIR $ZUN_TEMPEST_PLUGIN_BRANCH
+    setup_develop $ZUN_TEMPEST_PLUGIN_DIR
+}
+
+function install_etcd_server {
+    echo "Installing etcd"
+    # If there's a container named 'etcd' already exists, remove it.
+    if [ $(sudo docker ps -a | awk '{print $NF}' | grep -w etcd) ]; then
+        sudo docker rm -f etcd || true
+    fi
+    [[ $(pgrep -x "etcd") ]] || sudo docker run -d --net=host --name etcd quay.io/coreos/etcd:${ZUN_ETCD_VERSION} \
+                    /usr/local/bin/etcd \
+                    --data-dir=data.etcd \
+                    --name node0 \
+                    --initial-advertise-peer-urls http://${HOST_IP}:2380 \
+                    --listen-peer-urls http://${HOST_IP}:2380 \
+                    --advertise-client-urls http://${HOST_IP}:${ZUN_ETCD_PORT} \
+                    --listen-client-urls http://${HOST_IP}:${ZUN_ETCD_PORT} \
+                    --initial-cluster node0=http://${HOST_IP}:2380 \
+                    --initial-cluster-state new \
+                    --initial-cluster-token etcd-token
+}
+
+# start_zun_api() - Start the API process ahead of other things
+function start_zun_api {
+    # Get right service port for testing
+    local service_port=$ZUN_SERVICE_PORT
+    local service_protocol=$ZUN_SERVICE_PROTOCOL
+    if is_service_enabled tls-proxy; then
+        service_port=$ZUN_SERVICE_PORT_INT
+        service_protocol="http"
+    fi
+
+    local zun_url
+    if [ "$ZUN_USE_UWSGI" == "True" ]; then
+        run_process zun-api "$ZUN_BIN_DIR/uwsgi --procname-prefix zun-api --ini $ZUN_UWSGI_CONF"
+        zun_url=$service_protocol://$ZUN_SERVICE_HOST/container
+    else
+        run_process zun-api "$ZUN_BIN_DIR/zun-api"
+        zun_url=$service_protocol://$ZUN_SERVICE_HOST:$service_port
+    fi
+
+    echo "Waiting for zun-api to start..."
+    if ! wait_for_service $SERVICE_TIMEOUT $zun_url; then
+        die $LINENO "zun-api did not start"
+    fi
+
+    # Start proxies if enabled
+    if is_service_enabled tls-proxy; then
+        start_tls_proxy zun '*' $ZUN_SERVICE_PORT $ZUN_SERVICE_HOST $ZUN_SERVICE_PORT_INT
+    fi
+
+    # Start websocket proxy for interactive mode
+    if is_service_enabled zun-wsproxy; then
+        run_process zun-wsproxy "$ZUN_BIN_DIR/zun-wsproxy"
+    fi
+}
+
+# start_zun_compute() - Start Zun compute agent
+function start_zun_compute {
+    echo "Start zun compute..."
+    run_process zun-compute "$ZUN_BIN_DIR/zun-compute"
+}
+
+function start_zun_etcd {
+    echo "Start zun etcd..."
+    sudo docker start etcd || true
+}
+
+function stop_zun_etcd {
+    echo "Stop zun etcd..."
+    sudo docker stop etcd
+    sudo docker rm -f etcd || true
+}
+
+# start_zun() - Start running processes, including screen
+function start_zun {
+
+    # ``run_process`` checks ``is_service_enabled``, it is not needed here
+    start_zun_api
+    start_zun_compute
+    if is_service_enabled zun-etcd; then
+        start_zun_etcd
+    fi
+}
+
+# stop_zun() - Stop running processes (non-screen)
+function stop_zun {
+    if is_service_enabled zun-etcd; then
+        stop_zun_etcd
+    fi
+
+    if [ "$ZUN_USE_UWSGI" == "True" ]; then
+        disable_apache_site zun
+        restart_apache_server
+    else
+        stop_process zun-api
+    fi
+    stop_process zun-compute
+    if is_service_enabled zun-wsproxy; then
+        stop_process zun-wsproxy
+    fi
+}
+
+# Restore xtrace
+$XTRACE

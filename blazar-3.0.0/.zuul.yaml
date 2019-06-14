@@ -1,0 +1,65 @@
+- job:
+    name: blazar-devstack-dsvm
+    parent: legacy-dsvm-base
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^blazar/tests/.*$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+      - ^test-requirements.txt$
+      - ^tools/.*$
+      - ^tox.ini$
+    run: playbooks/legacy/blazar-devstack-dsvm/run.yaml
+    post-run: playbooks/legacy/blazar-devstack-dsvm/post.yaml
+    timeout: 4200
+    required-projects:
+      - openstack-dev/devstack
+      - openstack-infra/devstack-gate
+      - openstack/blazar
+      - openstack/blazar-nova
+      - openstack/python-blazarclient
+      - openstack/blazar-tempest-plugin
+
+- job:
+    name: blazar-devstack-dsvm-py35
+    parent: legacy-dsvm-base
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^blazar/tests/.*$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+      - ^test-requirements.txt$
+      - ^tools/.*$
+      - ^tox.ini$
+    run: playbooks/legacy/blazar-devstack-dsvm-py35/run.yaml
+    post-run: playbooks/legacy/blazar-devstack-dsvm-py35/post.yaml
+    timeout: 4200
+    required-projects:
+      - openstack-dev/devstack
+      - openstack-infra/devstack-gate
+      - openstack/blazar
+      - openstack/blazar-nova
+      - openstack/python-blazarclient
+      - openstack/blazar-tempest-plugin
+
+- project:
+    templates:
+      - check-requirements
+      - openstack-lower-constraints-jobs
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - openstack-python37-jobs
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        - blazar-devstack-dsvm
+        - blazar-devstack-dsvm-py35
+        - openstack-tox-pylint:
+            voting: false
+    gate:
+      queue: blazar
+      jobs:
+        - blazar-devstack-dsvm
+        - blazar-devstack-dsvm-py35

@@ -1,0 +1,620 @@
+CHANGES
+=======
+
+3.0.0
+-----
+
+* Add a release note for the floating IP plugin
+* Use os\_region\_name to select Neutron endpoint
+* Prevent the delete floating IP API from deleting reserved floating ips
+* Expose floatingip APIs and virtual:floatingip resources
+* Support on\_start and on\_end method in FloatingIPPlugin class
+* Support reserve\_resource in floatingip\_plugin
+* Create tables for floating IP reservations
+* Add floatingip plugin to support floating IP resource
+* Add floatingips table for floating IP resources
+* Expose placement exception code to end users
+* Use oslo\_serialization.jsonutils.dump\_as\_bytes()
+* Distinguish hypervisor\_hostname and service\_name
+* Expose instance reservation affinity support
+* Consider affinity=True in reallocation
+* Add FloatingIPPool class for neutron client
+* Add BlazarNeutronClient base class
+* Spec: Floating IP reservation plugin
+* Do not execute event of transitional lease
+* Support adding to existing reservation inventory
+* Consider the number of instances for reservation inventory
+* Change update\_host\_allocations() for new affinity
+* Update placement client unit tests
+* Prevent race during instance deletion
+* Update json module to jsonutils
+* add python 3.7 unit test job
+* Change pickup\_hosts() for affinity=True/None
+* Prevent leases from being deleted during event execution
+* Move hosts back to freepool in case of failure
+* Call placement after instance delete
+* Use hypervisor\_hostname for host name
+* Add more details to exception messages
+* Use LOG.exception in except block in status module
+* Raise error if resource provider is not found
+* Add a release note for the List and Get Allocation APIs
+* Support reservation\_id parameter in List and Get Allocation API
+* Support lease\_id parameter in List and Get Allocations API
+* Expose List/Get Allocations API
+* Implement list and get allocations methods to compute hosts plugin
+* Pass query parameters in GET request to list handler
+* Change "Resource Allocation API" spec
+* Use template for lower-constraints
+* Enable mutable config in blazar
+* Fix typo in spec
+* Set the min and max value of IntOpt config options
+* Change openstack-dev to openstack-discuss
+* Use placement inventory for instance reservation
+* Return 401 error for invalid token instead of 204
+* Change openstack-dev to openstack-discuss
+* Fix incorrect response returned by the Update Lease API
+* Fix enabled log\_exchange issue
+* Update config group for option aggregate\_freepool\_name
+* Correct spelling mistakes
+* Fix small typo in test case class name
+* Move blazar-status docs to admin section
+* Add new hosts to aggregate when updating an active reservation
+* Add blazar-status upgrade check command framework
+* Create and delete reservation provider
+* Adds subnormal path for placement client (2)
+* Adds subnormal path for placement client (1)
+* Add update/delete resource inventory
+* Improve error message for AggregateAlreadyHasHost exception
+* Add create/delete resource class
+* Add create/delete reservation provider
+* Allow terminating leases in ERROR state when start\_lease failed
+* Allow leases to transition to ERROR status when events fail
+* Allow terminating a lease in ERROR state
+* Increment versioning with pbr instruction
+* add python 3.6 unit test job
+* switch documentation job to new PTI
+* import zuul job settings from project-config
+* Handle requirements set to empty strings
+* Fix py36 unit tests
+* Remove nose dependency
+* Mark the ZeroMQ driver deprecated
+* Fix order of arguments in assertEqual
+* Add lease\_opts to the global option list
+* Create directory for Stein specs
+* Add Rocky release note page
+
+2.0.0
+-----
+
+* Check number of replaced hosts in update\_reservation
+* Add some release notes for Rocky release
+* Catch any exception raised in call\_monitor\_plugin()
+* Set username when initializing PhysicalHostMonitorPlugin
+* Continue running on\_end() when instance deletion fails
+* Fix default values provided as keyword arguments
+* Rename scalar relationships to use singular names
+* Raise database exception instead of returning None
+* Close session after updating lease statuses
+
+2.0.0.0b3
+---------
+
+* Restore execution of plugin tests
+* Add get/create/delete resource provider
+* Start to make placement client
+* Fix directory structure
+* Add release note for response code fixes
+* Support nova compute-api microversion '2.53'
+* Add cleaning time
+* Spec: Placement API support for instance reservation
+* Set Tempest concurrency to one
+* Fix unit test to have appropriate FakeHost
+* Fix POST and PUT status codes and update API Reference
+* Change invalid date error code to 400
+* Change pylint requirement
+* Spec: Resource allocation API
+* Return 400 Bad Request for extra capability keys longer than 64 chars
+* Change response status code when start\_date and end\_date are invalid
+* Update pylint
+* Correct the project domain option for authorization
+* Check time order between start\_date and end\_date
+* Support blazar-dashboard installation in DevStack
+* Use assertEqual(len(x), y) instead of assertTrue(len(x) == y)
+* Query multiple events in the event loop
+* Use the full OpenStackClient option name to specify region
+* Handle availability zone info in compute host APIs
+* Add upgrade releaesnote for policy-in-code
+* Add a release note for policy-in-code
+* Change invalid input error code to 400
+* Register error response handlers with register\_error\_handler()
+* Use parameters in config file for trust test
+* add release notes to README.rst
+* Register and document policy in code
+* Remove deprecated configuration options
+* Change html\_context options to openstackdocstheme options
+* Prevent the host update API from updating in-use extra capabilities
+* fix tox python3 overrides
+
+2.0.0.0b2
+---------
+
+* Ignore keys unsupported by BlazarContext in its creation
+* Update default configuration values related to Keystone
+* Update the home-page link for setup.cfg
+* Support resource\_properties key in instance reservation
+* Add resource\_properties column to instance\_reservations table
+* Replace db\_api with sql query in migration script
+* Add periodic healing
+* Fix initialization of the PhysicalHostMonitorPlugin
+* add lower-constraints job
+
+2.0.0.0b1
+---------
+
+* Correct API URLs
+* uncap eventlet
+* Updated from global requirements
+* Updated from global requirements
+* Remove climate namespace
+* Spec: Support multi availability zones
+* Create rocky directory for specs
+* Add earliest-version tag to release notes
+* Ignore Queens release notes in the next release
+* Add release note for Python 3 support
+* Add links to Blazar Dashboard documentation
+* Update links to API reference
+* Remove non-voting option for blazar-devstack-dsvm-py35
+* Correct information in state machine release note
+* Fix a link address
+* Fix a link address
+* Update reno for stable/queens
+* Fix typos
+* Fix typo
+
+1.0.0
+-----
+
+* Add a release note of the state machine
+* Add a document about the state machine
+* Delete unnecessary new lines in API reference
+* Add migration code for updating lease status
+* Add hosts operations to the API reference
+* Add a release note of the resource monitoring
+* Add a document about the resource monitoring
+* Support instance reservation healing
+* Allow DevStack to install Blazar projects as Python 3 packages
+* Add DevStack gate jobs for Python3
+* Fix map issues with Python3
+* Remove use of unsupported TEMPEST\_SERVICES variable
+* Add an API reference
+* Retry event actions
+* Fix object difference issues with Python2/3 compatibility
+* Fix typo: modify spelling error of Resource
+* Zuul: Remove project name
+* Support host recovery
+* Reduce Nova API calls in the host polling monitor
+* Implement host notification monitor plugin
+* Implement host polling monitor plugin
+* Remove commas in setup.cfg package classifiers
+
+1.0.0.0b3
+---------
+
+* Updated from global requirements
+* Fix zip issues with Python3
+* Fix JSON serialization issues with Python3
+* Fix filter issues with Python3
+* Fix exception message issues with Python3
+* Updated from global requirements
+* Updated from global requirements
+* Check the reservable field while looking for resources to reserve
+* Delete unused status related fields
+* Fix iterator issues with Python3
+* Remove mox from requirements
+* Remove bundled in tree tempest plugin
+* Add a status module
+* Add a resource monitoring feature into the manager
+* Updated from global requirements
+* Use waiter method to check server status
+* Update database schemas for the resource monitoring
+* Updated from global requirements
+* Change lease start date in some test scenarios
+* Fix grammar in exception message
+* Support DevStack installation with WSGI
+* Refactored blazar tempest plugin
+* Enable uWSGI deployment of the blazar-api service
+* Move wsgi app class to api directory
+* Support update reservation in instance reservation
+* zuul: add irrelevant-files section to job
+* Updated from global requirements
+
+0.4.0.0b2
+---------
+
+* Spec: Support extra specs in instance reservation
+* Updated from global requirements
+* Remove useless configuration samples from the installation document
+* Add a termination scenario test
+* Remove redundant description of parameter "project\_only"
+* Migrate to Zuul v3
+* Make the name of CPUInfo type more friendly
+* Fix paths of images in the state-machine spec
+* Tolerate spaces in extra capability values
+* Remove setting of version/release from releasenotes
+* Updated from global requirements
+* Fix unicode issues with Python 3
+* Spec: monitor states of resources
+* Move specs to the appropriate directory
+* Fix the host\_get\_all\_by\_queries() method
+* Add release note for the Hosts panel in blazar-dashboard
+* Adapt documentation structure to the new standard
+* Trivial: Remove vim header from source files
+* Updated from global requirements
+* Updated from global requirements
+* Spec: define state machines
+* Add a validation to create lease API
+* Check if a host is reserved before deleting it
+* Update a document
+* Updated from global requirements
+* Use correct terminology in instance reservation doc
+* Improve README
+* Use the openstackdocstheme Sphinx theme
+* Updated from global requirements
+* Add log hacking rules
+* Add support for multi-region deployments
+* Add a template for Queens specs
+* Fix filter scheduler settings in DevStack plugin
+* Updated from global requirements
+* Shrink Tempest scenario manager copy
+* Remove verbose configuration parameter from DevStack plugin
+* Updated from global requirements
+* Updated from global requirements
+* Updated from global requirements
+* Fix typos
+* Clarify the get\_full\_periods() method
+* Allow deleting leases which failed to start at any time
+* Add Pike release notes
+* Add six to requirements
+* Updated from global requirements
+* Clean up DevStack plugin code
+* Support updating capacity of reservations
+* Allow duplicate lease names
+* Set user\_id when creating leases
+* Return a MissingParameter error when required parameters are missing
+* Support before\_end parameter in the REST API
+* Allow update host API to add new extra capabilities
+* Pass hostnames rather than IDs to remove\_computehost()
+* Add a release note of the new instance reservation feature
+* Add a user guide for the new instance reservation feature
+* Enable DevStack to set up the new instance reservation feature
+* Enable deployers to specify virtual.instance.plugin in blazar.conf
+* Enable instance\_plugin to handle on\_start and on\_end events
+* Create Nova resources for instance reservations
+* Check maximum usages of hosts in a particular time window
+* Add instance reservation plugin
+* Pass only instance reservation specific columns to the reservation table
+* Add spec for instance reservation
+* Skip on\_end action if reservation has already ended
+* Configure ReservationPool with the blazar admin user
+* Revise endpoint creation part of the installation guide
+* Handle more exceptions raised in reserve\_resource()
+* Support running actions before the end of a lease
+* Replace uuid.uuid4() with uuidutils.generate\_uuid()
+* Updated from global requirements
+* Fix race condition between lease creation and event thread
+* Update URLs in documents according to document migration
+* Replace deprecated library function os.popen() with subprocess
+* Fix host filtering by extra capability
+* Add scenario test of lease expiration
+* Fix eventlet monkey patching
+* Validate physical host reservation parameters
+* Move sphinx requirements
+* Move the convert\_requirements method to the utils namespace
+* Add db api methods for the instance reservation table
+* Create an instance\_reservations table
+* Use assertTrue/False(A) instead of assertEqual(True/False, A)
+* Replace the usage of 'admin\_manager' with 'os\_admin'
+* Remove the old instance reservation plugin
+* Updated from global requirements
+* Prevent host reallocation for active reservations
+* Add a user guide
+* Fix import error in python3
+* Fix code for deleting instances when leases end
+* Create a host aggregate after checking if enough hosts are available
+* Updated from global requirements
+* Remove \_LI, \_LW, \_LE, \_LC from i18n
+* Updated from global requirements
+* Use manager name in tempest test
+* Remove support for py34
+* Updated from global requirements
+* Updated from global requirements
+* Change the default value for the config blazar\_az\_prefix
+* Move the NovaInventory class to utils/openstack/nova.py
+* Move the ReservationPool class to utils/openstack/nova.py
+* Spec for update-reserved-capacity
+* Replace messaging.get\_transport with get\_rpc\_transport
+* Updated from global requirements
+* Use eventlet executor instead of blocking executor
+* Revert "Fix gate issue in scenario test"
+* Add a nova section to blazar.conf
+* Using fixtures instead of deprecated mockpatch module
+* Gather all operations for the reservations table into the manager
+* Fix physical host reservation for non-admin users
+* Use assertIsNone instead of assertEqual(None, \*\*\*)
+* Updated from global requirements
+* Updated from global requirements
+* Replace deprecated tempest decorators
+* Fix gate issue in scenario test
+* Allow terminating leases at anytime
+* Updated from global requirements
+* Updated from global requirements
+* Delete reservations and resources if fails to create a lease
+* Updated from global requirements
+* Fix management of Blazar services by DevStack
+* Use HostAddressOpt for opts that accept IP and hostnames
+* Fix 'tox -e genconfig'
+* Remove unused reference from config-generator
+* Updated from global requirements
+* Change keystone\_authtoken configs
+* Correct a mistake for URL description
+* Delete instances at the end of leases
+* Updated from global requirements
+* Optimize the link address
+* Updated from global requirements
+* SPEC for on-end-options
+* Updated from global requirements
+* Replace six.iteritems() with .items()
+* Add Ocata branch release notes
+* SPEC for terminate-lease-at-anytime
+* Updated from global requirements
+* Updated from global requirements
+* Updated from global requirements
+* Validation for the number of hosts
+* Remove discover and lockfile from test-requirements
+* Updated from global requirements
+* Copy Tempest scenario base classes into blazar tree
+* Add specifications directory
+
+0.2.0
+-----
+
+* Update Blazar API v1 doc
+* Add namespace release note
+* Add release note of deprecation of ClimateFilter
+* Update the guide for installation without DevStack
+* Change filter name in DevStack plugin
+* Update contributor guide
+* Migrate climate namespace to blazar
+* Update overview documents
+* Updated Blazar API v1 doc
+* Set 0.0.0.0 as default host for Blazar API
+* Add release note of instance reservation issue
+* Whitelist rm command in tox virtual environments
+* Correct table format
+* Add more precise DevStack installation instructions
+* Support host reservation scenario test
+* Switch to use test\_utils.call\_until\_true
+* Clean oslo-incubator code
+* Use oslo.context
+* Use oslo.utils
+* Use oslo.db
+* Add missing space in log messages
+* Mark instance reservation scenario tests skipped
+* Follow latest Tempest framework
+* Stop using climate python client for testing blazar API
+* Add reno for release notes management
+* Use oslotest
+* Use oslo.policy
+* Delete unused oslo-incubator code
+* Use oslo-config-generator
+* Use oslo.middleware
+* Use oslo.i18n
+* Use oslo.service
+* Fix authentication of Nova client
+* Enable DevStack to set Keystone service name in config
+* Prepare for using standard python tests
+* Use oslo.log
+* Use filter\_scheduler config keys
+* Remove osapi\_compute\_extension configuration
+* Fix service and endpoint creation in DevStack
+* Remove contrib/devstack
+* Make DevStack create a freepool aggregate
+* Replace LOG.warn with LOG.warning
+* Typo fixing
+* Soft update from global-requirements
+* Update default environment list
+* Use jsonutils from oslo.serialization
+* Replace tempest logging module with oslo\_log
+* Switch from openstack.common to olso\_concurrency
+* Use constraints when building tox environments
+* Update to newer hacking
+* Use oslo.serialization
+* Remove unused pngmath Sphinx extension
+* Remove outdated climate.pot
+* Create Devstack plugin
+* use keystonemiddleware and fixture
+* py26 is no longer supported by Infra's CI
+* novaclient.v1\_1 no longer exists using v2 for gate jobs to pass
+* Change repository from stackforge to OpenStack
+* Update .gitreview for new namespace
+* Update requirements, fix oslo imports and correct tests
+* Update requirements, fix testsuite
+* Update method in host\_plugin to find hypervisor by name or id
+* Use openstack client to create climate accounts
+* Updated from global requirements
+* Adding version discovery
+* Added blazar as an alias package
+* Renamed Climate references to Blazar in the docs
+* Fixed pylint errors
+* Event status set to ERROR when it fails
+* Made lease id optional in create\_lease logging
+* Set before\_end\_lease event as DONE
+* Updated from global requirements
+* trust\_id is properly stored during create\_lease
+* Fix style errors close to new hacking update
+* Updated from global requirements
+* Added use of trusts to Physical Host plugin
+* Updated scenario tests to latest Tempest master
+* Passing auth\_url to keystoneclient.authenticate
+* Updated from global requirements
+* update devstack instructions for blazar rename
+* Fix tests gates broken due to keystoneclient upgrade to 0.9.0
+* Add extensions for API v2 controllers
+* Remove event\_list() because it is not used
+* Updated from global requirements
+* blazar install failed with devstack
+* Update .gitreview for new repo name
+* Updated from global requirements
+* debug level logs should not be translated
+* Create Statuses objects for Leases
+* Remove uuidutils imports in oslo modules
+* Do not change nova scheduler filters after installed climate
+* Updated from global requirements
+* V2 API Support for before\_end param configuration
+* Add scenario testing support
+* Set osapi\_compute\_extensions default value
+* Adjust import order according to PEP8 imports rule
+* API returns project/user/trust ids without dashes
+* Fixes the problem of tenant\_id key error
+* Added V2 API auth configuration to devstack
+* Sends notifications at lease events
+* Removed DefaultReservationController from devstack
+* Change references of tenant to project
+* Updated from global requirements
+* Dedicated exception for PR malformed requirements
+* PR Plugin now uses service\_name to identify hosts
+* Updated from global requirements
+* Catching no handled exception on leases deletion
+* Add primary folder structure for Tempest support
+* Duplicated lease name should return HTTP 409
+* Change log message to avoid typeFormat exception
+* Reservation with No Hosts Available returns 500
+* PR plugin uses host name to query Nova inventory
+* Port to Pecan/WSME for API v2
+* Extend Reservation API with additional properties
+* Adding migrate and lockfile to test\_requirements
+* Updated from global requirements
+* Update Keystone sample config file
+* Use nova client wrapper in all plugins modules
+* Support for DB migrations using Alembic
+* Updated from global requirements
+* Climate Manager now starts even if a plugin fails
+* Devstack : create the freepool used by reservation host plugin
+* Lets the cloud administrator create the freepool
+* Change API v1 path to explicit module
+* Updated from global requirements
+* Updated from global requirements
+* Fix work with new keystoneclient master
+* Fix REST API docs
+* Updated from global requirements
+* Fix issues coming from oslo-incubator update
+* Updated from global requirements
+* Update openstack.common with latest oslo-incubator
+* Enable verbose logging in devstack
+* Fix small misuse of cast within oslo.messaging wrapper
+* Clean-up config files for API and Manager
+* Add development guides to docs
+* Add installation guides to docs
+* Start moving Climate docs from wiki to Sphinx docs
+* Remove unecessary sys.path add from docs/config.py
+* Fix issue with devstack Climate config file
+* Reworking configuration options
+* Adding/Handling DB specific exceptions
+* Updated from global requirements
+* Fix issue with new python-keystoneclient
+* Remove direct assignments of context attributes
+* Remove explicit access to is\_admin in context
+* Initial devstack support implemented
+* Adding tests for sqlalchemy class
+* Fix issue with new oslo.messaging
+* Add pylint check for Climate project
+* Fix pylint errors
+* Improve memory/performace in ManagerService
+* Port to oslo.messaging
+* Modifying coverage tox.ini configuration
+* Remove old Scheduler RPC Service
+* lease\_create now raises InvalidDate exception
+
+0.1.0
+-----
+
+* Add LICENSE and MANIFEST.in files
+* Fix setup.cfg
+* Fix API status when Manager raises Exceptions
+* Implement basic plugin for VM management
+* Fix testing env variables and testing directory
+* Fix common exception usage in manager service
+* Updated from global requirements
+* Add notes about Keystone v3 endpoint to README.rst
+* Improve coherence of exceptions handling
+* Physical host reservation plugin (lease update)
+* Physical host reservation plugin
+* Implement keystone trust support
+* Fix Authentication problem with Keystone V3
+* Add utils to work with OpenStack components
+* Physical host reservation (DB related things)
+* Updated from global requirements
+* Filter DB queries per project\_id
+* Fix coverage for add\_computehost with ID of host
+* Fix malformed plugins table
+* Physical host reservation (manager and base plugin)
+* Fix service user creating objects
+* Add Physical Host Config to climate.conf.example
+* Policy management for Climate
+* Fix Manager exceptions rendering for end-users
+* Add Host Reservation Admin Manager
+* Updated from global requirements
+* Nova Aggregate wrapper to manage host allocation pools
+* DB API and models for supporting Compute Hosts Reservations
+* Implement primary support for i18n messages shown to user
+* Remove empty copyright headers
+* Add Host Reservation Admin API
+* Remove config parsing call from test setup
+* Add Cover directory to gitignore
+* Fix API exceptions handling for message and error code
+* Hotfix for bug 1255928
+* Remove extra excludes for flake8 checks
+* Switch on coverage support for unit tests
+* Unittest for manager service
+* Refactor context module to make it more flexible
+* Revert "Support building wheels (PEP-427)"
+* Remove nova dependency
+* Add unit tests to api functionality
+* Implemented bugfix for bug 1252989
+* Fix tox.ini to run tests in lockutils wrapper
+* Run tests using testrepository
+* Support building wheels (PEP-427)
+* Test module refactoring
+* Update openstack/common/lockutils
+* Upgrade hacking to the latest version
+* Sync with global requirements except hacking
+* Ignore vim temporary files
+* Add HACKING.rst with link to the style guidelines
+* Implement Manager service
+* Convert to a more modern form of openstack-common.conf
+* Small fix for climate.api.utils
+* Fix REST API service classes methods
+* Change api.service to use a class, fix validations in api
+* Remove context passing around, use climate.context instead
+* Add docs for REST API 1.0
+* Implement REST API
+* Add context module, rename context to ctx in method args
+* Rename climate.cmd.climate\_\* to climate.cmd.\*
+* Add Unit test framework and provide unittests for DB API
+* Create utils module and move there service utils
+* Add basic documentation possibility
+* Update OpenStack Common code
+* Fix packages versions to match global requirements
+* Use flake8 + hacking instead of pep8
+* Use setup.py develop for tox install
+* Fix performance issues for DB API
+* Fix DB API issue when searching for specific event
+* Implement climate db api
+* Start implement separate db module
+* Migrate to pbr
+* Update Oslo
+* Add a basic filter for Nova
+*  Implement a basic inventory retrieval plugin using Nova
+* Add gitreview file
+* Import project layout
+* Initial commit

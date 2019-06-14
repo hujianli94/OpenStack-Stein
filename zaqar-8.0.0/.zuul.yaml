@@ -1,0 +1,148 @@
+- job:
+    name: zaqar-grenade-base
+    parent: legacy-dsvm-base
+    irrelevant-files:
+      - ^(test-|)requirements.txt$
+      - ^setup.cfg$
+    required-projects:
+      - openstack-dev/grenade
+      - openstack-infra/devstack-gate
+      - openstack/python-zaqarclient
+      - openstack/zaqar
+      - openstack/zaqar-tempest-plugin
+    run: playbooks/legacy/grenade-devstack-zaqar-base/run.yaml
+    post-run: playbooks/legacy/grenade-devstack-zaqar-base/post.yaml
+    timeout: 7800
+
+- job:
+    name: zaqar-tempest-base
+    parent: legacy-dsvm-base
+    irrelevant-files:
+      - ^(test-|)requirements.txt$
+      - ^setup.cfg$
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/python-zaqarclient
+      - openstack/tempest
+      - openstack/zaqar
+      - openstack/zaqar-tempest-plugin
+    run: playbooks/legacy/tempest-devstack-zaqar-base/run.yaml
+    post-run: playbooks/legacy/tempest-devstack-zaqar-base/post.yaml
+    timeout: 7800
+
+- job:
+    name: zaqar-grenade-mongodb
+    parent: zaqar-grenade-base
+    voting: false
+    vars:
+      database_backend: mongodb
+
+- job:
+    name: zaqar-grenade-redis
+    parent: zaqar-grenade-base
+    voting: false
+    vars:
+      database_backend: redis
+
+- job:
+    name: zaqar-grenade-swift
+    parent: zaqar-grenade-base
+    voting: false
+    vars:
+      database_backend: swift
+
+- job:
+    name: zaqar-tempest-mongodb
+    parent: zaqar-tempest-base
+    vars:
+      database_backend: mongodb
+
+- job:
+    name: zaqar-tempest-redis
+    parent: zaqar-tempest-base
+    vars:
+      database_backend: redis
+
+- job:
+    name: zaqar-tempest-swift
+    parent: zaqar-tempest-base
+    vars:
+      database_backend: swift
+
+- job:
+    name: zaqar-tox-integration
+    parent: openstack-tox
+    description: |
+      Run Zaqar integration tests using tox with environment ``integration``.
+    vars:
+      tox_envlist: integration
+
+- job:
+    name: zaqar-rally
+    parent: legacy-dsvm-base
+    run: playbooks/legacy/rally-dsvm-zaqar-zaqar/run.yaml
+    post-run: playbooks/legacy/rally-dsvm-zaqar-zaqar/post.yaml
+    timeout: 7800
+    required-projects:
+      - openstack-infra/devstack-gate
+      - openstack/aodh
+      - openstack/ceilometer
+      - openstack/diskimage-builder
+      - openstack/ironic
+      - openstack/magnum
+      - openstack/networking-bgpvpn
+      - openstack/neutron
+      - openstack/neutron-fwaas
+      - openstack/neutron-lbaas
+      - openstack/neutron-vpnaas
+      - openstack/octavia
+      - openstack/panko
+      - openstack/python-magnumclient
+      - openstack/python-senlinclient
+      - openstack/python-watcherclient
+      - openstack/python-zaqarclient
+      - openstack/rally
+      - openstack/senlin
+      - openstack/tripleo-image-elements
+      - openstack/watcher
+      - openstack/zaqar
+      - openstack/zaqar-ui
+
+- project:
+    templates:
+      - check-requirements
+      - openstack-lower-constraints-jobs
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - periodic-stable-jobs
+      - publish-openstack-docs-pti
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        - zaqar-tox-integration
+        - zaqar-tempest-redis
+        - zaqar-tempest-swift
+        - zaqar-tempest-mongodb
+        - zaqar-grenade-mongodb
+        - zaqar-grenade-redis
+        - zaqar-grenade-swift
+        # TripleO jobs that deploy Zaqar.
+        # Note we don't use a project-template here, so it's easier
+        # to disable voting on one specific job if things go wrong.
+        # If you need any support to debug these jobs in case of
+        # failures, please reach us on #tripleo IRC channel.
+        - tripleo-ci-centos-7-scenario002-standalone
+        # Heat job that deploy Zaqar
+        - heat-functional-convg-mysql-lbaasv2
+        - zaqar-rally:
+            voting: false
+    gate:
+      queue: zaqar
+      jobs:
+        - zaqar-tox-integration
+        - zaqar-tempest-mongodb
+        - zaqar-tempest-redis
+        - zaqar-tempest-swift
+        - tripleo-ci-centos-7-scenario002-standalone
+        - heat-functional-convg-mysql-lbaasv2

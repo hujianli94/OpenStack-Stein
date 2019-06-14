@@ -1,0 +1,278 @@
+CHANGES
+=======
+
+7.0.0
+-----
+
+* Updated rh host workflow for recovery workflow details
+* Handle KeyError: 'progress\_details'
+* fix oslo-config-generator conf
+* Functional tests to check recovery workflow details
+* Functional tests for notification APIs
+* Configure taskflow connection
+* Add progress details for recovery workflows
+* Improve logging error messages
+* Functional tests for host APIs
+* Add functional CI job and tests for segments
+* Send notifications for all API changes
+* Add common methods to use for sending notification
+* Define objects used for notification
+* Add necessary constants and methods for RPC notification
+* Run all jobs by default using python3
+* Py3: Ensure wsgi headers are not bytes type
+* Recover resized instance(power\_state=SHUTDOWN) with vm\_state=stopped
+* Fix parsing api version with correct service\_type
+* Update hacking version >1.1.0
+* Allow updating host name only if it exists in nova
+* Add masakari-systemfault-integration-ci to .zuul.yaml
+* Use template for lower-constraints
+* Return 400 if notification payload is incorrect
+* change nova.services.disable use service\_uuid
+* Cleanup testrepository
+* Update coverage environment and use template for cover
+* Uninstall policy.json from openstack\_dashboard correctly
+
+7.0.0.0b1
+---------
+
+* Allow adding host only if it exists in nova
+* Update the HTTP links to HTTPS
+* Change openstack-dev to openstack-discuss
+* Update README
+* Fix datetime microsecond discrepancy issue
+* Add framework for masakari-status upgrade check
+* Fix: TestMasakariAPI tests skipped due to missing \_\_init\_\_.py
+* Increment versioning with pbr instruction
+* fix tox python3 overrides
+* Fix docs create service for masakari Currently openstacksdk use instance-ha type service instead of masakari
+* switch documentation job to new PTI
+* import zuul job settings from project-config
+* Add masakari-custom-recovery-methods.conf in etc/masakari
+* Update reno for stable/rocky
+
+6.0.0.0rc1
+----------
+
+* Add hooks for recovery method customization plugins
+* Added devstack support for masakari-dashboard
+* Fix masakari installation failure for policy.json
+* Register and Document policy in code
+* Removed unnecessary parantheses in yield statements
+* Add line for PyCharm IDE in gitignore file
+
+6.0.0.0b3
+---------
+
+* fix tox python3 overrides
+* Remove testrepository
+* Switch to using stestr
+* Avoid recovery from failure twice
+* Fix Context test cases
+
+6.0.0.0b2
+---------
+
+* Fix module has no attribute 'parse\_args'
+* Deploy masakari-api with uwsgi
+* Generalize DB conf group copying
+* Make accept-language tests work with webob 1.8.x
+* Enable mutable config in Masakari
+* Update "auth\_url"
+* Fix typo in api-ref/source/failover-segments.inc file
+
+6.0.0.0b1
+---------
+
+* add lower-constraints job
+* Add db purge support
+* Completely remove mox from Masakari unittest
+* Fix stable branch releasenotes
+* Introspective Instance Monitoring through QEMU Guest Agent
+* Make readme more readable
+* Ship files like other openstack projects
+* Fix the docs page link
+* Use method validate\_integer from oslo.utils
+* Updated from global requirements
+* Updated from global requirements
+* Drop all qpid related explanations
+* Fix for difference in tzinfo.tzname value between py27 and py35
+* Changed default value of 'wait\_period\_after\_power\_off'
+
+5.0.0
+-----
+
+* Fix default value of 'nova\_catalog\_admin\_info'
+* Updated from global requirements
+
+5.0.0.0b3
+---------
+
+* Remove use of unsupported TEMPEST\_SERVICES variable
+* Change masakari service-type from 'ha' to 'instance-ha'
+* Ignore '409 Conflict' when adding reserved\_host to aggregate
+* Stop using deprecated 'message' attribute in Exception
+* Improve the home-page url in setup.cfg
+* Evacuates instances which task\_state is not none
+* Remove unnecessary sleep
+* Updated from global requirements
+* Masakari operator's documentation
+* Masakari developer's documentation
+* Masakari API Specifications
+* Remove setting of version/release from releasenotes
+* Updated from global requirements
+* Updated from global requirements
+* Make eventlet hub use a monotonic clock
+* Fix devstack installation of masakari
+* Modify unit testcases according to oslo.context
+* Use service\_type and service\_name of nova\_catalog\_admin\_info
+* Add ssl support for masakari plugin
+* Hacking: do not translate log messages
+* Upgrade oslo.db and Replace DbMigrationError with DBMigrationError
+* iso8601.is8601.Utc No Longer Exists
+
+4.0.0
+-----
+
+* Make 'error' instances recovery configurable
+* Add missing domain name to novaclient
+* Make provision to evacuate all instances
+* Enable global hacking checks and remove local checks
+* Fix 'host delete' delete's host of another segment
+* conf: Deprecate 'masakari\_topic' RPC options
+* Send global\_request\_id to nova when calls are made
+* Update the documentation link for doc migration
+* Remove 'on\_shared\_storage' parameter from nova evacuate
+* Remove unused methods
+* Remove support for py34
+* Use os-testr instead of testr
+* Enable code coverage report in console output
+* Use get\_rpc\_transport instead of get\_transport
+* Fix race condition between evacuation and its confirmation
+* Updated from global requirements
+* Exclude on maintenance reserved\_hosts for host\_failure recovery
+* Optimize the link address
+* Fix identity\_admin
+* Revert "Fix os\_privileged\_user\_auth\_url"
+* Fix failing test cases
+* Fix os\_privileged\_user\_auth\_url
+* Ignore instance recovery for 'paused' or 'rescued' instance
+* Use DDT to reduce test code duplication
+* Updated from global requirements
+* Remove log translations
+* Implement auto\_priority and rh\_priority recovery\_methods
+* Updated from global requirements
+* Delete the failure host from reserved\_host
+* Don't pass argument sqlite\_db in set\_defaults()
+* Use HostAddressOpt for opts that accept IP and hostnames
+* Add license information in test-requirements.txt
+* Fix test method which has incorrect reference
+* Change nova\_catalog\_admin\_info to default to publicURL
+* Update to a newer hacking library
+* Prevent 404 error when adding reserved\_host to aggregate
+
+3.0.0.0rc1
+----------
+
+* Add reserved\_host to failed\_host's aggregate
+* Add host\_failure workflow for 'reserved\_host' recovery\_method
+* Tolerate jsonschema==2.6.0
+* Fix release notes formatting
+* Release note for \_process\_unfinished\_notifications periodic task
+* Boolean filters are not working for host list api
+* InstanceFailure: Ignore notifications for certain events
+* Set access\_policy for messaging's dispatcher
+* Add ha enabled config options
+* Implement \_process\_unfinished\_notifications periodic tasks
+* Sync tox environment with upper-constraint of requirements
+* Add business rules for host and failover\_segment
+* Bump taskflow version to minimum 2.7.0
+* Added engine manager and rpcapi related unit tests
+* Stop logging unnecessary warning on context create
+* Fix incorrect test class name
+* Update to match latest global-requirements
+* Use dict.items() and dict.values() as per guidelines
+* Add unit tests for notification business rules
+* Remove deps under pep8 section to enable hacking checks
+* Fix bad request error for valid marker in hosts
+* Extracted HTTP response codes to constants
+* Add unit tests for process failure flow
+* Remove unused test\_masakari module
+* [Devstack] Fix devstack plugin compatibility
+* Fix failing gate jobs due to removal of nova\_client.service\_catalog
+* Avoid printing traceback if VM is not HA\_Enabled
+* Stop instance only if it's HA\_Enabled
+* Fix spelling mistake and log message
+* Add database related test cases
+* Fix spelling mistake
+* Change default topic name of masakari-engine
+* Return correct response codes
+* Add unit tests for instance failure flow
+* Add unit tests for host failure workflow
+* Add missing namespaces in masakari-config-generator.conf
+* Add admin role for masakari user
+* Fix invalid port reference in devstack settings
+* Add unit tests for nova support
+* Set admin user as the default policy
+* Fix 500 error while create/update host
+
+2.0.0
+-----
+
+* Add instance and process failure workflow
+* Add host failure workflow
+* Add nova support in masakari
+* Add TaskFlowDriver support to process notifications
+* Add business rule for process\_notification
+* Convert boolean parameters in host api
+* Remove pypy from tox env list
+* Return HTTPBadRequest instead of HTTPNotFound
+* Drop MANIFEST.in - it's not needed by pbr
+* Add process\_notification cast call
+* Add authentication libraries to requirements.txt
+* Add RPC layer for masakari
+* Enable release notes translation
+* Fix 500 if you pass invalid sort\_key and sort\_dir
+* Remove unused method
+* Enable masakari-engine in devstack
+* Add masakari-engine support
+* Add Masakari Object Serializer
+* Add notifications controller for masakari
+* Remove wrong reference to cinder
+* Remove reference of Nova
+* Added host controller for masakari
+* Added failover segments controller for masakari
+* Add notification related objects
+* Remove redundant str typecasting
+* Using assertIsNone() instead of assertIs(None, ..)
+* py33 is no longer supported by Infra's CI
+* Remove unexpected method argument
+* Clean imports in code
+* TrivialFix: Merge imports in code
+* TrivialFix: Remove logging import unused
+* Alter nullable constraint on created\_at column
+* Removed unnecessary sort\_keys and sort\_dirs
+* Add notification db apis and migration script
+* Don't attempt to escalate masakari-manage privileges
+* Dictionary creation could be rewritten with dictionary literal
+* Added masakari objects
+* Refactor: Move post method to APIValidationTestCase base class
+* Add test cases for 'extension\_info' module
+* Correct API Version String format
+* Return NotFound exception for delete db api
+* Cleanup tox.ini: Remove obsolete constraints
+* Add testing for WSGI Framework
+* Add schema framework for masakari
+* Added masakari db apis
+* Update unique constraint of hosts table
+* Add devstack plugin
+* Use %()d for integer substitution
+* Make use of oslo-config-generator
+* Dictionary creation could be rewritten with dictionary literal
+* Add db sync support for masakari
+* Add a hacking rule to enforce use of LOG.warning
+* Add a hacking rule for string interpolation at logging
+* Add hacking checks
+* Add support for wsgi framework
+* Add project description to README.rst
+* Initial Cookiecutter Commit
+* Added .gitreview

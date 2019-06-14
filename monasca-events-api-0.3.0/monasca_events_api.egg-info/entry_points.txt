@@ -1,0 +1,9 @@
+[oslo.config.opts]
+events.api = monasca_events_api.conf:list_opts
+
+[oslo.policy.policies]
+events.api = monasca_events_api.policies:list_rules
+
+[wsgi_scripts]
+monasca-events-api-wsgi = monasca_events_api.app.wsgi:main
+

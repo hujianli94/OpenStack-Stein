@@ -1,0 +1,13 @@
+[console_scripts]
+ec2-api = ec2api.cmd.api:main
+ec2-api-manage = ec2api.cmd.manage:main
+ec2-api-metadata = ec2api.cmd.api_metadata:main
+ec2-api-s3 = ec2api.cmd.api_s3:main
+
+[oslo.config.opts]
+ec2api = ec2api.opts:list_opts
+ec2api.api = ec2api.api.opts:list_opts
+ec2api.metadata = ec2api.metadata.opts:list_opts
+ec2api.s3 = ec2api.s3.opts:list_opts
+keystoneauth1 = ec2api.opts:list_auth_opts
+

@@ -1,0 +1,31 @@
+[blazar.api.v1.extensions]
+leases = blazar.api.v1.leases.v1_0:get_rest
+physical.host.plugin = blazar.api.v1.oshosts.v1_0:get_rest
+virtual.floatingip.plugin = blazar.api.v1.floatingips.v1_0:get_rest
+
+[blazar.api.v2.controllers.extensions]
+leases = blazar.api.v2.controllers.extensions.lease:LeasesController
+oshosts = blazar.api.v2.controllers.extensions.host:HostsController
+
+[blazar.resource.plugins]
+dummy.vm.plugin = blazar.plugins.dummy_vm_plugin:DummyVMPlugin
+physical.host.plugin = blazar.plugins.oshosts.host_plugin:PhysicalHostPlugin
+virtual.floatingip.plugin = blazar.plugins.floatingips.floatingip_plugin:FloatingIpPlugin
+virtual.instance.plugin = blazar.plugins.instances.instance_plugin:VirtualInstancePlugin
+
+[console_scripts]
+blazar-api = blazar.cmd.api:main
+blazar-db-manage = blazar.db.migration.cli:main
+blazar-manager = blazar.cmd.manager:main
+blazar-rpc-zmq-receiver = blazar.cmd.rpc_zmq_receiver:main
+blazar-status = blazar.cmd.status:main
+
+[oslo.config.opts]
+blazar = blazar.opts:list_opts
+
+[oslo.policy.policies]
+blazar = blazar.policies:list_rules
+
+[wsgi_scripts]
+blazar-api-wsgi = blazar.api.wsgi_app:init_app
+

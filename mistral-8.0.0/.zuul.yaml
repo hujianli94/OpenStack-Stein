@@ -1,0 +1,154 @@
+- job:
+    name: mistral-devstack-base
+    parent: devstack
+    timeout: 7800
+    vars:
+      devstack_plugins:
+        mistral: https://git.openstack.org/openstack/mistral
+        heat: https://git.openstack.org/openstack/heat
+      devstack_services:
+        heat: true
+        h-api: true
+        h-api-cfn: true
+        h-api-cw: true
+        h-eng: true
+      tox_environment:
+        IDENTITY_API_VERSION: 3
+        PYTHONUNBUFFERED: 'true'
+        MISTRAL_USE_MOD_WSGI: true
+        MISTRAL_RPC_IMPLEMENTATION: oslo
+        MYSQL_ROOT_PW: secretdatabase
+    required-projects:
+      - openstack-dev/devstack
+      - openstack-infra/devstack-gate
+      - openstack/heat
+      - openstack/mistral
+      - openstack/python-mistralclient
+      - openstack/mistral-tempest-plugin
+      - openstack/mistral-lib
+
+- job:
+    name: mistral-rally-task
+    parent: rally-task-mistral
+    vars:
+      devstack_plugins:
+        rally-openstack: https://git.openstack.org/openstack/rally-openstack
+      rally_task: rally-jobs/task-mistral.yaml
+    required-projects:
+      - openstack/rally-openstack
+
+- job:
+    name: mistral-docker-buildimage
+    parent: publish-openstack-artifacts
+    run: playbooks/docker-buildimage/run.yaml
+    post-run: playbooks/docker-buildimage/post.yaml
+    timeout: 1800
+    required-projects:
+      - openstack/mistral
+
+- job:
+    name: mistral-docker-buildimage-test
+    run: playbooks/docker-buildimage/run.yaml
+    post-run: playbooks/docker-buildimage/post.yaml
+    timeout: 1800
+    required-projects:
+      - openstack/mistral
+
+# This job does not work. We can come back to it later.
+# - job:
+#     name: mistral-ha
+#     parent: legacy-base
+#     run: playbooks/legacy/mistral-ha/run
+#     timeout: 4200
+
+- job:
+    name: mistral-tox-unit-mysql
+    parent: openstack-tox
+    vars:
+      tox_envlist: unit-mysql
+    timeout: 3600
+    required-projects:
+      - openstack/mistral-lib
+
+- job:
+    name: mistral-tox-unit-postgresql
+    parent: openstack-tox
+    vars:
+      tox_envlist: unit-postgresql
+      tox_environment: {CI_PROJECT: "{{ zuul['project']['name'] }}"}
+    timeout: 3600
+    required-projects:
+      - openstack/mistral-lib
+
+- project:
+    templates:
+      - openstack-python-jobs
+      - openstack-python35-jobs
+      - openstack-python36-jobs
+      - openstack-python37-jobs
+      - publish-openstack-docs-pti
+      - check-requirements
+      - release-notes-jobs-python3
+    check:
+      jobs:
+        - openstack-tox-cover:
+            voting: false
+            irrelevant-files:
+              - ^.zuul.yaml$
+            required-projects:
+              - openstack/mistral-lib
+        - openstack-tox-py35:
+            required-projects:
+              - openstack/mistral-lib
+        - openstack-tox-py36:
+            required-projects:
+              - openstack/mistral-lib
+        - openstack-tox-py37:
+            required-projects:
+              - openstack/mistral-lib
+        - openstack-tox-py27:
+            required-projects:
+              - openstack/mistral-lib
+        - mistral-devstack
+        - mistral-devstack-non-apache:
+            branches: ^(?!stable/(newton|ocata)).*$
+        - mistral-devstack-kombu:
+            branches: ^(?!stable/newton).*$
+        - mistral-tox-unit-mysql
+        - mistral-tox-unit-postgresql
+        # TripleO jobs that deploy Mistral.
+        # Note we don't use a project-template here, so it's easier
+        # to disable voting on one specific job if things go wrong.
+        # If you need any support to debug these jobs in case of
+        # failures, please reach us on #tripleo IRC channel.
+        - tripleo-ci-centos-7-scenario003-standalone:
+            voting: false
+        - tripleo-ci-centos-7-containers-multinode:
+            voting: false
+        - mistral-rally-task:
+             voting: false
+        - openstack-tox-lower-constraints:
+            required-projects:
+              - openstack/mistral-lib
+    gate:
+      queue: mistral
+      jobs:
+        - mistral-devstack
+        - mistral-devstack-non-apache
+        - mistral-tox-unit-mysql
+        - mistral-tox-unit-postgresql
+        # - tripleo-ci-centos-7-scenario003-standalone
+        - mistral-devstack-kombu
+        - openstack-tox-lower-constraints
+        # - tripleo-ci-centos-7-undercloud-containers
+    post:
+      jobs:
+        - mistral-docker-buildimage:
+            branches: master
+    experimental:
+      jobs:
+        - mistral-docker-buildimage-test:
+            branches: master
+        # This job doesn't work yet.
+        # - mistral-ha:
+        #     voting: false

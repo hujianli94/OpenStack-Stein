@@ -1,0 +1,37 @@
+[console_scripts]
+tricircle-api = tricircle.cmd.api:main
+tricircle-db-manage = tricircle.cmd.manage:main
+tricircle-status = tricircle.cmd.status:main
+tricircle-xjob = tricircle.cmd.xjob:main
+
+[networking_sfc.flowclassifier.drivers]
+tricircle_fc = tricircle.network.central_fc_driver:TricircleFcDriver
+
+[networking_sfc.sfc.drivers]
+tricircle_sfc = tricircle.network.central_sfc_driver:TricircleSfcDriver
+
+[networking_trunk.trunk.drivers]
+tricircle_tk = tricircle.network.central_trunk_driver:TricircleTrunkDriver
+
+[oslo.config.opts]
+tricircle.api = tricircle.api.opts:list_opts
+tricircle.common = tricircle.common.opts:list_opts
+tricircle.db = tricircle.db.opts:list_opts
+tricircle.network = tricircle.network.opts:list_opts
+tricircle.xjob = tricircle.xjob.opts:list_opts
+
+[oslo.policy.policies]
+tricircle = tricircle.common.policy:list_policies
+
+[tricircle.network.extension_drivers]
+qos = neutron.plugins.ml2.extensions.qos:QosExtensionDriver
+
+[tricircle.network.type_drivers]
+flat = tricircle.network.drivers.type_flat:FlatTypeDriver
+local = tricircle.network.drivers.type_local:LocalTypeDriver
+vlan = tricircle.network.drivers.type_vlan:VLANTypeDriver
+vxlan = tricircle.network.drivers.type_vxlan:VxLANTypeDriver
+
+[wsgi_scripts]
+tricircle-api-wsgi = tricircle.api.wsgi:init_application
+

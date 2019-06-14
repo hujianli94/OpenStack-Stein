@@ -1,0 +1,25 @@
+---
+- hosts: all
+  roles:
+    - configure-swap
+    - install-docker
+  tasks:
+    - name: Create logging folders
+      file:
+        path: "/tmp/logs/{{ item }}"
+        state: directory
+      with_items:
+        - ansible
+        - build
+
+    - name: Link logs output folder
+      file:
+        src: /tmp/logs
+        dest: "{{ zuul.project.src_dir }}/logs"
+        state: link
+
+    - name: Install dependencies
+      become: true
+      pip:
+        name: docker
+        state: present
