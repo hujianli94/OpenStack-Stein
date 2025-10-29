@@ -13,6 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+定义了一个名为 _Base 的类，该类作为 Blazar API v2 控制器中其他类的基础类
+
+提供了将对象属性转换为字典的功能，并且可以将远程过程调用（RPC）对象转换为 Blazar API 中定义的对象。
+
+关键方法:
+as_dict: 将对象属性转换为字典，方便与客户端进行数据交换。
+convert: 将 RPC 对象转换为 Blazar API 中定义的对象，简化了数据处理流程。
+"""
+
 import wsme
 from wsme import types as wtypes
 

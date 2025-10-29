@@ -14,6 +14,11 @@
 # limitations under the License.
 
 """Version 2 of the API.
+
+主要功能是实现Blazar项目中API版本2的根控制器，负责动态加载和管理API扩展，并根据路由参数正确地映射到相应的控制器实例。
+
+通过这种方式，Blazar的API可以根据配置灵活地扩展功能，同时保持了代码的清晰和可维护性。
+
 """
 
 from oslo_config import cfg
@@ -49,6 +54,12 @@ class V2Controller(rest.RestController):
                 LOG.error("API Plugin %s was not loaded", name)
 
     def __init__(self):
+        """
+        初始化V2Controller实例。
+        使用stevedore.enabled.EnabledExtensionManager动态加载API扩展，check_func参数指定过滤条件，只加载在CONF.api.api_v2_controllers列表中的扩展。
+        遍历加载的扩展，将扩展名作为属性添加到V2Controller实例中，并更新路由信息。
+        记录已加载的扩展名称。
+        """
         extensions = []
 
         self.extension_manager = enabled.EnabledExtensionManager(
@@ -76,6 +87,10 @@ class V2Controller(rest.RestController):
 
         It allows to map controller URL with correct controller instance.
         By default, it maps with the same name.
+
+        重写了pecan.rest.RestController的_route方法。
+        根据传入的路由参数args，从_routes字典中获取对应的路由，如果路由不存在则将其重定向到一个不存在的控制器（‘http404-nonexistingcontroller’）。
+        处理IndexError异常，当没有传入路由参数时，记录错误信息。
         """
 
         try:

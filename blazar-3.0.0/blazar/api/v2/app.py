@@ -13,6 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+主要功能是配置和创建Blazar API v2版本的应用程序。
+它通过注册配置选项来管理身份验证策略和日志记录，并使用Pecan框架创建了一个WSGI应用程序实例。
+在创建过程中，它添加了几个关键的中间件来处理身份验证、错误处理和调试。
+
+"""
+
 from keystonemiddleware import auth_token
 from oslo_config import cfg
 from oslo_middleware import debug

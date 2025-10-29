@@ -13,6 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+主要功能是对租赁（lease）进行CRUD（创建、读取、更新、删除）操作。
+
+"""
+
 import pecan
 from wsme import types as wtypes
 import wsmeext.pecan as wsme_pecan
@@ -26,6 +31,10 @@ from blazar.manager import service
 from blazar import policy
 from blazar.utils import trusts
 
+
+# Lease类用于表示租赁资源，
+# 继承自base._Base。它定义了租赁的各种属性，如UUID、名称、开始日期、结束日期、用户ID、项目ID、信任ID、预订信息、事件、结束前日期和状态。
+# sample方法返回一个租赁的示例对象，用于文档或测试目的。
 
 class Lease(base._Base):
 
@@ -79,11 +88,13 @@ class Lease(base._Base):
                    )
 
 
+# LeasesController类用于管理租赁资源的API操作，继承自extensions.BaseController。
 class LeasesController(extensions.BaseController):
     """Manages operations on leases."""
 
     name = 'leases'
 
+    # @policy.authorize 这个装饰器用于策略授权。它确保在执行被装饰的方法之前，用户必须具有相应的权限。
     @policy.authorize('leases', 'get')
     @wsme_pecan.wsexpose(Lease, types.UuidType())
     def get_one(self, id):
@@ -105,6 +116,8 @@ class LeasesController(extensions.BaseController):
 
     @policy.authorize('leases', 'post')
     @wsme_pecan.wsexpose(Lease, body=Lease, status_code=201)
+    # 这个装饰器用于信任授权。它确保在执行被装饰的方法之前，使用信任机制来验证用户的权限。
+    # 这个装饰器通常用于需要更高级别权限验证的操作，例如创建租赁资源。
     @trusts.use_trust_auth()
     def post(self, lease):
         """Creates a new lease.

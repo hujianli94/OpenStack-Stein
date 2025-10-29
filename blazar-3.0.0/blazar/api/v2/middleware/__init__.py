@@ -13,6 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+ParsableErrorMiddleware 是一个 WSGI 中间件，用于将错误响应转换为客户端可解析的 JSON 格式。
+
+它能处理异常、清理错误信息、映射异常类，并最终生成结构化的 JSON 错误响应。
+"""
+
 from oslo_log import log as logging
 from oslo_serialization import jsonutils
 import webob

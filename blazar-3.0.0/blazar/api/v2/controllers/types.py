@@ -13,6 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+定义了几个自定义的数据类型类，这些类用于验证用户提交的数据是否符合预期的格式。
+
+这些类包括UUID类型、整数类型、CPU信息类型、文本或整数类型以及时间类型，每个类都有自己的validate方法，用于确保数据格式的正确性，从而提高API的安全性和数据一致性。
+"""
+
 import datetime
 import uuid
 

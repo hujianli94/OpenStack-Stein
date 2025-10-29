@@ -13,6 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+实现了对Blazar项目中主机资源的基本管理操作，包括获取主机信息、创建主机、更新主机信息和删除主机。
+
+通过HostsController类处理HTTP请求，并使用Host类来定义和操作主机对象。同时，代码中也考虑到了权限控制和异常处理。
+
+"""
+
 from oslo_log import log as logging
 import pecan
 from wsme import types as wtypes
