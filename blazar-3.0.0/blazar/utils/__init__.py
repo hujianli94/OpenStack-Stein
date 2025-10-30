@@ -12,6 +12,13 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+LazyProxy 类的主要功能是延迟实例化对象。
+它允许在不立即创建对象的情况下，访问和调用对象的方法。
+只有在第一次调用方法时，才会真正实例化对象。
+这种机制可以提高性能，特别是在创建对象代价较高且可能不被使用的情况下。
+LazyProxy 类的使用场景可能包括资源管理、配置加载等需要延迟初始化的地方。
+"""
 import functools
 
 

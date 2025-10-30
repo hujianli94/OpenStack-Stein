@@ -13,6 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+代码实现了一个RESTful API接口,主要用于Blazar浮动IP的CRUD(创建、读取、更新、删除)操作。
+
+通过定义不同的路由和处理函数,使得外部应用可以通过HTTP请求对Blazar中的浮动IP资源进行管理和查询。
+"""
+
 from blazar.api.v1.floatingips import service
 from blazar.api.v1 import utils as api_utils
 from blazar.api.v1 import validation

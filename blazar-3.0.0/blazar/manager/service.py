@@ -12,7 +12,11 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+"""
+这段代码的主要功能是实现Blazar服务中的资源租赁管理,包括租赁的创建、更新、删除和状态管理,
+以及与各种资源类型的插件交互以执行具体的租赁操作。
+此外,它还负责监控租赁事件并定时处理它们。
+"""
 import datetime
 
 import eventlet
@@ -57,7 +61,9 @@ LEASE_DATE_FORMAT = "%Y-%m-%d %H:%M"
 
 EVENT_INTERVAL = 10
 
-
+# ManagerService类,该类是blazar-manager服务的主要实现。
+# ManagerService类继承自service_utils.RPCServer,
+# 是blazar-manager服务的核心类,负责与Blazar数据库交互、执行调度逻辑、运行事件、处理插件等。
 class ManagerService(service_utils.RPCServer):
     """Service class for the blazar-manager service.
 
@@ -220,10 +226,10 @@ class ManagerService(service_utils.RPCServer):
             raise exceptions.MissingParameter(param=', '.join(missing_attr))
 
     def get_lease(self, lease_id):
-        return db_api.lease_get(lease_id)
+        return db_api.lease_get(lease_id)       # 调用数据库 API 获取指定 ID 的租赁资源
 
     def list_leases(self, project_id=None, query=None):
-        return db_api.lease_list(project_id)
+        return db_api.lease_list(project_id)    # 调用数据库 API 获取所有租赁资源并转换为 Lease 对象列表
 
     def create_lease(self, lease_values):
         """Create a lease with reservations.

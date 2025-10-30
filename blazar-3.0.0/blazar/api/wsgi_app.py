@@ -12,7 +12,10 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+"""
+代码的主要目的是根据配置文件中的设置来初始化Blazar API应用程序,并决定启用哪个版本的API。
+通过导入必要的模块、配置对象的初始化、配置文件路径的获取以及应用程序的创建,实现了Blazar API服务的启动和版本管理。
+"""
 import os
 
 from oslo_config import cfg

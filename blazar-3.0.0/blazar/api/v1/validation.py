@@ -13,6 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+主要功能是一个装饰器,用于在调用某个API方法之前检查指定的对象是否存在。
+如果对象不存在,它会捕获NotFound异常,并通过api_utils.not_found函数返回一个标准的404错误响应。
+如果对象存在,则继续执行原本的API方法。这样可以确保API调用时对象的有效性,避免因对象不存在而导致的错误操作。
+"""
 import functools
 
 from blazar.api.v1 import utils as api_utils

@@ -66,11 +66,13 @@ class APIRouter(base_wsgi.Router):
     """Routes requests on the API to the appropriate controller and method."""
     ExtensionManager = None  # override in subclasses
 
+    # Paste Deploy 工厂方法
     @classmethod
     def factory(cls, global_config, **local_config):
         """Simple paste factory, :class:`cinder.wsgi.Router` doesn't have."""
         return cls()
 
+    # 初始化路由器,设置路由和扩展
     def __init__(self, ext_mgr=None):
         if ext_mgr is None:
             if self.ExtensionManager:
@@ -80,12 +82,16 @@ class APIRouter(base_wsgi.Router):
 
         mapper = ProjectMapper()
         self.resources = {}
-        self._setup_routes(mapper, ext_mgr)
-        self._setup_ext_routes(mapper, ext_mgr)
-        self._setup_extensions(ext_mgr)
+        self._setup_routes(mapper, ext_mgr)             # 设置基础路由
+        self._setup_ext_routes(mapper, ext_mgr)         # 设置扩展资源路由
+        self._setup_extensions(ext_mgr)                 # 设置扩展资源
         super(APIRouter, self).__init__(mapper)
 
     def _setup_ext_routes(self, mapper, ext_mgr):
+        """
+        设置扩展资源路由，将扩展资源的控制器注册到资源中。
+        """
+        # 遍历所有扩展资源
         for resource in ext_mgr.get_resources():
             LOG.debug('Extended resource: %s',
                       resource.collection)
@@ -106,6 +112,10 @@ class APIRouter(base_wsgi.Router):
                 resource.custom_routes_fn(mapper, wsgi_resource)
 
     def _setup_extensions(self, ext_mgr):
+        """
+        设置扩展资源路由，将扩展资源的控制器注册到资源中。
+        """
+        # 遍历所有扩展资源
         for extension in ext_mgr.get_controller_extensions():
             collection = extension.collection
             controller = extension.controller
@@ -127,4 +137,7 @@ class APIRouter(base_wsgi.Router):
             resource.register_extensions(controller)
 
     def _setup_routes(self, mapper, ext_mgr):
+        """
+        设置基础路由，将基础资源的控制器注册到资源中。
+        """
         raise NotImplementedError

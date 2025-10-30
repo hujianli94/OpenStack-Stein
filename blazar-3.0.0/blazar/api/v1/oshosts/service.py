@@ -13,6 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+主要功能是提供一个API接口,用于管理Blazar中的计算主机资源。
+它包括查询所有主机、通过ID查询特定主机、创建新主机、更新现有主机信息以及删除主机的功能。
+此外，还提供了查询主机资源分配情况的功能。这些方法都经过了权限校验，确保只有被授权的用户才能执行相应的操作。
+
+调用 rpcapi 中的方法
+"""
 from blazar.manager.oshosts import rpcapi as manager_rpcapi
 from blazar import policy
 from blazar.utils import trusts
@@ -20,9 +27,10 @@ from blazar.utils import trusts
 
 class API(object):
     def __init__(self):
+        # 初始化一个ManagerRPCAPI实例，用于与Blazar的计算主机管理组件进行通信。
         self.manager_rpcapi = manager_rpcapi.ManagerRPCAPI()
 
-    @policy.authorize('oshosts', 'get')
+    @policy.authorize('oshosts', 'get') # 使用装饰器进行权限校验，确保调用者有权限执行此操作
     def get_computehosts(self, query):
         """List all existing computehosts."""
         return self.manager_rpcapi.list_computehosts(query=query)

@@ -12,7 +12,12 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+主要功能是从HTTP请求头中提取用户认证信息和其他元数据,并将其封装成BlazarContext对象供Blazar服务使用。
 
+通过这种方式,Blazar能够识别请求的用户身份、项目归属以及该用户的角色权限,从而进行相应的资源预留操作和权限管理。
+
+"""
 from oslo_serialization import jsonutils
 import six
 

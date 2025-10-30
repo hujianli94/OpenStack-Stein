@@ -12,7 +12,9 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+"""
+主要功能是创建一个全局的配置对象 RPC 通信的配置选项
+"""
 from oslo_config import cfg
 import oslo_messaging as messaging
 

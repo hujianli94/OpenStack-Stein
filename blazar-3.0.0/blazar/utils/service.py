@@ -14,6 +14,13 @@
 # WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations
 # under the License.
+"""
+这段代码的主要功能是通过定义RPC客户端和服务器类,实现Blazar服务之间的通信。
+
+ContextEndpointHandler类用于在处理请求时管理上下文环境,确保请求处理过程中所需的环境信息正确无误。
+
+with_empty_context装饰器则为某些函数提供一个空的上下文环境。最后,prepare_service函数用于初始化整个服务,设置日志配置。
+"""
 
 import functools
 
@@ -26,7 +33,7 @@ from blazar import context
 
 LOG = logging.getLogger(__name__)
 
-
+# 创建一个RPC客户端，用于向Blazar服务发送请求。
 class RPCClient(object):
     def __init__(self, target):
         super(RPCClient, self).__init__()
@@ -43,7 +50,7 @@ class RPCClient(object):
         ctx = context.current()
         return self._client.call(ctx.to_dict(), name, **kwargs)
 
-
+# 创建一个RPC服务器，用于接收并处理来自客户端的消息。
 class RPCServer(service.Service):
     def __init__(self, target):
         super(RPCServer, self).__init__()
@@ -62,7 +69,7 @@ class RPCServer(service.Service):
         super(RPCServer, self).stop()
         self._server.stop()
 
-
+# 在处理RPC请求时，管理请求的上下文环境。
 class ContextEndpointHandler(object):
     def __init__(self, endpoint, target):
         self.__endpoint = endpoint
@@ -82,7 +89,7 @@ class ContextEndpointHandler(object):
                       "%(class)s class",
                       {'method': name, 'class': self.__endpoint})
 
-
+# 为某些函数提供一个空的上下文环境。
 def with_empty_context(func):
     @functools.wraps(func)
     def decorator(*args, **kwargs):
@@ -91,6 +98,6 @@ def with_empty_context(func):
 
     return decorator
 
-
+# 初始化服务，设置日志配置。
 def prepare_service(argv=[]):
     logging.setup(cfg.CONF, 'blazar')

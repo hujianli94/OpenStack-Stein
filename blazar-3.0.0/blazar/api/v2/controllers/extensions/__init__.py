@@ -14,11 +14,10 @@
 # limitations under the License.
 
 """
-主要目的是为Blazar项目中的API扩展提供一个基础控制器类 BaseController，
-该类定义了通用的API操作逻辑，并要求所有子类必须实现资源的获取、创建、更新和删除等基本操作。
+主要目的是为Blazar项目中的API扩展提供一个基础控制器类 BaseController,
+该类定义了通用的API操作逻辑,并要求所有子类必须实现资源的获取、创建、更新和删除等基本操作。
 
-通过这种方式，可以确保API的一致性和可扩展性。
-
+通过这种方式,可以确保API的一致性和可扩展性。
 """
 import abc
 

@@ -12,7 +12,12 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+这段代码的主要功能是通过继承Flask的Blueprint类来创建一个RESTful API辅助类Rest。
+Rest类的主要目的是简化RESTful路由的定义,并提供统一的异常处理机制,以便更好地构建和管理Blazar项目的API。
 
+该类还初始化了一个日志记录器,用于记录与API路由定义和处理相关的日志信息。
+"""
 import traceback
 
 import flask
@@ -30,7 +35,7 @@ from blazar.utils.openstack import exceptions as opst_exceptions
 
 LOG = logging.getLogger(__name__)
 
-
+# 定义了一个名为Rest的类，继承自Flask的Blueprint类。这个类的主要目的是简化Blazar API中RESTful路由的定义和异常处理。
 class Rest(flask.Blueprint):
     """REST helper class."""
 

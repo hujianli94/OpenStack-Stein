@@ -14,8 +14,7 @@
 # limitations under the License.
 
 """
-主要功能是对租赁（lease）进行CRUD（创建、读取、更新、删除）操作。
-
+主要功能是对租赁(lease) 进行 CRUD 操作。
 """
 
 import pecan
@@ -33,7 +32,8 @@ from blazar.utils import trusts
 
 
 # Lease类用于表示租赁资源，
-# 继承自base._Base。它定义了租赁的各种属性，如UUID、名称、开始日期、结束日期、用户ID、项目ID、信任ID、预订信息、事件、结束前日期和状态。
+# 继承自base._Base。
+# 它定义了租赁的各种属性，如UUID、名称、开始日期、结束日期、用户ID、项目ID、信任ID、预订信息、事件、结束前日期和状态。
 # sample方法返回一个租赁的示例对象，用于文档或测试目的。
 
 class Lease(base._Base):
@@ -102,7 +102,7 @@ class LeasesController(extensions.BaseController):
 
         :param id: ID of lease
         """
-        lease = pecan.request.rpcapi.get_lease(id)
+        lease = pecan.request.rpcapi.get_lease(id)      # 调用 RPC API 获取指定 ID 的租赁资源
         if lease is None:
             raise exceptions.NotFound(object={'lease_id': id})
         return Lease.convert(lease)
@@ -112,7 +112,7 @@ class LeasesController(extensions.BaseController):
     def get_all(self):
         """Returns all leases."""
         return [Lease.convert(lease)
-                for lease in pecan.request.rpcapi.list_leases()]
+                for lease in pecan.request.rpcapi.list_leases()]    # 调用 RPC API 获取所有租赁资源并转换为 Lease 对象列表
 
     @policy.authorize('leases', 'post')
     @wsme_pecan.wsexpose(Lease, body=Lease, status_code=201)
@@ -127,7 +127,7 @@ class LeasesController(extensions.BaseController):
         # FIXME(sbauza): DB exceptions are currently catched and return a lease
         #                equal to None instead of being sent to the API
         lease_dct = lease.as_dict()
-        lease = pecan.request.rpcapi.create_lease(lease_dct)
+        lease = pecan.request.rpcapi.create_lease(lease_dct)     # 调用 RPC API 创建新的租赁资源
         if lease is not None:
             return Lease.convert(lease)
         else:
@@ -162,7 +162,7 @@ class LeasesController(extensions.BaseController):
         if before_end_date:
             sublease_dct['before_end_date'] = before_end_date
 
-        lease = pecan.request.rpcapi.update_lease(id, sublease_dct)
+        lease = pecan.request.rpcapi.update_lease(id, sublease_dct)     # 调用 RPC API 更新指定 ID 的租赁资源
 
         if lease is None:
             raise exceptions.NotFound(object={'lease_id': id})
@@ -176,7 +176,7 @@ class LeasesController(extensions.BaseController):
         :param id: UUID of a lease.
         """
         try:
-            pecan.request.rpcapi.delete_lease(id)
+            pecan.request.rpcapi.delete_lease(id)                       # 调用 RPC API 删除指定 ID 的租赁资源
         except TypeError:
             # The lease was not existing when asking to delete it
             raise exceptions.NotFound(object={'lease_id': id})

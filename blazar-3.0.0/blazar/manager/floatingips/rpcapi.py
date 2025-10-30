@@ -13,6 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+FloatingIPsRPCAPI 类的主要功能是提供与 Blazar 的 blazar-manager 服务进行远程通信的接口，支持以下操作：
+RPC 方法实现：
+    获取特定浮动 IP 的详细信息。
+    列出所有浮动 IP,支持根据项目 ID 和查询条件进行过滤。
+    创建新的浮动 IP。
+    删除指定的浮动 IP。
+这些操作使得其他服务能够通过 RPC 调用来管理 Blazar 中的浮动 IP 资源。
+"""
 from oslo_config import cfg
 
 from blazar import manager

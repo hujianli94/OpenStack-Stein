@@ -14,10 +14,10 @@
 # limitations under the License.
 
 """
-实现了对Blazar项目中主机资源的基本管理操作，包括获取主机信息、创建主机、更新主机信息和删除主机。
+实现了对Blazar项目中主机资源的基本管理操作,包括获取主机信息、创建主机、更新主机信息和删除主机。
 
-通过HostsController类处理HTTP请求，并使用Host类来定义和操作主机对象。同时，代码中也考虑到了权限控制和异常处理。
-
+通过HostsController类处理HTTP请求,并使用Host类来定义和操作主机对象。
+同时,代码中也考虑到了权限控制和异常处理。
 """
 
 from oslo_log import log as logging
@@ -72,6 +72,7 @@ class Host(base._Base):
     extra_capas = wtypes.DictType(wtypes.text, types.TextOrInteger())
     "Extra capabilities for the host"
 
+    # 定义convert方法,将RPC对象转换为Host对象
     @classmethod
     def convert(cls, rpc_obj):
         extra_keys = [key for key in rpc_obj
@@ -113,8 +114,8 @@ class HostsController(extensions.BaseController):
     extra_routes = {'os-hosts': 'oshosts',
                     'oshosts': None}
 
-    @policy.authorize('oshosts', 'get')
-    @wsme_pecan.wsexpose(Host, types.IntegerType())
+    @policy.authorize('oshosts', 'get') # 授权用户获取主机信息
+    @wsme_pecan.wsexpose(Host, types.IntegerType()) # 定义GET /os-hosts/{id} 路由,用于获取指定ID的主机信息
     def get_one(self, id):
         """Returns the host having this specific uuid
 
@@ -125,17 +126,17 @@ class HostsController(extensions.BaseController):
             raise exceptions.NotFound(object={'host_id': id})
         return Host.convert(host_dct)
 
-    @policy.authorize('oshosts', 'get')
-    @wsme_pecan.wsexpose([Host], q=[])
+    @policy.authorize('oshosts', 'get') # 授权用户获取所有主机信息
+    @wsme_pecan.wsexpose([Host], q=[]) # 定义GET /os-hosts 路由,用于获取所有主机信息
     def get_all(self):
         """Returns all hosts."""
         return [Host.convert(host)
                 for host in
                 pecan.request.hosts_rpcapi.list_computehosts()]
 
-    @policy.authorize('oshosts', 'post')
-    @wsme_pecan.wsexpose(Host, body=Host, status_code=201)
-    @trusts.use_trust_auth()
+    @policy.authorize('oshosts', 'post') # 授权用户创建主机
+    @wsme_pecan.wsexpose(Host, body=Host, status_code=201) # 定义POST /os-hosts 路由,用于创建主机
+    @trusts.use_trust_auth() # 调用trusts.use_trust_auth()装饰器,用于创建主机时创建委托
     def post(self, host):
         """Creates a new host.
 
@@ -151,8 +152,8 @@ class HostsController(extensions.BaseController):
         else:
             raise exceptions.BlazarException(_("Host can't be created"))
 
-    @policy.authorize('oshosts', 'put')
-    @wsme_pecan.wsexpose(Host, types.IntegerType(), body=Host)
+    @policy.authorize('oshosts', 'put') # 授权用户更新主机信息
+    @wsme_pecan.wsexpose(Host, types.IntegerType(), body=Host) # 定义PUT /os-hosts/{id} 路由,用于更新指定ID的主机信息
     def put(self, id, host):
         """Update an existing host.
 
@@ -166,11 +167,11 @@ class HostsController(extensions.BaseController):
             raise exceptions.NotFound(object={'host_id': id})
         return Host.convert(host)
 
-    @policy.authorize('oshosts', 'delete')
+    @policy.authorize('oshosts', 'delete') # 授权用户删除主机
     # NOTE(sbauza): We need to expose text for parameter type as Manager is
     #               expecting it and int raises an AttributeError
     @wsme_pecan.wsexpose(None, wtypes.text,
-                         status_code=204)
+                         status_code=204) # 定义DELETE /os-hosts/{id} 路由,用于删除指定ID的主机
     def delete(self, id):
         """Delete an existing host.
 

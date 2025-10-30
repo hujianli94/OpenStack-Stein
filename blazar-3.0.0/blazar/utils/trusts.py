@@ -13,6 +13,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+代码的核心功能是处理Keystone信任的创建和删除,以及基于信任创建上下文。
+
+它通过定义create_trust()和delete_trust()函数来实现对信任对象的操作。
+
+同时,通过create_ctx_from_trust()函数,可以基于信任ID创建一个包含认证信息的Blazar上下文对象。
+
+最后,use_trust_auth()装饰器实现了在方法调用中自动创建信任并传递信任ID的功能,简化了信任使用的流程。
+"""
+
 import functools
 
 from oslo_config import cfg

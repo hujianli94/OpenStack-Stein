@@ -13,6 +13,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+代码实现了一个RESTful API接口,主要用于Blazar租赁的CRUD(创建、读取、更新、删除)操作。
+
+通过定义不同的路由和处理函数,使得外部应用可以通过HTTP请求对Blazar中的租赁资源进行管理和查询。
+
+同时,代码中还包含了一个获取所有可用插件的接口,这些插件可以扩展Blazar的功能。
+"""
+
 from oslo_log import log as logging
 
 from blazar.api.v1.leases import service

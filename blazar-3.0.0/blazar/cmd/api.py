@@ -51,10 +51,11 @@ def main():
     """Entry point to start Blazar API wsgi server."""
     cfg.CONF(sys.argv[1:], project='blazar', prog='blazar-api')
     service_utils.prepare_service(sys.argv)
+    # 如果 enable_v1_api 为 False， 则只启动 v2 版本的 API
     if not CONF.enable_v1_api:
         app = v2_app.make_app()
     else:
-        app = wsgi_app.VersionSelectorApplication()
+        app = wsgi_app.VersionSelectorApplication()     # 同时启动 v1 和 v2 版本的 API
 
     wsgi.server(eventlet.listen((CONF.host, CONF.port), backlog=500), app)
 

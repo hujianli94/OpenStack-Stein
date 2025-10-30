@@ -12,6 +12,20 @@
 # implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+"""
+ManagerRPCAPI 类的主要功能是提供与 Blazar 管理器服务进行 RPC 通信的方法。
+它封装了对计算主机资源的 CRUD 操作（创建、读取、更新、删除），以及查询分配信息的操作。
+
+RPC 方法实现：
+    get_computehost: 获取指定计算主机的详细信息。
+    list_computehosts: 列出所有计算主机的信息，可以接受查询参数以过滤结果。
+    create_computehost: 根据传入的参数创建一个新的计算主机。
+    update_computehost: 更新指定计算主机的信息，传入要更新的参数字典。
+    delete_computehost: 删除指定的计算主机。
+    list_allocations: 列出所有计算主机上的分配信息，可以接受查询参数以过滤结果。
+    get_allocations: 列出指定计算主机上的分配信息，可以接受查询参数以过滤结果
+这些操作使得其他服务能够通过 RPC 调用来管理 Blazar 中的计算主机资源。
+"""
 
 from oslo_config import cfg
 
