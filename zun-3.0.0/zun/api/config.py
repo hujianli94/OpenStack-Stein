@@ -16,8 +16,8 @@ from zun.api import hooks
 
 # Pecan Application Configurations
 app = {
-    'root': 'zun.api.controllers.root.RootController',
-    'modules': ['zun'],
+    'root': 'zun.api.controllers.root.RootController', # 定义WSGI应用的根控制器
+    'modules': ['zun'],                                # 定义WSGI应用的模块列表
     'hooks': [
         hooks.ContextHook(),
         hooks.NoExceptionTracebackHook(),

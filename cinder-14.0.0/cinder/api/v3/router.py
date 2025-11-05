@@ -44,6 +44,7 @@ from cinder.api.v3 import workers
 from cinder.api import versions
 
 
+# 继承 cinder.api.openstack.APIRouter
 class APIRouter(cinder.api.openstack.APIRouter):
     """Routes requests on the API to the appropriate controller and method."""
     ExtensionManager = extensions.ExtensionManager

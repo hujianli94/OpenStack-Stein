@@ -65,6 +65,10 @@ api_opts = [
                 help='Specify list of extensions to load when using osapi_'
                      'volume_extension option with cinder.api.contrib.'
                      'select_extensions'),
+    # Cinder根据配置文件/etc/cinder/cinder.conf的osapi_volume_extension
+    # 选项的值又分为两种情况：standard_extensions与select_extensions。
+    # standard_extensions是指加载contrib目录下实现的所有资源，select_extensions则可以指定加载哪些资源。
+    # standard_extensions为默认的设置
     cfg.MultiStrOpt('osapi_volume_extension',
                     default=['cinder.api.contrib.standard_extensions'],
                     help='osapi volume extension to load'),

@@ -33,7 +33,7 @@ CONF = cfg.CONF
 LOG = logging.getLogger(__name__)
 FILES_TO_SKIP = ['resource_common_manage.py', 'scheduler_hints.py']
 
-
+# ExtensionDescriptor 是一个扩展的基类，定义了扩展应该实现的方法。
 class ExtensionDescriptor(object):
     """Base class that defines the contract for extensions.
 
@@ -58,6 +58,7 @@ class ExtensionDescriptor(object):
         ext_mgr.register(self)
         self.ext_mgr = ext_mgr
 
+    # 返回一个扩展资源的列表。扩展资源是新的名词，并且可以通过URL访问。
     def get_resources(self):
         """List of extensions.ResourceExtension extension objects.
 
@@ -66,7 +67,7 @@ class ExtensionDescriptor(object):
         """
         resources = []
         return resources
-
+    # 返回一个控制器扩展的列表。控制器扩展用于扩展现有的控制器。
     def get_controller_extensions(self):
         """List of extensions.ControllerExtension extension objects.
 
@@ -75,7 +76,7 @@ class ExtensionDescriptor(object):
         controller_exts = []
         return controller_exts
 
-
+# ExtensionsResource 类用于处理与扩展相关的API请求。
 class ExtensionsResource(wsgi.Resource):
 
     def __init__(self, extension_manager):
@@ -113,6 +114,7 @@ class ExtensionsResource(wsgi.Resource):
         raise webob.exc.HTTPNotFound()
 
 
+# ExtensionManager 类负责从配置路径加载扩展，并管理扩展的注册和查询。
 class ExtensionManager(object):
     """Load extensions from the configured extension path.
 
@@ -218,6 +220,7 @@ class ExtensionManager(object):
                             {'ext_factory': ext_factory, 'exc': exc})
 
 
+# 用于扩展OpenStack Cinder API的核心控制器。
 class ControllerExtension(object):
     """Extend core controllers of cinder OpenStack API.
 
@@ -230,7 +233,7 @@ class ControllerExtension(object):
         self.collection = collection
         self.controller = controller
 
-
+# 用于向OpenStack Cinder API添加顶级资源。
 class ResourceExtension(object):
     """Add top level resources to the OpenStack API in cinder."""
 
@@ -249,6 +252,8 @@ class ResourceExtension(object):
         self.custom_routes_fn = custom_routes_fn
 
 
+# load_standard_extensions 函数用于加载标准API扩展。
+# 功能：遍历给定路径下的所有模块和子目录，尝试加载扩展类并将它们注册到扩展管理器中。
 def load_standard_extensions(ext_mgr, logger, path, package, ext_list=None):
     """Registers all standard API extensions."""
 
@@ -320,6 +325,8 @@ def load_standard_extensions(ext_mgr, logger, path, package, ext_list=None):
         dirnames[:] = subdirs
 
 
+# extension_authorizer 函数用于生成授权检查函数。
+# 功能：根据API名称和扩展名称生成一个授权检查函数，该函数可以检查给定的上下文是否有权限执行特定的操作。
 def extension_authorizer(api_name, extension_name):
     def authorize(context, target=None, action=None):
         if target is None:

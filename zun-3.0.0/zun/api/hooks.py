@@ -12,7 +12,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-
+"""
+主要为Zun API请求处理流程提供了三个关键的钩子机制,
+分别用于创建和附加请求上下文对象、附加RPC API对象以及在生产环境中保护错误信息不泄露给客户端。
+"""
 from pecan import hooks
 
 from zun.common import context
@@ -21,7 +24,7 @@ import zun.conf
 
 CONF = zun.conf.CONF
 
-
+# 这个钩子用于为每个传入的HTTP请求创建一个上下文对象，并将其附加到请求状态中。
 class ContextHook(hooks.PecanHook):
     """Configures a request context and attaches it to the request.
 
@@ -69,7 +72,7 @@ class ContextHook(hooks.PecanHook):
             domain_name=domain_name,
             roles=roles)
 
-
+# 这个钩子用于将RPC API对象附加到请求状态中。
 class RPCHook(hooks.PecanHook):
     """Attach the rpcapi object to the request so controllers can get to it."""
 
@@ -77,7 +80,8 @@ class RPCHook(hooks.PecanHook):
         context = state.request.context
         state.request.compute_api = compute_api.API(context)
 
-
+# 这个钩子主要用于处理异常情况下的响应，特别是当远程过程调用引发异常并生成详细的回溯信息时。
+# 本钩子的作用是移除回溯信息，防止敏感的内部错误细节泄露给客户端，从而增强系统的安全性
 class NoExceptionTracebackHook(hooks.PecanHook):
     """Workaround rpc.common: deserialize_remote_exception.
 

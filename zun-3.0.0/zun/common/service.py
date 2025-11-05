@@ -14,6 +14,10 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
+"""
+主要功能是初始化、配置和启动Zun项目的API服务。它通过WSGIService类来封装WSGI服务的启动、停止、等待和重置操作,
+并确保API服务能够根据配置文件的要求正确运行,包括支持SSL和设置适当的并发工作进程数量。
+"""
 
 from oslo_concurrency import processutils
 from oslo_log import log

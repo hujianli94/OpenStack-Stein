@@ -29,10 +29,11 @@ CONF = cfg.CONF
 LOG = logging.getLogger(__name__)
 
 
+# load_standard_extensions
 def standard_extensions(ext_mgr):
     extensions.load_standard_extensions(ext_mgr, LOG, __path__, __package__)
 
-
+# load select_extensions
 def select_extensions(ext_mgr):
     extensions.load_standard_extensions(ext_mgr, LOG, __path__, __package__,
                                         CONF.osapi_volume_ext_list)

@@ -154,10 +154,10 @@ class V1(controllers_base.APIBase):
                                         'registries', '', bookmark=True)]
         return v1
 
-
+# V1版本API的根控制器。
 class Controller(controllers_base.Controller):
     """Version 1 API controller root."""
-
+    # 包含多个子控制器，分别对应于不同的资源
     services = zun_services.ZunServiceController()
     containers = container_controller.ContainersController()
     images = image_controller.ImagesController()
@@ -171,8 +171,10 @@ class Controller(controllers_base.Controller):
 
     @pecan.expose('json')
     def get(self):
-        return V1.convert()
+        return V1.convert() # 当客户端请求V1版本API的信息时，调用V1.convert()方法返回API详细信息。
 
+    # 用于检查请求的API版本是否在支持的版本范围内。
+    # 如果请求的版本不在支持的范围内，将抛出HTTPNotAcceptableAPIVersion异常。
     def _check_version(self, version, headers=None):
         if headers is None:
             headers = {}
@@ -198,7 +200,8 @@ class Controller(controllers_base.Controller):
                 headers=headers,
                 max_version=str(MAX_VER),
                 min_version=str(MIN_VER))
-
+    # 用于处理API路由。首先从请求头中解析出请求的API版本，并设置响应头中的版本信息。
+    # 然后检查请求的版本是否被支持。最后，调用父类的_route方法路由请求到相应的子控制器
     @pecan.expose()
     def _route(self, args):
         version = ver.Version(

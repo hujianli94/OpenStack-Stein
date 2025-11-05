@@ -10,12 +10,16 @@
 #    License for the specific language governing permissions and limitations
 #    under the License.
 
+"""
+主要功能是为了支持OpenStack Zun API在处理集合资源时的分页功能。
+Collection类能够判断是否存在更多需要分页的数据,并能够生成指向这些数据的URL链接。
+"""
 import pecan
 
 from zun.api.controllers import base
 from zun.api.controllers import link
 
-
+# Collection类的主要目的是为了处理API请求时的集合资源，并提供分页功能。
 class Collection(base.APIBase):
 
     @property
